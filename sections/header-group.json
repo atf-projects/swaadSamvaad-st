@@ -4,9 +4,40 @@
   "sections": {
     "header_section": {
       "type": "header",
+      "blocks": {
+        "announcement_1": {
+          "type": "announcement",
+          "settings": {
+            "text": "FSSAI Certified License No. : 233220030000077",
+            "icon": "🌿",
+            "link": ""
+          }
+        },
+        "announcement_2": {
+          "type": "announcement",
+          "settings": {
+            "text": "Welcome to Swaad Samvaad • Authentic Taste of Mithila & Home",
+            "icon": "✨",
+            "link": ""
+          }
+        },
+        "announcement_3": {
+          "type": "announcement",
+          "settings": {
+            "text": "100% Pure Desi Ghee Thekua • Special Combo Offers Live!",
+            "icon": "🔥",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "announcement_1",
+        "announcement_2",
+        "announcement_3"
+      ],
       "settings": {
         "show_announcement": true,
-        "announcement_text": "FSSAI Certified License No. : 233220030000077",
+        "announcement_speed": 4,
         "announcement_bg": "#3D1E0B",
         "announcement_text_color": "#F0E6D8",
         "logo_initials": "SS",

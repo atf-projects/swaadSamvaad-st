@@ -1,11 +1,12 @@
 /**
  * SWAAD SAMVAAD - Custom Header Interactive JavaScript
- * Handles Search Popup, Scan Order Modal, Mobile Drawer & Predictive Search
+ * Handles Rotating Announcement Slider, Search Popup, Scan Order Modal, Mobile Drawer & Predictive Search
  */
 
 document.addEventListener('DOMContentLoaded', function () {
   // Elements
   const headerSection = document.querySelector('.ss-header-section');
+  const announcementBar = document.querySelector('.ss-announcement-bar');
   const searchTriggers = document.querySelectorAll('[data-ss-trigger="search"]');
   const searchModal = document.getElementById('SwaadSearchModal');
   const searchCloseBtns = document.querySelectorAll('[data-ss-close="search"]');
@@ -31,9 +32,67 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // 1. Search Modal Open/Close Logic
+  // ==========================================
+  // 1. Rotating Announcement Slider Animation
+  // ==========================================
+  if (announcementBar) {
+    const slides = announcementBar.querySelectorAll('.ss-announcement-slide');
+    if (slides.length > 1) {
+      let currentSlide = 0;
+      const speed = parseInt(announcementBar.dataset.ssAnnouncementSpeed, 10) || 4000;
+      let intervalId = null;
+
+      function goToSlide(nextIndex) {
+        if (nextIndex === currentSlide) return;
+        const prevSlide = currentSlide;
+        slides[prevSlide].classList.remove('is-active');
+        slides[prevSlide].classList.add('is-exiting');
+
+        setTimeout(() => {
+          slides[prevSlide].classList.remove('is-exiting');
+        }, 500);
+
+        slides[nextIndex].classList.add('is-active');
+        currentSlide = nextIndex;
+      }
+
+      function nextSlide() {
+        const next = (currentSlide + 1) % slides.length;
+        goToSlide(next);
+      }
+
+      function startSlider() {
+        if (!intervalId) {
+          intervalId = setInterval(nextSlide, speed);
+        }
+      }
+
+      function stopSlider() {
+        if (intervalId) {
+          clearInterval(intervalId);
+          intervalId = null;
+        }
+      }
+
+      startSlider();
+
+      // Pause on mouse hover / touch
+      announcementBar.addEventListener('mouseenter', stopSlider);
+      announcementBar.addEventListener('mouseleave', startSlider);
+      announcementBar.addEventListener('touchstart', stopSlider, { passive: true });
+      announcementBar.addEventListener('touchend', startSlider, { passive: true });
+    }
+  }
+
+  // ==========================================
+  // 2. Search Modal Open/Close Logic
+  // ==========================================
   function openSearchModal() {
     if (!searchModal) return;
+    // Close mobile drawer if open
+    if (mobileDrawer && mobileDrawer.classList.contains('is-active')) {
+      closeMobileDrawer();
+    }
     searchModal.classList.add('is-active');
     searchModal.removeAttribute('hidden');
     setScrollLock(true);
@@ -127,9 +186,15 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // 2. Scan Order Modal Open/Close Logic
+  // ==========================================
+  // 3. Scan Order Modal Open/Close Logic
+  // ==========================================
   function openScanModal() {
     if (!scanModal) return;
+    // Close mobile drawer if open
+    if (mobileDrawer && mobileDrawer.classList.contains('is-active')) {
+      closeMobileDrawer();
+    }
     scanModal.classList.add('is-active');
     scanModal.removeAttribute('hidden');
     setScrollLock(true);
@@ -153,7 +218,9 @@ document.addEventListener('DOMContentLoaded', function () {
     btn.addEventListener('click', closeScanModal);
   });
 
-  // 3. Mobile Navigation Drawer Logic
+  // ==========================================
+  // 4. Mobile Navigation Drawer Logic
+  // ==========================================
   function openMobileDrawer() {
     if (!mobileDrawer) return;
     mobileDrawer.classList.add('is-active');
@@ -196,6 +263,6 @@ document.addEventListener('DOMContentLoaded', function () {
         headerSection.classList.remove('is-scrolled');
       }
       lastScroll = currentScroll;
-    });
+    }, { passive: true });
   }
 });

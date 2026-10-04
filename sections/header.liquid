@@ -1,9 +1,11 @@
 {% comment %}
   SWAAD SAMVAAD - Main Header Section
-  Includes Top Announcement Bar, Main Navigation, Search Popup Overlay, Scan Order Modal & Mobile Drawer
+  Includes Rotating Announcement Slider, Main Navigation, Search Popup Overlay, Scan Order Modal & Premium Mobile Drawer
 {% endcomment %}
 
 {{ 'custom-header.css' | asset_url | stylesheet_tag }}
+
+{% assign header_logo = section.settings.logo | default: settings.logo %}
 
 <header
   id="header-component"
@@ -13,7 +15,7 @@
     --ss-color-cream-bg: {{ section.settings.color_bg | default: '#F9F8F3' }};
   "
 >
-  {% comment %} 1. TOP ANNOUNCEMENT BAR {% endcomment %}
+  {% comment %} 1. TOP ANNOUNCEMENT BAR (ROTATING ANIMATED SLIDER) {% endcomment %}
   {% if section.settings.show_announcement %}
     <div
       class="ss-announcement-bar"
@@ -21,17 +23,41 @@
         background-color: {{ section.settings.announcement_bg | default: '#3D1E0B' }};
         color: {{ section.settings.announcement_text_color | default: '#F0E6D8' }};
       "
+      data-ss-announcement-speed="{{ section.settings.announcement_speed | default: 4 | times: 1000 }}"
     >
-      <div class="ss-announcement-content">
-        <span class="ss-announcement-icon">
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path d="M17,8C8,10 5,16 3,21C8,20 15,17 18,12C19,10.3 19,8.5 17,8Z" />
-            <path d="M3,21C4.33,16.67 8.33,12 17,8" stroke="currentColor" stroke-width="1.5" fill="none" />
-          </svg>
-        </span>
-        <span class="ss-announcement-text">
-          {{ section.settings.announcement_text | default: 'FSSAI Certified License No. : 233220030000077' }}
-        </span>
+      <div class="ss-announcement-slider">
+        {% if section.blocks.size > 0 %}
+          {% for block in section.blocks %}
+            <div
+              class="ss-announcement-slide {% if forloop.first %}is-active{% endif %}"
+              data-ss-slide-index="{{ forloop.index0 }}"
+              {{ block.shopify_attributes }}
+            >
+              {% if block.settings.link != blank %}
+                <a href="{{ block.settings.link }}" class="ss-announcement-link">
+              {% endif %}
+                <span class="ss-announcement-icon-badge">{{ block.settings.icon | default: '🌿' }}</span>
+                <span class="ss-announcement-text">{{ block.settings.text }}</span>
+              {% if block.settings.link != blank %}
+                </a>
+              {% endif %}
+            </div>
+          {% endfor %}
+        {% else %}
+          {% comment %} Default animated slides if merchant has not added custom blocks yet {% endcomment %}
+          <div class="ss-announcement-slide is-active" data-ss-slide-index="0">
+            <span class="ss-announcement-icon-badge">🌿</span>
+            <span class="ss-announcement-text">{{ section.settings.announcement_text | default: 'FSSAI Certified License No. : 233220030000077' }}</span>
+          </div>
+          <div class="ss-announcement-slide" data-ss-slide-index="1">
+            <span class="ss-announcement-icon-badge">✨</span>
+            <span class="ss-announcement-text">Welcome to Swaad Samvaad • Authentic Taste of Mithila & Home</span>
+          </div>
+          <div class="ss-announcement-slide" data-ss-slide-index="2">
+            <span class="ss-announcement-icon-badge">🔥</span>
+            <span class="ss-announcement-text">100% Pure Desi Ghee Thekua • Special Combo Offers Live!</span>
+          </div>
+        {% endif %}
       </div>
     </div>
   {% endif %}
@@ -56,8 +82,8 @@
       {% comment %} Brand Logo / Badge {% endcomment %}
       <div class="ss-branding">
         <a href="{{ routes.root_url }}" class="ss-brand-logo-link" aria-label="Swaad Samvaad Home">
-          {% if section.settings.logo != blank %}
-            {{ section.settings.logo | image_url: width: 220 | image_tag: class: 'ss-custom-logo-img', alt: shop.name }}
+          {% if header_logo != blank %}
+            {{ header_logo | image_url: width: 400 | image_tag: class: 'ss-custom-logo-img', alt: shop.name, loading: 'eager' }}
           {% else %}
             <div class="ss-logo-badge">
               {{ section.settings.logo_initials | default: 'SS' }}
@@ -237,15 +263,22 @@
   </div>
 </div>
 
-{% comment %} 5. MOBILE NAVIGATION DRAWER {% endcomment %}
+{% comment %} 5. PREMIUM MOBILE NAVIGATION DRAWER {% endcomment %}
 <div id="SwaadMobileDrawer" class="ss-mobile-drawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation" hidden>
   <div class="ss-drawer-backdrop" data-ss-close="mobile-drawer"></div>
   <div class="ss-drawer-content">
+    {% comment %} Drawer Header {% endcomment %}
     <div class="ss-drawer-header">
-      <div class="ss-logo-badge" style="width:36px; height:36px; font-size:15px;">
-        {{ section.settings.logo_initials | default: 'SS' }}
-      </div>
-      <span class="ss-brand-title" style="font-size:17px;">SWAAD SAMVAAD</span>
+      <a href="{{ routes.root_url }}" class="ss-drawer-brand">
+        {% if header_logo != blank %}
+          {{ header_logo | image_url: width: 220 | image_tag: class: 'ss-custom-logo-img', alt: shop.name, loading: 'lazy' }}
+        {% else %}
+          <div class="ss-logo-badge" style="width:36px; height:36px; font-size:15px;">
+            {{ section.settings.logo_initials | default: 'SS' }}
+          </div>
+          <span class="ss-brand-title" style="font-size:17px;">{{ section.settings.brand_title | default: 'SWAAD SAMVAAD' }}</span>
+        {% endif %}
+      </a>
       <button type="button" class="ss-drawer-close-btn" data-ss-close="mobile-drawer" aria-label="Close Menu">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
           <line x1="18" y1="6" x2="6" y2="18" />
@@ -253,57 +286,98 @@
         </svg>
       </button>
     </div>
+
+    {% comment %} Drawer Body {% endcomment %}
     <div class="ss-drawer-body">
-      <!-- Quick Search Trigger in Drawer -->
+      <!-- Premium Quick Search Box -->
       <button
         type="button"
-        class="ss-scan-order-btn"
-        style="justify-content:center; width:100%;"
+        class="ss-drawer-search-box"
         data-ss-trigger="search"
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style="width:16px; height:16px;">
+        <svg class="ss-drawer-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
           <circle cx="11" cy="11" r="7" />
           <line x1="16.5" y1="16.5" x2="22" y2="22" />
         </svg>
-        <span>Search Desi Gud, Thekua...</span>
+        <span class="ss-drawer-search-placeholder">Search Desi Gud, Thekua, Sweets...</span>
       </button>
 
-      <!-- Navigation List -->
+      <!-- Clean Navigation List with Chevrons -->
       <ul class="ss-drawer-nav-list">
         {% if section.settings.menu != blank and linklists[section.settings.menu].links.size > 0 %}
           {% for link in linklists[section.settings.menu].links %}
-            <li>
+            <li class="ss-drawer-nav-item">
               <a href="{{ link.url }}" class="ss-drawer-nav-link">
-                {% if link.title contains 'FSSAI' or link.title contains 'Quality' %}
-                  <span class="ss-green-dot" aria-hidden="true"></span>
-                {% endif %}
-                {{ link.title }}
+                <span class="ss-drawer-nav-label-wrap">
+                  {% if link.title contains 'FSSAI' or link.title contains 'Quality' %}
+                    <span class="ss-green-dot" aria-hidden="true"></span>
+                  {% endif %}
+                  {{ link.title }}
+                </span>
+                <span class="ss-drawer-nav-arrow" aria-hidden="true">›</span>
               </a>
             </li>
           {% endfor %}
         {% else %}
-          <li><a href="{{ routes.all_products_collection_url }}" class="ss-drawer-nav-link">Shop Thekua</a></li>
-          <li><a href="/pages/why-desi-ghee" class="ss-drawer-nav-link">Why Desi Ghee?</a></li>
-          <li><a href="/pages/our-story" class="ss-drawer-nav-link">Our Story</a></li>
-          <li>
-            <a href="/pages/fssai-quality" class="ss-drawer-nav-link">
-              <span class="ss-green-dot" aria-hidden="true"></span>
-              FSSAI & Quality
+          <li class="ss-drawer-nav-item">
+            <a href="{{ routes.all_products_collection_url }}" class="ss-drawer-nav-link">
+              <span class="ss-drawer-nav-label-wrap">Shop Thekua</span>
+              <span class="ss-drawer-nav-arrow" aria-hidden="true">›</span>
             </a>
           </li>
-          <li><a href="/pages/refund-policy" class="ss-drawer-nav-link">100% Refund</a></li>
-          <li><a href="#reviews" class="ss-drawer-nav-link">Reviews</a></li>
+          <li class="ss-drawer-nav-item">
+            <a href="/pages/why-desi-ghee" class="ss-drawer-nav-link">
+              <span class="ss-drawer-nav-label-wrap">Why Desi Ghee?</span>
+              <span class="ss-drawer-nav-arrow" aria-hidden="true">›</span>
+            </a>
+          </li>
+          <li class="ss-drawer-nav-item">
+            <a href="/pages/our-story" class="ss-drawer-nav-link">
+              <span class="ss-drawer-nav-label-wrap">Our Story</span>
+              <span class="ss-drawer-nav-arrow" aria-hidden="true">›</span>
+            </a>
+          </li>
+          <li class="ss-drawer-nav-item">
+            <a href="/pages/fssai-quality" class="ss-drawer-nav-link">
+              <span class="ss-drawer-nav-label-wrap">
+                <span class="ss-green-dot" aria-hidden="true"></span>
+                FSSAI & Quality
+              </span>
+              <span class="ss-drawer-nav-arrow" aria-hidden="true">›</span>
+            </a>
+          </li>
+          <li class="ss-drawer-nav-item">
+            <a href="/pages/refund-policy" class="ss-drawer-nav-link">
+              <span class="ss-drawer-nav-label-wrap">100% Refund</span>
+              <span class="ss-drawer-nav-arrow" aria-hidden="true">›</span>
+            </a>
+          </li>
+          <li class="ss-drawer-nav-item">
+            <a href="#reviews" class="ss-drawer-nav-link">
+              <span class="ss-drawer-nav-label-wrap">Reviews</span>
+              <span class="ss-drawer-nav-arrow" aria-hidden="true">›</span>
+            </a>
+          </li>
         {% endif %}
       </ul>
 
-      <!-- Scan Order Action -->
-      <div class="ss-drawer-actions">
-        <a href="#" class="ss-scan-order-btn" style="justify-content:center;" data-ss-trigger="scan">
+      <!-- Premium Scan Order CTA Card -->
+      <button type="button" class="ss-drawer-scan-card" data-ss-trigger="scan">
+        <div class="ss-drawer-scan-icon-wrap">
           <svg viewBox="0 0 24 24" fill="currentColor">
             <path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v3h-3v-3zm-5 0h3v3h-3v-3zm0 5h3v3h-3v-3zm5 0h3v3h-3v-3z" />
           </svg>
-          <span>Scan Order QR</span>
-        </a>
+        </div>
+        <div class="ss-drawer-scan-text-wrap">
+          <span class="ss-drawer-scan-title">Scan to Order</span>
+          <span class="ss-drawer-scan-subtitle">Quick QR / WhatsApp Order</span>
+        </div>
+        <span class="ss-drawer-scan-arrow">›</span>
+      </button>
+
+      <!-- Trust Footer in Drawer -->
+      <div class="ss-drawer-footer">
+        <span class="ss-drawer-trust-text">🌿 100% Traditional Mithila Taste • Pure Desi Ghee</span>
       </div>
     </div>
   </div>
@@ -330,9 +404,19 @@
       "default": true
     },
     {
+      "type": "range",
+      "id": "announcement_speed",
+      "label": "Slide Change Speed (Seconds)",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "unit": "s"
+    },
+    {
       "type": "text",
       "id": "announcement_text",
-      "label": "Announcement Text",
+      "label": "Fallback Announcement Text",
       "default": "FSSAI Certified License No. : 233220030000077"
     },
     {
@@ -354,12 +438,12 @@
     {
       "type": "image_picker",
       "id": "logo",
-      "label": "Custom Logo Image"
+      "label": "Custom Header Logo (Overrides Theme Setting Logo)"
     },
     {
       "type": "text",
       "id": "logo_initials",
-      "label": "Badge Initials",
+      "label": "Fallback Badge Initials",
       "default": "SS"
     },
     {
@@ -429,9 +513,57 @@
       "default": "#3D1E0B"
     }
   ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement Slide",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Announcement Text",
+          "default": "FSSAI Certified License No. : 233220030000077"
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon (Emoji or text)",
+          "default": "🌿"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (Optional)"
+        }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "Header"
+      "name": "Header",
+      "blocks": [
+        {
+          "type": "announcement",
+          "settings": {
+            "text": "FSSAI Certified License No. : 233220030000077",
+            "icon": "🌿"
+          }
+        },
+        {
+          "type": "announcement",
+          "settings": {
+            "text": "Welcome to Swaad Samvaad • Authentic Taste of Mithila & Home",
+            "icon": "✨"
+          }
+        },
+        {
+          "type": "announcement",
+          "settings": {
+            "text": "100% Pure Desi Ghee Thekua • Special Combo Offers Live!",
+            "icon": "🔥"
+          }
+        }
+      ]
     }
   ]
 }
