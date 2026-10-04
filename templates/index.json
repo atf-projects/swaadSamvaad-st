@@ -8,8 +8,94 @@
  * ------------------------------------------------------------
  */{
   "sections": {
+    "ss_hero_banner_main": {
+      "type": "ss-hero-banner",
+      "blocks": {
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "slide_media_type": "image"
+          }
+        },
+        "badge_fssai": {
+          "type": "badge",
+          "settings": {
+            "icon": "fssai",
+            "text": "FSSAI Certified"
+          }
+        },
+        "badge_veg": {
+          "type": "badge",
+          "settings": {
+            "icon": "leaf",
+            "text": "100% Vegetarian"
+          }
+        },
+        "badge_no_preservatives": {
+          "type": "badge",
+          "settings": {
+            "icon": "no",
+            "text": "No Preservatives"
+          }
+        }
+      },
+      "block_order": [
+        "slide_1",
+        "badge_fssai",
+        "badge_veg",
+        "badge_no_preservatives"
+      ],
+      "settings": {}
+    },
+    "ss_usp_strip_main": {
+      "type": "ss-usp-strip",
+      "blocks": {
+        "usp_1": {
+          "type": "usp_item",
+          "settings": {
+            "icon": "ghee",
+            "title": "Pure Desi Ghee",
+            "subtitle": "No cheap oils or additives"
+          }
+        },
+        "usp_2": {
+          "type": "usp_item",
+          "settings": {
+            "icon": "shield-check",
+            "title": "100% Taste Refund",
+            "subtitle": "Love it or get fully refunded"
+          }
+        },
+        "usp_3": {
+          "type": "usp_item",
+          "settings": {
+            "icon": "wheat",
+            "title": "Handcrafted",
+            "subtitle": "Authentic Mithila recipe"
+          }
+        },
+        "usp_4": {
+          "type": "usp_item",
+          "settings": {
+            "icon": "box",
+            "title": "Freshly Packed",
+            "subtitle": "Zero artificial preservatives"
+          }
+        }
+      },
+      "block_order": [
+        "usp_1",
+        "usp_2",
+        "usp_3",
+        "usp_4"
+      ],
+      "settings": {
+        "overlap_banner": true
+      }
+    },
     "hero_G7CAX9": {
       "type": "hero",
+      "disabled": true,
       "blocks": {
         "text_KJqzT8": {
           "type": "text",
@@ -1093,6 +1179,8 @@
     }
   },
   "order": [
+    "ss_hero_banner_main",
+    "ss_usp_strip_main",
     "hero_G7CAX9",
     "section",
     "product_list_YidTcf",

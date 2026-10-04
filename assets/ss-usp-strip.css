@@ -1,0 +1,160 @@
+/* ==========================================================================
+   SWAAD SAMVAAD - USP Value Strip Styles (sections/ss-usp-strip.liquid)
+   Matches theme typography and luxury warm palette.
+   ========================================================================== */
+
+.ss-usp-section {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  padding-top: var(--ss-usp-pad-top, 0px);
+  padding-bottom: var(--ss-usp-pad-bottom, 48px);
+  margin-top: 40px;
+  font-family: var(--font-body--family, var(--ss-font-sans, 'Plus Jakarta Sans', sans-serif));
+  box-sizing: border-box;
+}
+
+.ss-usp-section--overlap {
+  margin-top: 36px;
+}
+
+.ss-usp-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 3vw, 32px);
+  box-sizing: border-box;
+}
+
+.ss-usp-section--full .ss-usp-container {
+  max-width: 100%;
+  padding: 0 16px;
+}
+
+.ss-usp-card {
+  background-color: var(--ss-usp-bg, #FDFBF7);
+  border: 1px solid var(--ss-usp-border-color, #EBDDCF);
+  border-radius: 20px;
+  box-shadow: 0 14px 34px -10px rgba(43, 26, 16, 0.12), 0 2px 6px rgba(43, 26, 16, 0.04);
+  padding: clamp(20px, 2.5vw, 32px) clamp(16px, 2.5vw, 28px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ss-usp-card:hover {
+  box-shadow: 0 20px 40px -10px rgba(43, 26, 16, 0.18);
+}
+
+.ss-usp-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: center;
+  gap: 0;
+}
+
+.ss-usp-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 8px 16px;
+  position: relative;
+}
+
+.ss-usp-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 15%;
+  height: 70%;
+  width: 1px;
+  background-color: var(--ss-usp-border-color, #EBDDCF);
+}
+
+.ss-usp-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  color: var(--ss-usp-icon-color, #B4552B);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ss-usp-item:hover .ss-usp-icon-wrap {
+  transform: translateY(-2px) scale(1.08);
+}
+
+.ss-usp-svg {
+  width: 28px;
+  height: 28px;
+}
+
+.ss-usp-custom-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.ss-usp-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ss-usp-title {
+  font-family: var(--font-heading--family, var(--ss-font-display, 'Outfit', sans-serif));
+  font-size: clamp(14px, 1.1vw, 16.5px);
+  font-weight: 700;
+  color: var(--ss-usp-title-color, #2B1A10);
+  margin: 0;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.ss-usp-subtitle {
+  font-size: clamp(11.5px, 0.9vw, 13px);
+  color: var(--ss-usp-subtitle-color, #7C6C60);
+  margin: 0;
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+/* ==========================================================================
+   Responsive: Tablet & Mobile
+   ========================================================================== */
+@media (max-width: 900px) {
+  .ss-usp-grid {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 24px;
+  }
+
+  .ss-usp-item:nth-child(2n)::after {
+    display: none;
+  }
+
+  .ss-usp-section--overlap {
+    margin-top: -30px;
+  }
+}
+
+@media (max-width: 550px) {
+  .ss-usp-grid {
+    grid-template-columns: 1fr;
+    row-gap: 20px;
+  }
+
+  .ss-usp-item::after {
+    display: none !important;
+  }
+
+  .ss-usp-item {
+    padding: 6px 8px;
+  }
+
+  .ss-usp-card {
+    border-radius: 16px;
+    padding: 20px 14px;
+  }
+
+  .ss-usp-section--overlap {
+    margin-top: -24px;
+  }
+}
