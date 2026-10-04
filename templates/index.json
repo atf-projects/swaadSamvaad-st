@@ -142,6 +142,61 @@
         "padding_bottom": 70
       }
     },
+    "ss_comparison_main": {
+      "type": "ss-comparison",
+      "blocks": {
+        "row_1": {
+          "type": "comparison_row",
+          "settings": {
+            "feature_title": "Fat Source",
+            "our_value": "100% Pure Desi Ghee",
+            "competitor_value": "Palm Oil / Hydrogenated Fat"
+          }
+        },
+        "row_2": {
+          "type": "comparison_row",
+          "settings": {
+            "feature_title": "Preparation",
+            "our_value": "Authentic Handcrafted",
+            "competitor_value": "Mass Machine Processed"
+          }
+        },
+        "row_3": {
+          "type": "comparison_row",
+          "settings": {
+            "feature_title": "Preservatives",
+            "our_value": "0% Chemical Preservatives",
+            "competitor_value": "High Preservatives & Additives"
+          }
+        },
+        "row_4": {
+          "type": "comparison_row",
+          "settings": {
+            "feature_title": "Taste Feel",
+            "our_value": "Authentic Home & Festival Swaad",
+            "competitor_value": "Artificial Flavors & Essence"
+          }
+        }
+      },
+      "block_order": [
+        "row_1",
+        "row_2",
+        "row_3",
+        "row_4"
+      ],
+      "settings": {
+        "eyebrow_text": "THE HONEST DIFFERENCE",
+        "heading_prefix": "Healthier Than",
+        "heading_highlight": "Factory Cookies",
+        "subheading": "",
+        "our_brand_name": "SWAAD SAMVAAD THEKUA",
+        "competitor_name": "BAKERY / FACTORY COOKIES",
+        "bg_color": "#FFFFFF",
+        "show_trust_strip": true,
+        "padding_top": 80,
+        "padding_bottom": 90
+      }
+    },
     "hero_G7CAX9": {
       "type": "hero",
       "disabled": true,
@@ -1231,6 +1286,7 @@
     "ss_hero_banner_main",
     "ss_usp_strip_main",
     "ss_featured_products_main",
+    "ss_comparison_main",
     "hero_G7CAX9",
     "section",
     "product_list_YidTcf",

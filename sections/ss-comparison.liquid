@@ -1,0 +1,466 @@
+{% comment %}
+  Section: SS Comparison / Healthier Than Factory Cookies
+  Brand: Swaad Samvaad (Authentic Mithila Handcrafted Thekua)
+  Features:
+  - High-Contrast Clean White Canvas (Distinguished from cream product sections)
+  - Luxury Espresso Walnut Header with Golden Highlighted Swaad Samvaad Column
+  - Crisp Green Checkmarks & Red Cross Badges
+  - Smart Dual-mode: Luxury Table on Desktop, Smart Comparison Cards on Mobile
+  - Fully Customizable Rows via Shopify Blocks
+{% endcomment %}
+
+{{ 'ss-comparison.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_id = section.id
+  assign eyebrow = section.settings.eyebrow_text | default: 'THE HONEST DIFFERENCE'
+  assign heading_prefix = section.settings.heading_prefix | default: 'Healthier Than'
+  assign heading_highlight = section.settings.heading_highlight | default: 'Factory Cookies'
+  assign subheading = section.settings.subheading
+  assign bg_color = section.settings.bg_color | default: '#FFFFFF'
+  assign our_brand_name = section.settings.our_brand_name | default: 'SWAAD SAMVAAD THEKUA'
+  assign competitor_name = section.settings.competitor_name | default: 'BAKERY / FACTORY COOKIES'
+  assign show_trust_strip = section.settings.show_trust_strip
+-%}
+
+<div
+  id="ss-comparison-{{ section_id }}"
+  class="ss-comparison"
+  style="
+    --ss-comp-pad-top: {{ section.settings.padding_top | default: 80 }}px;
+    --ss-comp-pad-bottom: {{ section.settings.padding_bottom | default: 90 }}px;
+    --ss-comp-bg-color: {{ bg_color }};
+  "
+>
+  <div class="ss-comparison__container">
+    <!-- Header -->
+    <div class="ss-comparison__header">
+      {%- if eyebrow != blank -%}
+        <div class="ss-comparison__eyebrow-pill">
+          <span class="ss-comparison__eyebrow-dot"></span>
+          <span>{{ eyebrow }}</span>
+        </div>
+      {%- endif -%}
+
+      <h2 class="ss-comparison__heading">
+        {{ heading_prefix }} <span class="ss-comparison__heading-highlight">{{ heading_highlight }}</span>
+      </h2>
+
+      {%- if subheading != blank -%}
+        <p class="ss-comparison__subheading">{{ subheading }}</p>
+      {%- endif -%}
+    </div>
+
+    <!-- Desktop / Tablet Table View (Screen >= 720px) -->
+    <div class="ss-comparison__table-card ss-comparison__desktop-view">
+      <table class="ss-comparison__table">
+        <thead class="ss-comparison__thead">
+          <tr>
+            <th class="ss-comparison__th ss-comparison__th--feature" scope="col">FEATURE</th>
+            <th class="ss-comparison__th ss-comparison__th--brand" scope="col">
+              <span class="ss-comparison__brand-badge">
+                <!-- Auspicious Diya / Heritage Flame Icon -->
+                <svg class="ss-comparison__diya-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 2c0 0-3 3.5-3 6 0 1.66 1.34 3 3 3s3-1.34 3-3c0-2.5-3-6-3-6z" fill="#FFC107"/>
+                  <path d="M3 14c0 4.42 4.03 8 9 8s9-3.58 9-8c0-1.5-3-3-9-3s-9 1.5-9 3z" fill="#DE8626"/>
+                  <ellipse cx="12" cy="13.5" rx="7" ry="2" fill="#FFE599"/>
+                </svg>
+                {{ our_brand_name }}
+              </span>
+            </th>
+            <th class="ss-comparison__th ss-comparison__th--competitor" scope="col">{{ competitor_name }}</th>
+          </tr>
+        </thead>
+        <tbody class="ss-comparison__tbody">
+          {%- if section.blocks.size > 0 -%}
+            {%- for block in section.blocks -%}
+              <tr {{ block.shopify_attributes }}>
+                <td class="ss-comparison__td ss-comparison__td--feature">
+                  {{ block.settings.feature_title }}
+                </td>
+                <td class="ss-comparison__td ss-comparison__td--brand">
+                  <div class="ss-comparison__val-wrap ss-comparison__val-wrap--good">
+                    <span class="ss-comparison__icon ss-comparison__icon--check" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </span>
+                    <span>{{ block.settings.our_value }}</span>
+                  </div>
+                </td>
+                <td class="ss-comparison__td ss-comparison__td--competitor">
+                  <div class="ss-comparison__val-wrap ss-comparison__val-wrap--bad">
+                    <span class="ss-comparison__icon ss-comparison__icon--cross" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </span>
+                    <span>{{ block.settings.competitor_value }}</span>
+                  </div>
+                </td>
+              </tr>
+            {%- endfor -%}
+          {%- else -%}
+            <!-- Fallback Default Rows -->
+            <tr>
+              <td class="ss-comparison__td ss-comparison__td--feature">Fat Source</td>
+              <td class="ss-comparison__td ss-comparison__td--brand">
+                <div class="ss-comparison__val-wrap ss-comparison__val-wrap--good">
+                  <span class="ss-comparison__icon ss-comparison__icon--check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                  <span>100% Pure Desi Ghee</span>
+                </div>
+              </td>
+              <td class="ss-comparison__td ss-comparison__td--competitor">
+                <div class="ss-comparison__val-wrap ss-comparison__val-wrap--bad">
+                  <span class="ss-comparison__icon ss-comparison__icon--cross" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span>
+                  <span>Palm Oil / Hydrogenated Fat</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="ss-comparison__td ss-comparison__td--feature">Preparation</td>
+              <td class="ss-comparison__td ss-comparison__td--brand">
+                <div class="ss-comparison__val-wrap ss-comparison__val-wrap--good">
+                  <span class="ss-comparison__icon ss-comparison__icon--check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                  <span>Authentic Handcrafted</span>
+                </div>
+              </td>
+              <td class="ss-comparison__td ss-comparison__td--competitor">
+                <div class="ss-comparison__val-wrap ss-comparison__val-wrap--bad">
+                  <span class="ss-comparison__icon ss-comparison__icon--cross" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span>
+                  <span>Mass Machine Processed</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="ss-comparison__td ss-comparison__td--feature">Preservatives</td>
+              <td class="ss-comparison__td ss-comparison__td--brand">
+                <div class="ss-comparison__val-wrap ss-comparison__val-wrap--good">
+                  <span class="ss-comparison__icon ss-comparison__icon--check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                  <span>0% Chemical Preservatives</span>
+                </div>
+              </td>
+              <td class="ss-comparison__td ss-comparison__td--competitor">
+                <div class="ss-comparison__val-wrap ss-comparison__val-wrap--bad">
+                  <span class="ss-comparison__icon ss-comparison__icon--cross" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span>
+                  <span>High Preservatives & Additives</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="ss-comparison__td ss-comparison__td--feature">Taste Feel</td>
+              <td class="ss-comparison__td ss-comparison__td--brand">
+                <div class="ss-comparison__val-wrap ss-comparison__val-wrap--good">
+                  <span class="ss-comparison__icon ss-comparison__icon--check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                  <span>Authentic Home & Festival Swaad</span>
+                </div>
+              </td>
+              <td class="ss-comparison__td ss-comparison__td--competitor">
+                <div class="ss-comparison__val-wrap ss-comparison__val-wrap--bad">
+                  <span class="ss-comparison__icon ss-comparison__icon--cross" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span>
+                  <span>Artificial Flavors & Essence</span>
+                </div>
+              </td>
+            </tr>
+          {%- endif -%}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mobile-Optimized Comparison Cards View (Ultra-Crisp on Phones) -->
+    <div class="ss-comparison__mobile-view">
+      <!-- Mobile Headers -->
+      <div class="ss-comp-mob-header">
+        <div class="ss-comp-mob-header__brand">
+          <svg class="ss-comparison__diya-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2c0 0-3 3.5-3 6 0 1.66 1.34 3 3 3s3-1.34 3-3c0-2.5-3-6-3-6z" fill="#FFC107"/>
+            <path d="M3 14c0 4.42 4.03 8 9 8s9-3.58 9-8c0-1.5-3-3-9-3s-9 1.5-9 3z" fill="#DE8626"/>
+            <ellipse cx="12" cy="13.5" rx="7" ry="2" fill="#FFE599"/>
+          </svg>
+          <span>Swaad Samvaad</span>
+        </div>
+        <div class="ss-comp-mob-header__vs">VS</div>
+        <div class="ss-comp-mob-header__comp">
+          <span>Factory Cookies</span>
+        </div>
+      </div>
+
+      <!-- Mobile Feature Cards -->
+      <div class="ss-comp-mob-cards">
+        {%- if section.blocks.size > 0 -%}
+          {%- for block in section.blocks -%}
+            <div class="ss-comp-mob-card" {{ block.shopify_attributes }}>
+              <div class="ss-comp-mob-card__title">{{ block.settings.feature_title }}</div>
+              <div class="ss-comp-mob-card__grid">
+                <!-- Our Brand -->
+                <div class="ss-comp-mob-card__item ss-comp-mob-card__item--good">
+                  <div class="ss-comp-mob-card__status">
+                    <span class="ss-comparison__icon ss-comparison__icon--check" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </span>
+                    <span class="ss-comp-mob-card__tag">Our Thekua</span>
+                  </div>
+                  <div class="ss-comp-mob-card__val">{{ block.settings.our_value }}</div>
+                </div>
+
+                <!-- Competitor -->
+                <div class="ss-comp-mob-card__item ss-comp-mob-card__item--bad">
+                  <div class="ss-comp-mob-card__status">
+                    <span class="ss-comparison__icon ss-comparison__icon--cross" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </span>
+                    <span class="ss-comp-mob-card__tag">Others</span>
+                  </div>
+                  <div class="ss-comp-mob-card__val">{{ block.settings.competitor_value }}</div>
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          <!-- Fallback Mobile Cards -->
+          <div class="ss-comp-mob-card">
+            <div class="ss-comp-mob-card__title">Fat Source</div>
+            <div class="ss-comp-mob-card__grid">
+              <div class="ss-comp-mob-card__item ss-comp-mob-card__item--good">
+                <div class="ss-comp-mob-card__status">
+                  <span class="ss-comparison__icon ss-comparison__icon--check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                  <span class="ss-comp-mob-card__tag">Our Thekua</span>
+                </div>
+                <div class="ss-comp-mob-card__val">100% Pure Desi Ghee</div>
+              </div>
+              <div class="ss-comp-mob-card__item ss-comp-mob-card__item--bad">
+                <div class="ss-comp-mob-card__status">
+                  <span class="ss-comparison__icon ss-comparison__icon--cross"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span>
+                  <span class="ss-comp-mob-card__tag">Others</span>
+                </div>
+                <div class="ss-comp-mob-card__val">Palm Oil / Hydrogenated Fat</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ss-comp-mob-card">
+            <div class="ss-comp-mob-card__title">Preparation</div>
+            <div class="ss-comp-mob-card__grid">
+              <div class="ss-comp-mob-card__item ss-comp-mob-card__item--good">
+                <div class="ss-comp-mob-card__status">
+                  <span class="ss-comparison__icon ss-comparison__icon--check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                  <span class="ss-comp-mob-card__tag">Our Thekua</span>
+                </div>
+                <div class="ss-comp-mob-card__val">Authentic Handcrafted</div>
+              </div>
+              <div class="ss-comp-mob-card__item ss-comp-mob-card__item--bad">
+                <div class="ss-comp-mob-card__status">
+                  <span class="ss-comparison__icon ss-comparison__icon--cross"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span>
+                  <span class="ss-comp-mob-card__tag">Others</span>
+                </div>
+                <div class="ss-comp-mob-card__val">Mass Machine Processed</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ss-comp-mob-card">
+            <div class="ss-comp-mob-card__title">Preservatives</div>
+            <div class="ss-comp-mob-card__grid">
+              <div class="ss-comp-mob-card__item ss-comp-mob-card__item--good">
+                <div class="ss-comp-mob-card__status">
+                  <span class="ss-comparison__icon ss-comparison__icon--check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                  <span class="ss-comp-mob-card__tag">Our Thekua</span>
+                </div>
+                <div class="ss-comp-mob-card__val">0% Chemical Preservatives</div>
+              </div>
+              <div class="ss-comp-mob-card__item ss-comp-mob-card__item--bad">
+                <div class="ss-comp-mob-card__status">
+                  <span class="ss-comparison__icon ss-comparison__icon--cross"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span>
+                  <span class="ss-comp-mob-card__tag">Others</span>
+                </div>
+                <div class="ss-comp-mob-card__val">High Preservatives & Additives</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ss-comp-mob-card">
+            <div class="ss-comp-mob-card__title">Taste Feel</div>
+            <div class="ss-comp-mob-card__grid">
+              <div class="ss-comp-mob-card__item ss-comp-mob-card__item--good">
+                <div class="ss-comp-mob-card__status">
+                  <span class="ss-comparison__icon ss-comparison__icon--check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+                  <span class="ss-comp-mob-card__tag">Our Thekua</span>
+                </div>
+                <div class="ss-comp-mob-card__val">Authentic Home & Festival Swaad</div>
+              </div>
+              <div class="ss-comp-mob-card__item ss-comp-mob-card__item--bad">
+                <div class="ss-comp-mob-card__status">
+                  <span class="ss-comparison__icon ss-comparison__icon--cross"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span>
+                  <span class="ss-comp-mob-card__tag">Others</span>
+                </div>
+                <div class="ss-comp-mob-card__val">Artificial Flavors & Essence</div>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <!-- Trust Badges Strip Below Table -->
+    {%- if show_trust_strip -%}
+      <div class="ss-comparison__trust-strip">
+        <div class="ss-comparison__trust-item">
+          <span class="ss-comparison__trust-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          </span>
+          <span>100% Pure Desi Ghee</span>
+        </div>
+        <div class="ss-comparison__trust-item">
+          <span class="ss-comparison__trust-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          </span>
+          <span>Traditional Wood Mold Handcrafted</span>
+        </div>
+        <div class="ss-comparison__trust-item">
+          <span class="ss-comparison__trust-icon">
+            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </span>
+          <span>Zero Artificial Additives</span>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "SS Comparison Table",
+  "tag": "section",
+  "class": "section-ss-comparison",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Eyebrow Text",
+      "default": "THE HONEST DIFFERENCE"
+    },
+    {
+      "type": "text",
+      "id": "heading_prefix",
+      "label": "Heading Prefix",
+      "default": "Healthier Than"
+    },
+    {
+      "type": "text",
+      "id": "heading_highlight",
+      "label": "Heading Highlight (Accent)",
+      "default": "Factory Cookies"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading (Optional)"
+    },
+    {
+      "type": "text",
+      "id": "our_brand_name",
+      "label": "Our Brand Column Title",
+      "default": "SWAAD SAMVAAD THEKUA"
+    },
+    {
+      "type": "text",
+      "id": "competitor_name",
+      "label": "Competitor Column Title",
+      "default": "BAKERY / FACTORY COOKIES"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_strip",
+      "label": "Show Trust Strip Below Table",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 90
+    }
+  ],
+  "blocks": [
+    {
+      "type": "comparison_row",
+      "name": "Comparison Row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "feature_title",
+          "label": "Feature Name",
+          "default": "Fat Source"
+        },
+        {
+          "type": "text",
+          "id": "our_value",
+          "label": "Swaad Samvaad Value (Good)",
+          "default": "100% Pure Desi Ghee"
+        },
+        {
+          "type": "text",
+          "id": "competitor_value",
+          "label": "Competitor Value (Bad)",
+          "default": "Palm Oil / Hydrogenated Fat"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SS Comparison Table",
+      "blocks": [
+        {
+          "type": "comparison_row",
+          "settings": {
+            "feature_title": "Fat Source",
+            "our_value": "100% Pure Desi Ghee",
+            "competitor_value": "Palm Oil / Hydrogenated Fat"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "feature_title": "Preparation",
+            "our_value": "Authentic Handcrafted",
+            "competitor_value": "Mass Machine Processed"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "feature_title": "Preservatives",
+            "our_value": "0% Chemical Preservatives",
+            "competitor_value": "High Preservatives & Additives"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "feature_title": "Taste Feel",
+            "our_value": "Authentic Home & Festival Swaad",
+            "competitor_value": "Artificial Flavors & Essence"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
