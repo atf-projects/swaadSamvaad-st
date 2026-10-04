@@ -1,0 +1,355 @@
+{% comment %}
+  Section: SS Brand Story & Mithila Heritage
+  Brand: Swaad Samvaad (Authentic Mithila Handcrafted Thekua)
+  Features:
+  - Deep Roasted Walnut Heritage Backdrop with Dotted Borders
+  - 2-Column Responsive Layout: Story Narrative + Media Collage
+  - Floating Devanagari Love Note & Candid Heritage Inset Image
+  - 3 Value Feature Badges (Desi Ghee, Jaggery/Sugar, Hand-Molded)
+  - Full Admin Customizability via Shopify Theme Editor
+{% endcomment %}
+
+{{ 'ss-brand-story.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_id = section.id
+  assign eyebrow = section.settings.eyebrow_text | default: 'OUR STORY • MITHILA HERITAGE'
+  assign heading_prefix = section.settings.heading_prefix | default: 'From the hearths of'
+  assign heading_highlight = section.settings.heading_highlight | default: 'Mithila'
+  assign heading_suffix = section.settings.heading_suffix | default: 'to your home'
+  assign p1 = section.settings.story_p1 | default: 'In every Maithili home, thekua is not a snack — it is an offering. Molded by hand for Chhath Puja, packed into steel dabbas for traveling sons and daughters, and broken open at midnight with a glass of milk. It carries the taste of belonging.'
+  assign p2 = section.settings.story_p2 | default: 'Swaad Samvaad began with one stubborn belief: that this taste deserves to travel beyond Bihar without losing its soul. No maida. No preservatives. No factory shortcuts. Just atta, desi ghee, jaggery or sugar, and cardamom — pressed one piece at a time, exactly the way it has been done for generations.'
+  assign bg_color = section.settings.bg_color | default: '#422312'
+  assign note_tag = section.settings.note_tag | default: "MITHILA'S LOVE LANGUAGE"
+  assign note_text = section.settings.note_text | default: 'ठेकुआ — मिथिला के प्रेम की भाषा'
+  assign show_border_patterns = section.settings.show_border_patterns
+-%}
+
+<div
+  id="ss-brand-story-{{ section_id }}"
+  class="ss-story"
+  style="
+    --ss-story-pad-top: {{ section.settings.padding_top | default: 84 }}px;
+    --ss-story-pad-bottom: {{ section.settings.padding_bottom | default: 96 }}px;
+    --ss-story-bg-color: {{ bg_color }};
+  "
+>
+  {%- if show_border_patterns -%}
+    <!-- Traditional Mithila Dotted Top Border -->
+    <div class="ss-story__border-strip ss-story__border-strip--top" aria-hidden="true">
+      <svg width="100%" height="16" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="ss-story-border-top-{{ section_id }}" x="0" y="0" width="20" height="16" patternUnits="userSpaceOnUse">
+            <circle cx="10" cy="8" r="1.8" fill="#DE8626"/>
+            <circle cx="10" cy="8" r="0.8" fill="#FCE5B5"/>
+          </pattern>
+        </defs>
+        <line x1="0" y1="1" x2="100%" y2="1" stroke="#DE8626" stroke-width="0.8" stroke-dasharray="3 3" opacity="0.4"/>
+        <rect x="0" y="2" width="100%" height="12" fill="url(#ss-story-border-top-{{ section_id }})"/>
+        <line x1="0" y1="15" x2="100%" y2="15" stroke="#DE8626" stroke-width="0.8" stroke-dasharray="3 3" opacity="0.4"/>
+      </svg>
+    </div>
+
+    <!-- Traditional Mithila Dotted Bottom Border -->
+    <div class="ss-story__border-strip ss-story__border-strip--bottom" aria-hidden="true">
+      <svg width="100%" height="16" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="ss-story-border-bot-{{ section_id }}" x="0" y="0" width="20" height="16" patternUnits="userSpaceOnUse">
+            <circle cx="10" cy="8" r="1.8" fill="#DE8626"/>
+            <circle cx="10" cy="8" r="0.8" fill="#FCE5B5"/>
+          </pattern>
+        </defs>
+        <line x1="0" y1="1" x2="100%" y2="1" stroke="#DE8626" stroke-width="0.8" stroke-dasharray="3 3" opacity="0.4"/>
+        <rect x="0" y="2" width="100%" height="12" fill="url(#ss-story-border-bot-{{ section_id }})"/>
+        <line x1="0" y1="15" x2="100%" y2="15" stroke="#DE8626" stroke-width="0.8" stroke-dasharray="3 3" opacity="0.4"/>
+      </svg>
+    </div>
+  {%- endif -%}
+
+  <div class="ss-story__container">
+    <div class="ss-story__grid">
+      <!-- Left Column: Story Content & Value Cards -->
+      <div class="ss-story__content">
+        {%- if eyebrow != blank -%}
+          <div class="ss-story__eyebrow">
+            <span>{{ eyebrow }}</span>
+          </div>
+        {%- endif -%}
+
+        <h2 class="ss-story__heading">
+          {{ heading_prefix }} <em class="ss-story__highlight">{{ heading_highlight }}</em> {{ heading_suffix }}
+        </h2>
+
+        <div class="ss-story__text-body">
+          {%- if p1 != blank -%}
+            <p>{{ p1 }}</p>
+          {%- endif -%}
+          {%- if p2 != blank -%}
+            <p>{{ p2 }}</p>
+          {%- endif -%}
+        </div>
+
+        <!-- 3 Feature Highlight Badges -->
+        <div class="ss-story__features">
+          <!-- Card 1: Pure Desi Ghee -->
+          <div class="ss-story__feat-card">
+            <div class="ss-story__feat-icon-wrap" aria-hidden="true">
+              <!-- Traditional Ghee Handi Icon -->
+              <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11 6h10c1 0 2 1 2 2v2H9V8c0-1 1-2 2-2z" fill="#DE8626"/>
+                <path d="M7 11h18l-1.5 12c-.5 4-3.5 6-7.5 6s-7-2-7.5-6L7 11z" fill="#E8AE63" stroke="#DE8626" stroke-width="1.5"/>
+                <path d="M16 3c-1.5 1.5-2 3-2 3.5a2 2 0 104 0c0-.5-.5-2-2-3.5z" fill="#FDB813"/>
+                <circle cx="16" cy="18" r="3" fill="#FFF2D6" opacity="0.8"/>
+              </svg>
+            </div>
+            <div class="ss-story__feat-title">{{ section.settings.feat_1_title | default: 'Pure Desi Ghee' }}</div>
+            <div class="ss-story__feat-sub">{{ section.settings.feat_1_sub | default: 'slow-cooked, small-batch' }}</div>
+          </div>
+
+          <!-- Card 2: Jaggery & Sugar -->
+          <div class="ss-story__feat-card">
+            <div class="ss-story__feat-icon-wrap" aria-hidden="true">
+              <!-- Golden Wheat & Natural Sweetener Stalk -->
+              <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 28V6" stroke="#DE8626" stroke-width="2" stroke-linecap="round"/>
+                <ellipse cx="12" cy="10" rx="3.5" ry="2" transform="rotate(-30 12 10)" fill="#FDB813" stroke="#DE8626" stroke-width="1"/>
+                <ellipse cx="20" cy="10" rx="3.5" ry="2" transform="rotate(30 20 10)" fill="#FDB813" stroke="#DE8626" stroke-width="1"/>
+                <ellipse cx="11" cy="16" rx="3.5" ry="2" transform="rotate(-30 11 16)" fill="#FDB813" stroke="#DE8626" stroke-width="1"/>
+                <ellipse cx="21" cy="16" rx="3.5" ry="2" transform="rotate(30 21 16)" fill="#FDB813" stroke="#DE8626" stroke-width="1"/>
+                <ellipse cx="12" cy="22" rx="3.5" ry="2" transform="rotate(-30 12 22)" fill="#FDB813" stroke="#DE8626" stroke-width="1"/>
+                <ellipse cx="20" cy="22" rx="3.5" ry="2" transform="rotate(30 20 22)" fill="#FDB813" stroke="#DE8626" stroke-width="1"/>
+              </svg>
+            </div>
+            <div class="ss-story__feat-title">{{ section.settings.feat_2_title | default: 'Jaggery & Sugar' }}</div>
+            <div class="ss-story__feat-sub">{{ section.settings.feat_2_sub | default: 'no refined sweeteners' }}</div>
+          </div>
+
+          <!-- Card 3: Hand-Molded -->
+          <div class="ss-story__feat-card">
+            <div class="ss-story__feat-icon-wrap" aria-hidden="true">
+              <!-- Traditional Wooden Thekua Mold (Sancha) -->
+              <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="16" cy="16" rx="11" ry="8" fill="#D48A3D" stroke="#9E5B20" stroke-width="1.8"/>
+                <line x1="16" y1="10" x2="16" y2="22" stroke="#7A3F12" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="10" y1="14" x2="16" y2="16" stroke="#7A3F12" stroke-width="1.2"/>
+                <line x1="22" y1="14" x2="16" y2="16" stroke="#7A3F12" stroke-width="1.2"/>
+                <line x1="11" y1="18" x2="16" y2="19" stroke="#7A3F12" stroke-width="1.2"/>
+                <line x1="21" y1="18" x2="16" y2="19" stroke="#7A3F12" stroke-width="1.2"/>
+              </svg>
+            </div>
+            <div class="ss-story__feat-title">{{ section.settings.feat_3_title | default: 'Hand-Molded' }}</div>
+            <div class="ss-story__feat-sub">{{ section.settings.feat_3_sub | default: 'one piece at a time' }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Layered Media Collage -->
+      <div class="ss-story__media-collage">
+        <!-- Floating Love Note (Top Right) -->
+        <div class="ss-story__love-note">
+          <div class="ss-story__note-tag">{{ note_tag }}</div>
+          <div class="ss-story__note-hindi">{{ note_text }}</div>
+        </div>
+
+        <!-- Main Golden Thekua Plate Photo -->
+        <div class="ss-story__main-img-wrap">
+          {%- if section.settings.main_image != blank -%}
+            <img
+              src="{{ section.settings.main_image | image_url: width: 900 }}"
+              alt="Authentic Handcrafted Mithila Thekua Plate"
+              loading="lazy"
+              class="ss-story__main-img"
+              width="900"
+              height="900"
+            >
+          {%- else -%}
+            <img
+              src="{{ 'ss-story-thekua-plate.png' | asset_url }}"
+              alt="Authentic Handcrafted Mithila Thekua Plate"
+              loading="lazy"
+              class="ss-story__main-img"
+              width="900"
+              height="900"
+            >
+          {%- endif -%}
+        </div>
+
+        <!-- Secondary Inset Image (Child Eating Thekua - Bottom Left) -->
+        <div class="ss-story__inset-img-wrap">
+          {%- if section.settings.inset_image != blank -%}
+            <img
+              src="{{ section.settings.inset_image | image_url: width: 400 }}"
+              alt="Mithila Child Enjoying Fresh Thekua"
+              loading="lazy"
+              class="ss-story__inset-img"
+              width="400"
+              height="400"
+            >
+          {%- else -%}
+            <img
+              src="{{ 'ss-story-child.png' | asset_url }}"
+              alt="Mithila Child Enjoying Fresh Thekua"
+              loading="lazy"
+              class="ss-story__inset-img"
+              width="400"
+              height="400"
+            >
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "SS Brand Story",
+  "tag": "section",
+  "class": "section-ss-brand-story",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Eyebrow Text",
+      "default": "OUR STORY • MITHILA HERITAGE"
+    },
+    {
+      "type": "text",
+      "id": "heading_prefix",
+      "label": "Heading Prefix",
+      "default": "From the hearths of"
+    },
+    {
+      "type": "text",
+      "id": "heading_highlight",
+      "label": "Heading Highlight (Mithila)",
+      "default": "Mithila"
+    },
+    {
+      "type": "text",
+      "id": "heading_suffix",
+      "label": "Heading Suffix",
+      "default": "to your home"
+    },
+    {
+      "type": "textarea",
+      "id": "story_p1",
+      "label": "Story Paragraph 1",
+      "default": "In every Maithili home, thekua is not a snack — it is an offering. Molded by hand for Chhath Puja, packed into steel dabbas for traveling sons and daughters, and broken open at midnight with a glass of milk. It carries the taste of belonging."
+    },
+    {
+      "type": "textarea",
+      "id": "story_p2",
+      "label": "Story Paragraph 2",
+      "default": "Swaad Samvaad began with one stubborn belief: that this taste deserves to travel beyond Bihar without losing its soul. No maida. No preservatives. No factory shortcuts. Just atta, desi ghee, jaggery or sugar, and cardamom — pressed one piece at a time, exactly the way it has been done for generations."
+    },
+    {
+      "type": "header",
+      "content": "Feature Badges"
+    },
+    {
+      "type": "text",
+      "id": "feat_1_title",
+      "label": "Feature 1 Title",
+      "default": "Pure Desi Ghee"
+    },
+    {
+      "type": "text",
+      "id": "feat_1_sub",
+      "label": "Feature 1 Subtitle",
+      "default": "slow-cooked, small-batch"
+    },
+    {
+      "type": "text",
+      "id": "feat_2_title",
+      "label": "Feature 2 Title",
+      "default": "Jaggery & Sugar"
+    },
+    {
+      "type": "text",
+      "id": "feat_2_sub",
+      "label": "Feature 2 Subtitle",
+      "default": "no refined sweeteners"
+    },
+    {
+      "type": "text",
+      "id": "feat_3_title",
+      "label": "Feature 3 Title",
+      "default": "Hand-Molded"
+    },
+    {
+      "type": "text",
+      "id": "feat_3_sub",
+      "label": "Feature 3 Subtitle",
+      "default": "one piece at a time"
+    },
+    {
+      "type": "header",
+      "content": "Media Collage & Note"
+    },
+    {
+      "type": "image_picker",
+      "id": "main_image",
+      "label": "Main Plate Image (Optional Override)"
+    },
+    {
+      "type": "image_picker",
+      "id": "inset_image",
+      "label": "Secondary Inset Image (Optional Override)"
+    },
+    {
+      "type": "text",
+      "id": "note_tag",
+      "label": "Love Note Tag",
+      "default": "MITHILA'S LOVE LANGUAGE"
+    },
+    {
+      "type": "text",
+      "id": "note_text",
+      "label": "Love Note Text (Hindi / Devanagari)",
+      "default": "ठेकुआ — मिथिला के प्रेम की भाषा"
+    },
+    {
+      "type": "header",
+      "content": "Styling & Spacing"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#422312"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_border_patterns",
+      "label": "Show Dotted Mithila Border Strips",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 84
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 96
+    }
+  ],
+  "presets": [
+    {
+      "name": "SS Brand Story"
+    }
+  ]
+}
+{% endschema %}

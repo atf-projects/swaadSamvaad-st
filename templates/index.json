@@ -197,6 +197,29 @@
         "padding_bottom": 90
       }
     },
+    "ss_brand_story_main": {
+      "type": "ss-brand-story",
+      "settings": {
+        "eyebrow_text": "OUR STORY • MITHILA HERITAGE",
+        "heading_prefix": "From the hearths of",
+        "heading_highlight": "Mithila",
+        "heading_suffix": "to your home",
+        "story_p1": "In every Maithili home, thekua is not a snack — it is an offering. Molded by hand for Chhath Puja, packed into steel dabbas for traveling sons and daughters, and broken open at midnight with a glass of milk. It carries the taste of belonging.",
+        "story_p2": "Swaad Samvaad began with one stubborn belief: that this taste deserves to travel beyond Bihar without losing its soul. No maida. No preservatives. No factory shortcuts. Just atta, desi ghee, jaggery or sugar, and cardamom — pressed one piece at a time, exactly the way it has been done for generations.",
+        "feat_1_title": "Pure Desi Ghee",
+        "feat_1_sub": "slow-cooked, small-batch",
+        "feat_2_title": "Jaggery & Sugar",
+        "feat_2_sub": "no refined sweeteners",
+        "feat_3_title": "Hand-Molded",
+        "feat_3_sub": "one piece at a time",
+        "note_tag": "MITHILA'S LOVE LANGUAGE",
+        "note_text": "ठेकुआ — मिथिला के प्रेम की भाषा",
+        "bg_color": "#422312",
+        "show_border_patterns": true,
+        "padding_top": 84,
+        "padding_bottom": 96
+      }
+    },
     "hero_G7CAX9": {
       "type": "hero",
       "disabled": true,
@@ -1287,6 +1310,7 @@
     "ss_usp_strip_main",
     "ss_featured_products_main",
     "ss_comparison_main",
+    "ss_brand_story_main",
     "hero_G7CAX9",
     "section",
     "product_list_YidTcf",

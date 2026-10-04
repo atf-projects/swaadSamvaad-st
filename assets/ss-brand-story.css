@@ -1,0 +1,419 @@
+/* ==========================================================================
+   SWAAD SAMVAAD - Brand Story & Mithila Heritage Section
+   Features:
+   - Deep Royal Walnut Background with Traditional Dotted Mithila Border
+   - 2-Column Desktop Layout (Text & Feature Badges | Media Collage)
+   - Layered Media Collage with Floating Devanagari Love Note & Child Inset
+   - 100% Responsive for Desktop, Tablet & Mobile
+   ========================================================================== */
+
+.ss-story {
+  --ss-story-bg-dark: #422312;
+  --ss-story-brown-card: rgba(255, 255, 255, 0.065);
+  --ss-story-card-border: rgba(255, 255, 255, 0.14);
+  --ss-story-gold: #DE8626;
+  --ss-story-gold-light: #F8D98B;
+  --ss-story-terracotta: #C85F32;
+  --ss-story-text-light: #FAF5EE;
+  --ss-story-text-muted: #D9CBC0;
+
+  position: relative;
+  width: 100%;
+  background-color: var(--ss-story-bg-color, var(--ss-story-bg-dark));
+  padding-top: var(--ss-story-pad-top, 84px);
+  padding-bottom: var(--ss-story-pad-bottom, 96px);
+  overflow: hidden;
+  font-family: var(--font-body--family, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
+  color: var(--ss-story-text-light);
+  box-sizing: border-box;
+}
+
+.ss-story *,
+.ss-story *::before,
+.ss-story *::after {
+  box-sizing: border-box;
+}
+
+/* Traditional Mithila Dotted Top & Bottom Border Strips */
+.ss-story__border-strip {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 16px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.65;
+}
+
+.ss-story__border-strip--top {
+  top: 0;
+}
+
+.ss-story__border-strip--bottom {
+  bottom: 0;
+}
+
+/* Container */
+.ss-story__container {
+  position: relative;
+  z-index: 3;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* 2-Column Grid Layout */
+.ss-story__grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  align-items: center;
+  gap: 56px;
+}
+
+/* ==========================================================================
+   Left Column: Text Content & Value Feature Badges
+   ========================================================================== */
+.ss-story__content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Eyebrow */
+.ss-story__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ss-story-gold);
+}
+
+/* Heading */
+.ss-story__heading {
+  font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+  font-size: clamp(2.2rem, 1.6rem + 2.4vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.16;
+  color: var(--ss-story-text-light);
+  margin: 0;
+  letter-spacing: -0.018em;
+}
+
+.ss-story__heading em,
+.ss-story__highlight {
+  font-style: italic;
+  color: var(--ss-story-gold-light);
+  font-weight: 800;
+}
+
+/* Story Paragraphs */
+.ss-story__text-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: clamp(0.96rem, 0.9rem + 0.2vw, 1.05rem);
+  line-height: 1.68;
+  color: var(--ss-story-text-muted);
+  max-width: 620px;
+}
+
+.ss-story__text-body p {
+  margin: 0;
+}
+
+/* Bottom Feature Highlight Cards Row */
+.ss-story__features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.ss-story__feat-card {
+  background: var(--ss-story-brown-card);
+  border: 1px solid var(--ss-story-card-border);
+  border-radius: 16px;
+  padding: 16px 14px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.ss-story__feat-card:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.085);
+  border-color: rgba(222, 134, 38, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.ss-story__feat-icon-wrap {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ss-story-gold-light);
+  margin-bottom: 2px;
+}
+
+.ss-story__feat-icon-wrap svg {
+  width: 28px;
+  height: 28px;
+}
+
+.ss-story__feat-title {
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: var(--ss-story-text-light);
+  line-height: 1.25;
+}
+
+.ss-story__feat-sub {
+  font-size: 0.76rem;
+  font-weight: 400;
+  color: #AFA295;
+  line-height: 1.3;
+}
+
+/* ==========================================================================
+   Right Column: Layered Collage Media Component
+   ========================================================================== */
+.ss-story__media-collage {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* Main Golden Thekua Plate */
+.ss-story__main-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  background: radial-gradient(circle, #3D2214 0%, #1E0F08 100%);
+}
+
+.ss-story__main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ss-story__main-img-wrap:hover .ss-story__main-img {
+  transform: scale(1.04);
+}
+
+/* Floating Love Note Card (Top Right) */
+.ss-story__love-note {
+  position: absolute;
+  top: -16px;
+  right: -20px;
+  background: #FCEEE8;
+  border: 1px solid #F5D3C4;
+  border-radius: 14px;
+  padding: 12px 18px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  transform: rotate(4deg);
+  z-index: 5;
+  max-width: 200px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ss-story__love-note:hover {
+  transform: rotate(0deg) scale(1.04);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+}
+
+.ss-story__note-tag {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ss-story-terracotta);
+  margin-bottom: 3px;
+}
+
+.ss-story__note-hindi {
+  font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #26150C;
+}
+
+/* Secondary Inset Image (Child Eating Thekua - Bottom Left) */
+.ss-story__inset-img-wrap {
+  position: absolute;
+  bottom: -22px;
+  left: -24px;
+  width: 145px;
+  height: 145px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 3.5px solid var(--ss-story-bg-dark);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  transform: rotate(-3deg);
+  z-index: 4;
+  background: #3A2012;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ss-story__inset-img-wrap:hover {
+  transform: rotate(0deg) scale(1.06);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6);
+}
+
+.ss-story__inset-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+@media (max-width: 991px) {
+  .ss-story {
+    padding-top: 64px;
+    padding-bottom: 76px;
+  }
+
+  .ss-story__container {
+    padding: 0 24px;
+  }
+
+  .ss-story__grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .ss-story__content {
+    text-align: center;
+    align-items: center;
+  }
+
+  .ss-story__text-body {
+    max-width: 100%;
+  }
+
+  .ss-story__features {
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .ss-story__media-collage {
+    max-width: 420px;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .ss-story {
+    padding-top: 50px;
+    padding-bottom: 64px;
+  }
+
+  .ss-story__container {
+    padding: 0 16px;
+  }
+
+  .ss-story__grid {
+    gap: 38px;
+  }
+
+  .ss-story__eyebrow {
+    font-size: 0.78rem;
+  }
+
+  .ss-story__features {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+
+  .ss-story__feat-card {
+    padding: 12px 8px;
+    border-radius: 12px;
+  }
+
+  .ss-story__feat-title {
+    font-size: 0.8rem;
+  }
+
+  .ss-story__feat-sub {
+    font-size: 0.68rem;
+  }
+
+  .ss-story__feat-icon-wrap {
+    width: 30px;
+    height: 30px;
+  }
+
+  .ss-story__feat-icon-wrap svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .ss-story__media-collage {
+    max-width: 320px;
+    margin-bottom: 12px;
+  }
+
+  .ss-story__love-note {
+    top: -10px;
+    right: -10px;
+    padding: 8px 12px;
+    max-width: 155px;
+    border-radius: 10px;
+  }
+
+  .ss-story__note-tag {
+    font-size: 0.55rem;
+  }
+
+  .ss-story__note-hindi {
+    font-size: 0.82rem;
+  }
+
+  .ss-story__inset-img-wrap {
+    bottom: -14px;
+    left: -12px;
+    width: 105px;
+    height: 105px;
+    border-radius: 14px;
+    border-width: 2.5px;
+  }
+}
+
+@media (max-width: 380px) {
+  .ss-story__features {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .ss-story__feat-card {
+    flex-direction: row;
+    text-align: left;
+    padding: 10px 14px;
+    gap: 12px;
+  }
+
+  .ss-story__feat-icon-wrap {
+    margin-bottom: 0;
+  }
+}
