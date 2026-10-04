@@ -6,6 +6,9 @@
 {{ 'custom-header.css' | asset_url | stylesheet_tag }}
 
 {% assign header_logo = section.settings.logo | default: settings.logo %}
+{% assign wa_phone = section.settings.whatsapp_number | default: '919876543210' | remove: ' ' | remove: '+' | remove: '-' %}
+{% assign wa_text = section.settings.whatsapp_message | default: 'Hello Swaad Samvaad, I would like to order fresh Thekua!' %}
+{% capture wa_link %}https://wa.me/{{ wa_phone }}?text={{ wa_text | url_param_escape }}{% endcapture %}
 
 <header
   id="header-component"
@@ -137,7 +140,7 @@
         </ul>
       </nav>
 
-      {% comment %} Header Utilities (Search, Scan Order, Cart) {% endcomment %}
+      {% comment %} Header Utilities (Search, WhatsApp QR, Account, Cart) {% endcomment %}
       <div class="ss-header-actions">
         <!-- Search Trigger -->
         <button
@@ -153,16 +156,45 @@
           </svg>
         </button>
 
-        <!-- Scan Order Badge Button -->
-        <a href="#" class="ss-scan-order-btn" data-ss-trigger="scan" title="Scan to Order">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v3h-3v-3zm-5 0h3v3h-3v-3zm0 5h3v3h-3v-3zm5 0h3v3h-3v-3z" />
-          </svg>
-          <span>Scan Order</span>
-        </a>
+        <!-- WhatsApp QR Code Order Trigger Icon -->
+        {% if section.settings.show_whatsapp_qr %}
+          <button
+            type="button"
+            class="ss-icon-btn ss-qr-trigger-btn"
+            data-ss-trigger="scan"
+            aria-label="Order on WhatsApp via QR"
+            title="Order on WhatsApp"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M3 9V5a2 2 0 0 1 2-2h4" />
+              <path d="M15 3h4a2 2 0 0 1 2 2v4" />
+              <path d="M21 15v4a2 2 0 0 1-2 2h-4" />
+              <path d="M9 21H5a2 2 0 0 1-2-2v-4" />
+              <rect x="7" y="7" width="3" height="3" fill="currentColor" stroke="none" />
+              <rect x="14" y="7" width="3" height="3" fill="currentColor" stroke="none" />
+              <rect x="7" y="14" width="3" height="3" fill="currentColor" stroke="none" />
+              <rect x="14" y="14" width="3" height="3" fill="currentColor" stroke="none" />
+            </svg>
+          </button>
+        {% endif %}
+
+        <!-- Customer Account / Login Icon -->
+        {% if shop.customer_accounts_enabled or section.settings.show_account %}
+          <a
+            href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
+            class="ss-icon-btn ss-account-btn"
+            aria-label="{% if customer %}My Account{% else %}Log in to Account{% endif %}"
+            title="{% if customer %}My Account{% else %}Log in{% endif %}"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </a>
+        {% endif %}
 
         <!-- Cart Trigger -->
-        <a href="{{ routes.cart_url }}" class="ss-icon-btn ss-cart-btn" aria-label="Shopping Cart">
+        <a href="{{ routes.cart_url }}" class="ss-icon-btn ss-cart-btn" aria-label="Shopping Cart" title="Shopping Cart">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4H6z" />
             <line x1="3" y1="6" x2="21" y2="6" />
@@ -221,45 +253,56 @@
   </div>
 </div>
 
-{% comment %} 4. SCAN ORDER QR CODE MODAL {% endcomment %}
-<div id="SwaadScanModal" class="ss-scan-modal-container" role="dialog" aria-modal="true" aria-label="Scan Order QR Code" hidden>
+{% comment %} 4. WHATSAPP & SCAN ORDER QR CODE MODAL {% endcomment %}
+<div id="SwaadScanModal" class="ss-scan-modal-container" role="dialog" aria-modal="true" aria-label="Order on WhatsApp" hidden>
   <div class="ss-search-backdrop" data-ss-close="scan"></div>
   <div class="ss-scan-card">
     <button type="button" class="ss-scan-close-btn" data-ss-close="scan" aria-label="Close Modal">✕</button>
-    <h3 class="ss-scan-title">Scan to Order</h3>
-    <p class="ss-scan-subtitle">Scan QR code using camera/WhatsApp to order authentic Mithila Thekua directly!</p>
-    <div class="ss-qr-box">
-      <svg viewBox="0 0 100 100" fill="#3D1E0B">
-        <!-- Styled QR Code Vector Pattern -->
-        <rect x="10" y="10" width="25" height="25" fill="#3D1E0B"/>
-        <rect x="15" y="15" width="15" height="15" fill="#FFFFFF"/>
-        <rect x="18" y="18" width="9" height="9" fill="#3D1E0B"/>
-        
-        <rect x="65" y="10" width="25" height="25" fill="#3D1E0B"/>
-        <rect x="70" y="15" width="15" height="15" fill="#FFFFFF"/>
-        <rect x="73" y="18" width="9" height="9" fill="#3D1E0B"/>
-        
-        <rect x="10" y="65" width="25" height="25" fill="#3D1E0B"/>
-        <rect x="15" y="70" width="15" height="15" fill="#FFFFFF"/>
-        <rect x="18" y="73" width="9" height="9" fill="#3D1E0B"/>
-        
-        <!-- Data dots -->
-        <rect x="42" y="12" width="6" height="6"/>
-        <rect x="52" y="18" width="6" height="6"/>
-        <rect x="42" y="28" width="12" height="6"/>
-        <rect x="12" y="42" width="12" height="6"/>
-        <rect x="28" y="42" width="6" height="12"/>
-        <rect x="42" y="42" width="16" height="16"/>
-        <rect x="65" y="42" width="10" height="6"/>
-        <rect x="80" y="42" width="8" height="14"/>
-        <rect x="42" y="65" width="10" height="10"/>
-        <rect x="58" y="65" width="10" height="6"/>
-        <rect x="72" y="65" width="16" height="6"/>
-        <rect x="58" y="78" width="10" height="12"/>
-        <rect x="74" y="78" width="14" height="12"/>
-      </svg>
+    
+    <div class="ss-scan-header-badge">
+      <span class="ss-whatsapp-badge-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="#25D366">
+          <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/>
+        </svg>
+      </span>
+      <span>WhatsApp Quick Order</span>
     </div>
-    <span style="font-size:12px; font-weight:600; color:#C69C6D;">SWAAD SAMVAAD • TASTE OF MITHILA</span>
+
+    <h3 class="ss-scan-title">{{ section.settings.qr_modal_title | default: 'Order via WhatsApp' }}</h3>
+    <p class="ss-scan-subtitle">{{ section.settings.qr_modal_subtitle | default: 'Scan this QR code with your phone camera or WhatsApp to chat with us and order fresh Mithila Thekua directly!' }}</p>
+    
+    <div class="ss-qr-box">
+      {% if section.settings.custom_qr_image != blank %}
+        {{ section.settings.custom_qr_image | image_url: width: 320 | image_tag: class: 'ss-qr-img', alt: 'WhatsApp Order QR Code', loading: 'lazy' }}
+      {% else %}
+        {% capture qr_api_url %}https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data={{ wa_link | url_encode }}{% endcapture %}
+        <img
+          src="{{ qr_api_url }}"
+          alt="WhatsApp Order QR Code"
+          class="ss-qr-img"
+          width="180"
+          height="180"
+          loading="lazy"
+        >
+      {% endif %}
+    </div>
+
+    <!-- Direct Clickable WhatsApp Button -->
+    <a
+      href="{{ wa_link }}"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="ss-whatsapp-chat-btn"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm0 18.06c-1.49 0-2.95-.4-4.22-1.16l-.3-.18-3.13.82.84-3.05-.2-.31c-.83-1.32-1.27-2.86-1.27-4.46 0-4.47 3.64-8.11 8.11-8.11 2.16 0 4.2.84 5.73 2.37 1.53 1.53 2.37 3.56 2.37 5.73 0 4.48-3.64 8.12-8.13 8.12zm4.44-6.07c-.24-.12-1.44-.71-1.66-.79-.22-.08-.38-.12-.55.12-.16.24-.63.79-.77.95-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.95-1.2-.72-.64-1.21-1.43-1.35-1.67-.14-.24-.01-.37.11-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.55-1.32-.75-1.81-.2-.48-.4-.41-.55-.42l-.47-.01c-.16 0-.42.06-.64.3-.22.24-.85.83-.85 2.03s.87 2.35.99 2.52c.12.16 1.71 2.61 4.14 3.66.58.25 1.03.4 1.38.51.58.18 1.11.16 1.53.1.47-.07 1.44-.59 1.64-1.16.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.46-.28z"/>
+      </svg>
+      <span>Chat on WhatsApp</span>
+    </a>
+
+    <div class="ss-scan-footer-note">
+      <span>{{ section.settings.whatsapp_footer_text | default: 'Quick response • Order dispatch updates • Custom packaging' }}</span>
+    </div>
   </div>
 </div>
 
@@ -361,19 +404,41 @@
         {% endif %}
       </ul>
 
-      <!-- Premium Scan Order CTA Card -->
-      <button type="button" class="ss-drawer-scan-card" data-ss-trigger="scan">
-        <div class="ss-drawer-scan-icon-wrap">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v3h-3v-3zm-5 0h3v3h-3v-3zm0 5h3v3h-3v-3zm5 0h3v3h-3v-3z" />
+      <!-- Mobile Drawer Customer Account Link -->
+      {% if shop.customer_accounts_enabled or section.settings.show_account %}
+        <a
+          href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
+          class="ss-drawer-account-link"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
           </svg>
-        </div>
-        <div class="ss-drawer-scan-text-wrap">
-          <span class="ss-drawer-scan-title">Scan to Order</span>
-          <span class="ss-drawer-scan-subtitle">Quick QR / WhatsApp Order</span>
-        </div>
-        <span class="ss-drawer-scan-arrow">›</span>
-      </button>
+          <span>
+            {% if customer %}
+              My Account ({{ customer.first_name | default: 'Profile' }})
+            {% else %}
+              Log in / Sign up
+            {% endif %}
+          </span>
+        </a>
+      {% endif %}
+
+      <!-- Premium WhatsApp Order CTA Card -->
+      {% if section.settings.show_whatsapp_qr %}
+        <button type="button" class="ss-drawer-scan-card" data-ss-trigger="scan">
+          <div class="ss-drawer-scan-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="#25D366">
+              <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/>
+            </svg>
+          </div>
+          <div class="ss-drawer-scan-text-wrap">
+            <span class="ss-drawer-scan-title">Order via WhatsApp</span>
+            <span class="ss-drawer-scan-subtitle">Quick QR / WhatsApp Chat</span>
+          </div>
+          <span class="ss-drawer-scan-arrow">›</span>
+        </button>
+      {% endif %}
 
       <!-- Trust Footer in Drawer -->
       <div class="ss-drawer-footer">
@@ -467,6 +532,63 @@
       "id": "menu",
       "label": "Header Menu",
       "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "User Account"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account",
+      "label": "Show Account / Login Icon",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "WhatsApp & QR Code Order"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_whatsapp_qr",
+      "label": "Show WhatsApp QR Icon",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "WhatsApp Phone Number (with Country Code)",
+      "default": "919876543210",
+      "info": "Example: 919876543210 (without + sign)"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_message",
+      "label": "Pre-filled WhatsApp Message",
+      "default": "Hello Swaad Samvaad, I would like to order fresh Mithila Thekua!"
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_qr_image",
+      "label": "Custom QR Code Image (Optional)",
+      "info": "Upload custom QR image if you already have one. If left empty, QR code is automatically generated from your WhatsApp link."
+    },
+    {
+      "type": "text",
+      "id": "qr_modal_title",
+      "label": "QR Modal Title",
+      "default": "Order via WhatsApp"
+    },
+    {
+      "type": "textarea",
+      "id": "qr_modal_subtitle",
+      "label": "QR Modal Subtitle / Instructions",
+      "default": "Scan this QR code with your phone camera or WhatsApp to chat with us and order fresh Mithila Thekua directly!"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_footer_text",
+      "label": "WhatsApp Modal Footer Note",
+      "default": "Quick response • Order dispatch updates • Custom packaging"
     },
     {
       "type": "header",
