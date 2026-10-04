@@ -251,6 +251,8 @@
 
 .ss-nav-item {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .ss-nav-link {
@@ -258,12 +260,13 @@
   font-weight: 600;
   color: var(--ss-color-text-dark);
   text-decoration: none;
-  padding: 6px 0;
+  padding: 8px 0;
   display: flex;
   align-items: center;
   gap: 6px;
   transition: color var(--ss-transition-fast);
   white-space: nowrap;
+  position: relative;
 }
 
 .ss-nav-link:hover {
@@ -282,8 +285,181 @@
   border-radius: 2px;
 }
 
-.ss-nav-link:hover::after {
+.ss-nav-link:hover::after,
+.ss-has-dropdown:hover > .ss-nav-link::after {
   width: 100%;
+}
+
+/* Nav Dropdown Chevron */
+.ss-nav-chevron {
+  width: 9px;
+  height: 6px;
+  stroke: currentColor;
+  margin-left: 2px;
+  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.ss-has-dropdown:hover > .ss-nav-link .ss-nav-chevron,
+.ss-has-dropdown:focus-within > .ss-nav-link .ss-nav-chevron {
+  transform: rotate(180deg);
+  color: var(--ss-color-brown-dark);
+}
+
+/* Hover Bridge to prevent gap mouse-out */
+.ss-has-dropdown::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: -20px;
+  right: -20px;
+  height: 18px;
+  background: transparent;
+  display: block;
+}
+
+/* ==========================================================================
+   2B. Luxury Desktop Dropdown & Flyout Submenu
+   ========================================================================== */
+.ss-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  min-width: 220px;
+  background: #FFFFFF;
+  border-radius: 14px;
+  border: 1px solid rgba(198, 156, 109, 0.25);
+  box-shadow: 0 16px 42px rgba(61, 30, 11, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
+  padding: 8px 6px;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.22s;
+  box-sizing: border-box;
+}
+
+.ss-has-dropdown:hover > .ss-dropdown-menu,
+.ss-has-dropdown:focus-within > .ss-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.ss-dropdown-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ss-dropdown-item {
+  position: relative;
+  border-radius: 8px;
+}
+
+.ss-dropdown-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #3D2E26;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.18s ease;
+  text-align: left;
+  white-space: nowrap;
+  font-family: var(--ss-font-sans);
+}
+
+.ss-dropdown-link:hover,
+.ss-has-subdropdown:hover > .ss-dropdown-link {
+  background-color: #FAF5EE;
+  color: var(--ss-color-brown-dark);
+  padding-left: 17px;
+}
+
+.ss-subdropdown-chevron {
+  width: 6px;
+  height: 9px;
+  stroke: #9C8F85;
+  transition: transform 0.18s ease, stroke 0.18s ease;
+  margin-left: 14px;
+  flex-shrink: 0;
+}
+
+.ss-has-subdropdown:hover > .ss-dropdown-link .ss-subdropdown-chevron {
+  stroke: var(--ss-color-brown-dark);
+  transform: translateX(2px);
+}
+
+/* 3rd-Level Flyout Submenu */
+.ss-subdropdown-menu {
+  position: absolute;
+  top: -4px;
+  left: calc(100% + 6px);
+  min-width: 200px;
+  background: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid rgba(198, 156, 109, 0.25);
+  box-shadow: 0 14px 36px rgba(61, 30, 11, 0.12);
+  padding: 6px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(-6px);
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.2s;
+  box-sizing: border-box;
+}
+
+.ss-has-subdropdown:hover > .ss-subdropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.ss-subdropdown-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ss-subdropdown-item {
+  border-radius: 6px;
+}
+
+.ss-subdropdown-link {
+  display: block;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4A3E37;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.18s ease;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.ss-subdropdown-link:hover {
+  background-color: #FAF5EE;
+  color: var(--ss-color-brown-dark);
+  padding-left: 15px;
 }
 
 .ss-green-dot {
@@ -1284,6 +1460,14 @@ shopify-account:not(:defined) {
   border-bottom: 1px solid rgba(198, 156, 109, 0.14);
 }
 
+.ss-drawer-nav-row,
+.ss-drawer-subnav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
 .ss-drawer-nav-link {
   font-size: 15px;
   font-weight: 600;
@@ -1294,6 +1478,11 @@ shopify-account:not(:defined) {
   justify-content: space-between;
   padding: 14px 4px;
   transition: color var(--ss-transition-fast), padding-left var(--ss-transition-fast);
+}
+
+.ss-drawer-parent-link,
+.ss-drawer-subparent-link {
+  flex: 1;
 }
 
 .ss-drawer-nav-link:hover {
@@ -1311,6 +1500,139 @@ shopify-account:not(:defined) {
   color: var(--ss-color-gold-accent);
   font-size: 18px;
   line-height: 1;
+}
+
+/* Drawer Submenu Accordion Toggle Buttons */
+.ss-drawer-toggle-btn,
+.ss-drawer-grandchild-toggle-btn {
+  background: #FAF6F0;
+  border: 1px solid #E5DCD3;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--ss-color-brown-dark);
+  transition: all 0.22s ease;
+  margin-left: 8px;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.ss-drawer-toggle-btn:hover,
+.ss-drawer-grandchild-toggle-btn:hover {
+  background: #EFE6DC;
+}
+
+.ss-drawer-toggle-btn.is-open,
+.ss-drawer-grandchild-toggle-btn.is-open {
+  background-color: var(--ss-color-brown-dark);
+  color: #FFFFFF;
+  border-color: var(--ss-color-brown-dark);
+}
+
+.ss-drawer-toggle-icon {
+  width: 10px;
+  height: 6px;
+  stroke: currentColor;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ss-drawer-toggle-btn.is-open .ss-drawer-toggle-icon,
+.ss-drawer-grandchild-toggle-btn.is-open .ss-drawer-toggle-icon {
+  transform: rotate(180deg);
+}
+
+/* Drawer Submenu Container */
+.ss-drawer-submenu {
+  background-color: #F8F3EC;
+  border-radius: 12px;
+  margin: 2px 0 12px 0;
+  padding: 8px 8px;
+  border: 1px solid rgba(198, 156, 109, 0.2);
+  display: block;
+}
+
+.ss-drawer-submenu[hidden] {
+  display: none;
+}
+
+.ss-drawer-subnav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ss-drawer-subnav-item {
+  border-radius: 8px;
+}
+
+.ss-drawer-subnav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #4A3E37;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.18s ease;
+  background: transparent;
+}
+
+.ss-drawer-subnav-link:hover {
+  background: #FFFFFF;
+  color: var(--ss-color-brown-dark);
+  padding-left: 15px;
+}
+
+.ss-drawer-subnav-arrow {
+  color: #A89B91;
+  font-size: 16px;
+}
+
+/* Grandchild Submenu */
+.ss-drawer-grandchild-menu {
+  background: #FFFFFF;
+  border-radius: 8px;
+  margin: 4px 0 6px 12px;
+  padding: 6px 8px;
+  border: 1px solid rgba(198, 156, 109, 0.18);
+}
+
+.ss-drawer-grandchild-menu[hidden] {
+  display: none;
+}
+
+.ss-drawer-grandchild-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ss-drawer-grandchild-link {
+  display: block;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5A4E47;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.18s ease;
+}
+
+.ss-drawer-grandchild-link:hover {
+  background: #FAF5EE;
+  color: var(--ss-color-brown-dark);
 }
 
 /* Drawer Account Link */

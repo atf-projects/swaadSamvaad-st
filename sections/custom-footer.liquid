@@ -1,0 +1,351 @@
+{% comment %}
+  SWAAD SAMVAAD - Luxury Custom Footer Section
+  Pixel-perfect match to user's design reference with 100% merchant customization in Theme Editor.
+{% endcomment %}
+
+{{ 'custom-footer.css' | asset_url | stylesheet_tag }}
+
+{% assign footer_logo = section.settings.logo | default: settings.logo %}
+
+<footer class="ss-custom-footer" role="contentinfo">
+  {% comment %} 1. RUNNING MARQUEE TICKER {% endcomment %}
+  {% if section.settings.show_marquee %}
+    <div class="ss-footer-marquee-wrap" aria-hidden="true">
+      <div class="ss-footer-marquee-track">
+        {% capture marquee_unit %}
+          <div class="ss-footer-marquee-content">
+            {% for i in (1..8) %}
+              <div class="ss-footer-marquee-item">
+                <span class="ss-footer-marquee-text">{{ section.settings.marquee_text | default: 'SWAAD SAMVAAD' }}</span>
+                <span class="ss-footer-marquee-sparkle">✦</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% endcapture %}
+        {{ marquee_unit }}
+        {{ marquee_unit }}
+      </div>
+    </div>
+  {% endif %}
+
+  {% comment %} 2. MAIN 4-COLUMN FOOTER CONTENT {% endcomment %}
+  <div class="ss-footer-main">
+    <div class="ss-footer-grid">
+      {% comment %} Column 1: Brand Logo & Story {% endcomment %}
+      <div class="ss-footer-col ss-footer-col--brand">
+        <a href="{{ routes.root_url }}" class="ss-footer-brand-header" aria-label="{{ shop.name }}">
+          <div class="ss-footer-logo-circle">
+            {% if footer_logo != blank %}
+              {{ footer_logo | image_url: width: 120 | image_tag: class: 'ss-footer-logo-img', alt: shop.name, loading: 'lazy' }}
+            {% else %}
+              <span class="ss-footer-logo-fallback">{{ section.settings.logo_initials | default: 'SS' }}</span>
+            {% endif %}
+          </div>
+          {% if section.settings.show_brand_title and section.settings.brand_title_first != blank or section.settings.brand_title_second != blank %}
+            <h2 class="ss-footer-brand-title">
+              {{ section.settings.brand_title_first }}
+              {% if section.settings.brand_title_second != blank %}
+                <span>{{ section.settings.brand_title_second }}</span>
+              {% endif %}
+            </h2>
+          {% endif %}
+        </a>
+
+        <p class="ss-footer-brand-desc">
+          {{ section.settings.story_text | default: 'Our mission is simple — bring the authentic taste of Mithila home. Every thekua is handmade in small batches and fried in 100% pure desi ghee, the way our grandmothers made it for Chhath.' }}
+        </p>
+
+        <div class="ss-footer-leaf-tagline">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 008 20C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z"/>
+          </svg>
+          <span>{{ section.settings.leaf_tagline | default: 'Always Makes Difference' }}</span>
+        </div>
+      </div>
+
+      {% comment %} Column 2: Quick Links {% endcomment %}
+      <div class="ss-footer-col ss-footer-col--links">
+        <h3 class="ss-footer-heading">{{ section.settings.quick_links_title | default: 'QUICK LINKS' }}</h3>
+        <ul class="ss-footer-links-list">
+          {% if section.settings.menu != blank and linklists[section.settings.menu].links.size > 0 %}
+            {% for link in linklists[section.settings.menu].links %}
+              <li>
+                <a href="{{ link.url }}" class="ss-footer-link">{{ link.title }}</a>
+              </li>
+            {% endfor %}
+          {% else %}
+            <li><a href="{{ routes.all_products_collection_url }}" class="ss-footer-link">Shop Gud Thekua</a></li>
+            <li><a href="{{ routes.all_products_collection_url }}" class="ss-footer-link">Shop Chini Thekua</a></li>
+            <li><a href="/pages/refund-policy" class="ss-footer-link">100% Refund Terms</a></li>
+            <li><a href="/apps/track-order" class="ss-footer-link">Track Order</a></li>
+            <li><a href="/pages/shipping-policy" class="ss-footer-link">Shipping Policy</a></li>
+            <li><a href="/pages/privacy-policy" class="ss-footer-link">Privacy Policy</a></li>
+          {% endif %}
+        </ul>
+      </div>
+
+      {% comment %} Column 3: Also Available On (Amazon / Flipkart) {% endcomment %}
+      <div class="ss-footer-col ss-footer-col--marketplaces">
+        <h3 class="ss-footer-heading">{{ section.settings.marketplaces_title | default: 'ALSO AVAILABLE ON' }}</h3>
+        <div class="ss-footer-market-btns">
+          <a
+            href="{{ section.settings.amazon_url | default: 'https://www.amazon.in' }}"
+            class="ss-footer-market-btn ss-footer-market-btn--amazon"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Buy on Amazon"
+          >
+            Buy on <span>Amazon</span>
+          </a>
+          <a
+            href="{{ section.settings.flipkart_url | default: 'https://www.flipkart.com' }}"
+            class="ss-footer-market-btn ss-footer-market-btn--flipkart"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Buy on Flipkart"
+          >
+            Buy on <span>Flipkart</span>
+          </a>
+        </div>
+      </div>
+
+      {% comment %} Column 4: Customer Support & GST Details {% endcomment %}
+      <div class="ss-footer-col ss-footer-col--support">
+        <h3 class="ss-footer-heading">{{ section.settings.support_title | default: 'CUSTOMER SUPPORT' }}</h3>
+        <div class="ss-footer-support-content-wrap">
+          <div class="ss-footer-contact-list">
+            <a href="tel:{{ section.settings.phone | default: '+919811024472' | replace: ' ', '' }}" class="ss-footer-contact-item">
+              <span class="ss-footer-contact-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+              </span>
+              <span>{{ section.settings.phone_label | default: '+91-98110-24472' }}</span>
+            </a>
+
+            <a href="mailto:{{ section.settings.email | default: 'support@swaadsamvaad.com' }}" class="ss-footer-contact-item">
+              <span class="ss-footer-contact-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="4" width="20" height="16" rx="2"/>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                </svg>
+              </span>
+              <span>{{ section.settings.email | default: 'support@swaadsamvaad.com' }}</span>
+            </a>
+          </div>
+
+          <div class="ss-footer-gst-card">
+            <span class="ss-footer-gst-company">{{ section.settings.company_info | default: 'Yumee International · New Delhi' }}</span>
+            <span class="ss-footer-gst-num">GSTIN: {{ section.settings.gstin | default: '07AMZPJ4823B1ZX' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% comment %} 3. BOTTOM SUB-FOOTER {% endcomment %}
+  <div class="ss-footer-bottom">
+    <div class="ss-footer-bottom-container">
+      {% comment %} Left: FSSAI License {% endcomment %}
+      <div class="ss-footer-fssai-wrap">
+        <div class="ss-footer-fssai-badge">
+          {% if section.settings.fssai_logo != blank %}
+            {{ section.settings.fssai_logo | image_url: width: 120 | image_tag: class: 'ss-footer-fssai-img', alt: 'FSSAI Certified', loading: 'lazy' }}
+          {% else %}
+            <img src="{{ 'fssai-logo.png' | asset_url }}" alt="FSSAI Certified" class="ss-footer-fssai-img" width="55" height="20" loading="lazy">
+          {% endif %}
+        </div>
+        <span class="ss-footer-fssai-lic">
+          FSSAI Lic. No. <strong>{{ section.settings.fssai_number | default: '233220030000077' }}</strong>
+        </span>
+      </div>
+
+      {% comment %} Center: Copyright {% endcomment %}
+      <div class="ss-footer-copyright">
+        {{ section.settings.copyright_text | default: '© 2026 Swaad Samvaad · Taste of Mithila, Taste of Home' }}
+      </div>
+
+      {% comment %} Right: Payment Gateways / Methods {% endcomment %}
+      <div class="ss-footer-payments">
+        {{ section.settings.payment_methods | default: 'UPI · CARDS · NETBANKING · COD' }}
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Custom Brand Footer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Top Running Marquee Ticker"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_marquee",
+      "label": "Show Marquee Ticker",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "marquee_text",
+      "label": "Marquee Text",
+      "default": "SWAAD SAMVAAD"
+    },
+    {
+      "type": "header",
+      "content": "Column 1: Brand & Mission"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Brand Logo"
+    },
+    {
+      "type": "text",
+      "id": "logo_initials",
+      "label": "Fallback Initials",
+      "default": "SS"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_brand_title",
+      "label": "Show Brand Text Next to Logo",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "brand_title_first",
+      "label": "Brand Title First Word (Leave empty to hide)",
+      "default": "SWAAD"
+    },
+    {
+      "type": "text",
+      "id": "brand_title_second",
+      "label": "Brand Title Second Word (Gold)",
+      "default": "SAMVAAD"
+    },
+    {
+      "type": "textarea",
+      "id": "story_text",
+      "label": "Brand Mission / Story Text",
+      "default": "Our mission is simple — bring the authentic taste of Mithila home. Every thekua is handmade in small batches and fried in 100% pure desi ghee, the way our grandmothers made it for Chhath."
+    },
+    {
+      "type": "text",
+      "id": "leaf_tagline",
+      "label": "Leaf Tagline",
+      "default": "Always Makes Difference"
+    },
+    {
+      "type": "header",
+      "content": "Column 2: Quick Links"
+    },
+    {
+      "type": "text",
+      "id": "quick_links_title",
+      "label": "Quick Links Heading",
+      "default": "QUICK LINKS"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Footer Menu",
+      "default": "footer"
+    },
+    {
+      "type": "header",
+      "content": "Column 3: Marketplaces"
+    },
+    {
+      "type": "text",
+      "id": "marketplaces_title",
+      "label": "Marketplaces Heading",
+      "default": "ALSO AVAILABLE ON"
+    },
+    {
+      "type": "url",
+      "id": "amazon_url",
+      "label": "Amazon Store URL"
+    },
+    {
+      "type": "url",
+      "id": "flipkart_url",
+      "label": "Flipkart Store URL"
+    },
+    {
+      "type": "header",
+      "content": "Column 4: Customer Support & GST"
+    },
+    {
+      "type": "text",
+      "id": "support_title",
+      "label": "Support Heading",
+      "default": "CUSTOMER SUPPORT"
+    },
+    {
+      "type": "text",
+      "id": "phone_label",
+      "label": "Phone Number Display",
+      "default": "+91-98110-24472"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone Number Dial (Raw)",
+      "default": "+919811024472"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Support Email",
+      "default": "support@swaadsamvaad.com"
+    },
+    {
+      "type": "text",
+      "id": "company_info",
+      "label": "Company & Location",
+      "default": "Yumee International · New Delhi"
+    },
+    {
+      "type": "text",
+      "id": "gstin",
+      "label": "GSTIN Number",
+      "default": "07AMZPJ4823B1ZX"
+    },
+    {
+      "type": "header",
+      "content": "Bottom Bar & FSSAI"
+    },
+    {
+      "type": "image_picker",
+      "id": "fssai_logo",
+      "label": "FSSAI Logo Image"
+    },
+    {
+      "type": "text",
+      "id": "fssai_number",
+      "label": "FSSAI License Number",
+      "default": "233220030000077"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright Text",
+      "default": "© 2026 Swaad Samvaad · Taste of Mithila, Taste of Home"
+    },
+    {
+      "type": "text",
+      "id": "payment_methods",
+      "label": "Payment Methods Text",
+      "default": "UPI · CARDS · NETBANKING · COD"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Brand Footer"
+    }
+  ]
+}
+{% endschema %}

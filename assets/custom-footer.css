@@ -1,0 +1,519 @@
+/* ==========================================================================
+   SWAAD SAMVAAD - Luxury Custom Footer Styles
+   Matches Brand Aesthetics (Rich Dark Chocolate, Mithila Gold, Ivory Text)
+   ========================================================================== */
+
+:root {
+  --ss-footer-bg: #21130B;
+  --ss-footer-darker-bg: #1A0D06;
+  --ss-footer-card-bg: #2B1A10;
+  --ss-footer-card-border: rgba(198, 156, 109, 0.22);
+  --ss-footer-gold: #E5A93C;
+  --ss-footer-gold-accent: #C69C6D;
+  --ss-footer-text-primary: #FFFFFF;
+  --ss-footer-text-secondary: #C8BDB4;
+  --ss-footer-text-muted: #8E7F74;
+  --ss-footer-border: rgba(198, 156, 109, 0.15);
+}
+
+.ss-custom-footer {
+  background-color: var(--ss-footer-bg);
+  color: var(--ss-footer-text-secondary);
+  font-family: var(--font-body--family, var(--ss-font-sans, 'Plus Jakarta Sans', sans-serif));
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+/* ==========================================================================
+   1. Running Marquee Ticker
+   ========================================================================== */
+.ss-footer-marquee-wrap {
+  background-color: var(--ss-footer-darker-bg);
+  border-top: 1px solid var(--ss-footer-border);
+  border-bottom: 1px solid var(--ss-footer-border);
+  padding: 16px 0;
+  overflow: hidden;
+  position: relative;
+  white-space: nowrap;
+}
+
+.ss-footer-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: ssFooterMarquee 28s linear infinite;
+}
+
+.ss-footer-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes ssFooterMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.ss-footer-marquee-content {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.ss-footer-marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 28px;
+  padding-right: 28px;
+}
+
+.ss-footer-marquee-text {
+  font-family: var(--font-heading--family, var(--ss-font-display, 'Outfit', 'Plus Jakarta Sans', serif));
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: #FAF5EE;
+}
+
+.ss-footer-marquee-sparkle {
+  color: var(--ss-footer-gold);
+  font-size: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   2. Main Footer 4-Column Grid
+   ========================================================================== */
+.ss-footer-main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 60px 32px 50px 32px;
+}
+
+.ss-footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1.1fr 1.3fr;
+  gap: 48px;
+  align-items: start;
+}
+
+/* Column 1: Brand & Mission */
+.ss-footer-col--brand {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.ss-footer-brand-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+}
+
+.ss-footer-logo-circle {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1.5px solid var(--ss-footer-gold-accent);
+  background: #FAF5EE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.ss-footer-logo-circle .ss-footer-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+.ss-footer-logo-fallback {
+  font-family: var(--font-heading--family, var(--ss-font-display, 'Outfit', sans-serif));
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--ss-footer-gold);
+}
+
+.ss-footer-brand-title {
+  font-family: var(--font-heading--family, var(--ss-font-display, 'Outfit', sans-serif));
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.ss-footer-brand-title span {
+  color: var(--ss-footer-gold);
+}
+
+.ss-footer-brand-desc {
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--ss-footer-text-secondary);
+  margin: 0;
+  max-width: 380px;
+}
+
+.ss-footer-leaf-tagline {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ss-footer-gold);
+  margin-top: 4px;
+}
+
+.ss-footer-leaf-tagline svg {
+  width: 15px;
+  height: 15px;
+  fill: currentColor;
+}
+
+/* Headings for Columns */
+.ss-footer-heading {
+  font-family: var(--font-heading--family, var(--ss-font-display, 'Outfit', sans-serif));
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ss-footer-gold);
+  margin: 0 0 20px 0;
+}
+
+/* Column 2: Quick Links */
+.ss-footer-links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ss-footer-link {
+  color: var(--ss-footer-text-secondary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+}
+
+.ss-footer-link:hover {
+  color: #FFFFFF;
+  transform: translateX(3px);
+}
+
+/* Column 3: Also Available On (Marketplace CTA Pills) */
+.ss-footer-col--marketplaces {
+  display: flex;
+  flex-direction: column;
+}
+
+.ss-footer-market-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ss-footer-market-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #2F1E13;
+  border: 1px solid rgba(198, 156, 109, 0.28);
+  border-radius: 50px;
+  padding: 13px 24px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: #FFFFFF;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+.ss-footer-market-btn:hover {
+  background-color: #3D2619;
+  border-color: var(--ss-footer-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.ss-footer-market-btn--amazon span {
+  color: #FF9900;
+  font-weight: 700;
+  margin-left: 4px;
+}
+
+.ss-footer-market-btn--flipkart span {
+  color: #FFE500;
+  font-weight: 700;
+  margin-left: 4px;
+}
+
+/* Column 4: Customer Support & Legal Box */
+.ss-footer-col--support {
+  display: flex;
+  flex-direction: column;
+}
+
+.ss-footer-contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.ss-footer-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--ss-footer-text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.ss-footer-contact-item:hover {
+  color: var(--ss-footer-gold);
+}
+
+.ss-footer-contact-icon {
+  color: var(--ss-footer-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ss-footer-contact-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+}
+
+.ss-footer-gst-card {
+  background-color: #2A1A10;
+  border: 1px solid rgba(198, 156, 109, 0.2);
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.ss-footer-gst-company {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #D6CBC1;
+}
+
+.ss-footer-gst-num {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--ss-footer-text-muted);
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   3. Bottom Bar / Sub-Footer
+   ========================================================================== */
+.ss-footer-bottom {
+  border-top: 1px solid var(--ss-footer-border);
+  padding: 24px 32px;
+  background-color: #1A0E07;
+}
+
+.ss-footer-bottom-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Bottom Left: FSSAI */
+.ss-footer-fssai-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ss-footer-fssai-badge {
+  background: #FFFFFF;
+  border-radius: 4px;
+  padding: 2px 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+}
+
+.ss-footer-fssai-img {
+  height: 18px;
+  max-height: 18px;
+  width: auto;
+  max-width: 54px;
+  object-fit: contain;
+  display: block;
+}
+
+.ss-footer-fssai-lic {
+  font-size: 12.5px;
+  color: var(--ss-footer-text-secondary);
+}
+
+.ss-footer-fssai-lic strong {
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+/* Bottom Center: Copyright */
+.ss-footer-copyright {
+  font-size: 12.5px;
+  color: var(--ss-footer-text-muted);
+  text-align: center;
+}
+
+/* Bottom Right: Payment Methods */
+.ss-footer-payments {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--ss-footer-text-muted);
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   Responsive Adaptations (Desktop, 3-Grid Tablet + Bottom Support, Mobile)
+   ========================================================================== */
+
+/* Tablet Layout (601px - 1024px): 3-Column Top Grid + Full-Width Customer Support Bottom */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .ss-footer-main {
+    padding: 50px 28px 42px 28px;
+  }
+
+  .ss-footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1.15fr; /* 3-grid on top: Brand | Links | Marketplaces */
+    gap: 36px 28px;
+    align-items: start;
+  }
+
+  .ss-footer-col--brand {
+    grid-column: 1;
+  }
+
+  .ss-footer-col--brand .ss-footer-brand-desc {
+    max-width: 100%;
+  }
+
+  .ss-footer-col--links {
+    grid-column: 2;
+  }
+
+  .ss-footer-col--links .ss-footer-links-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .ss-footer-col--marketplaces {
+    grid-column: 3;
+  }
+
+  /* Customer Support shifts to bottom spanning full width */
+  .ss-footer-col--support {
+    grid-column: 1 / -1;
+    margin-top: 8px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(198, 156, 109, 0.18);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .ss-footer-col--support .ss-footer-heading {
+    margin-bottom: 4px;
+  }
+
+  .ss-footer-support-content-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: center;
+  }
+
+  .ss-footer-support-content-wrap .ss-footer-contact-list {
+    margin-bottom: 0;
+  }
+}
+
+/* Mobile Screens (<= 600px) */
+@media (max-width: 600px) {
+  .ss-footer-main {
+    padding: 42px 20px 36px 20px;
+  }
+
+  .ss-footer-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .ss-footer-support-content-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .ss-footer-marquee-text {
+    font-size: 18px;
+    letter-spacing: 2px;
+  }
+
+  .ss-footer-marquee-sparkle {
+    font-size: 16px;
+  }
+
+  .ss-footer-marquee-item {
+    gap: 18px;
+    padding-right: 18px;
+  }
+
+  .ss-footer-bottom {
+    padding: 22px 20px;
+  }
+
+  .ss-footer-bottom-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .ss-footer-fssai-wrap {
+    flex-direction: column;
+    gap: 6px;
+  }
+}

@@ -243,6 +243,52 @@ document.addEventListener('DOMContentLoaded', function () {
     btn.addEventListener('click', closeMobileDrawer);
   });
 
+  // Mobile Drawer Submenu Accordion Handler
+  if (mobileDrawer) {
+    mobileDrawer.addEventListener('click', function (e) {
+      const toggleBtn = e.target.closest('.ss-drawer-toggle-btn');
+      if (toggleBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const navItem = toggleBtn.closest('.ss-drawer-nav-item');
+        const submenu = navItem ? navItem.querySelector('.ss-drawer-submenu') : null;
+        if (submenu) {
+          const isOpen = toggleBtn.classList.contains('is-open');
+          if (isOpen) {
+            toggleBtn.classList.remove('is-open');
+            toggleBtn.setAttribute('aria-expanded', 'false');
+            submenu.setAttribute('hidden', '');
+          } else {
+            toggleBtn.classList.add('is-open');
+            toggleBtn.setAttribute('aria-expanded', 'true');
+            submenu.removeAttribute('hidden');
+          }
+        }
+        return;
+      }
+
+      const grandchildToggleBtn = e.target.closest('.ss-drawer-grandchild-toggle-btn');
+      if (grandchildToggleBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const subnavItem = grandchildToggleBtn.closest('.ss-drawer-subnav-item');
+        const grandchildMenu = subnavItem ? subnavItem.querySelector('.ss-drawer-grandchild-menu') : null;
+        if (grandchildMenu) {
+          const isOpen = grandchildToggleBtn.classList.contains('is-open');
+          if (isOpen) {
+            grandchildToggleBtn.classList.remove('is-open');
+            grandchildToggleBtn.setAttribute('aria-expanded', 'false');
+            grandchildMenu.setAttribute('hidden', '');
+          } else {
+            grandchildToggleBtn.classList.add('is-open');
+            grandchildToggleBtn.setAttribute('aria-expanded', 'true');
+            grandchildMenu.removeAttribute('hidden');
+          }
+        }
+      }
+    });
+  }
+
   // ==========================================
   // 5. Account / Sign-In Modal & shopify-account Anchoring
   // ==========================================

@@ -104,13 +104,51 @@
         <ul class="ss-nav-list">
           {% if section.settings.menu != blank and linklists[section.settings.menu].links.size > 0 %}
             {% for link in linklists[section.settings.menu].links %}
-              <li class="ss-nav-item">
-                <a href="{{ link.url }}" class="ss-nav-link">
+              <li class="ss-nav-item{% if link.links != blank %} ss-has-dropdown{% endif %}">
+                <a href="{{ link.url }}" class="ss-nav-link{% if link.links != blank %} ss-has-dropdown-link{% endif %}">
                   {% if link.title contains 'FSSAI' or link.title contains 'Quality' %}
                     <span class="ss-green-dot" aria-hidden="true"></span>
                   {% endif %}
-                  {{ link.title }}
+                  <span>{{ link.title }}</span>
+                  {% if link.links != blank %}
+                    <svg class="ss-nav-chevron" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <polyline points="1 1 5 5 9 1"></polyline>
+                    </svg>
+                  {% endif %}
                 </a>
+
+                {% if link.links != blank %}
+                  <div class="ss-dropdown-menu">
+                    <ul class="ss-dropdown-list">
+                      {% for child_link in link.links %}
+                        <li class="ss-dropdown-item{% if child_link.links != blank %} ss-has-subdropdown{% endif %}">
+                          <a href="{{ child_link.url }}" class="ss-dropdown-link">
+                            <span>{{ child_link.title }}</span>
+                            {% if child_link.links != blank %}
+                              <svg class="ss-subdropdown-chevron" viewBox="0 0 6 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <polyline points="1 1 5 5 1 9"></polyline>
+                              </svg>
+                            {% endif %}
+                          </a>
+
+                          {% if child_link.links != blank %}
+                            <div class="ss-subdropdown-menu">
+                              <ul class="ss-subdropdown-list">
+                                {% for grandchild_link in child_link.links %}
+                                  <li class="ss-subdropdown-item">
+                                    <a href="{{ grandchild_link.url }}" class="ss-subdropdown-link">
+                                      {{ grandchild_link.title }}
+                                    </a>
+                                  </li>
+                                {% endfor %}
+                              </ul>
+                            </div>
+                          {% endif %}
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                {% endif %}
               </li>
             {% endfor %}
           {% else %}
@@ -455,20 +493,74 @@
         <span class="ss-drawer-search-placeholder">Search Desi Gud, Thekua, Sweets...</span>
       </button>
 
-      <!-- Clean Navigation List with Chevrons -->
+      <!-- Clean Navigation List with Chevrons & Expandable Submenus -->
       <ul class="ss-drawer-nav-list">
         {% if section.settings.menu != blank and linklists[section.settings.menu].links.size > 0 %}
           {% for link in linklists[section.settings.menu].links %}
-            <li class="ss-drawer-nav-item">
-              <a href="{{ link.url }}" class="ss-drawer-nav-link">
-                <span class="ss-drawer-nav-label-wrap">
-                  {% if link.title contains 'FSSAI' or link.title contains 'Quality' %}
-                    <span class="ss-green-dot" aria-hidden="true"></span>
-                  {% endif %}
-                  {{ link.title }}
-                </span>
-                <span class="ss-drawer-nav-arrow" aria-hidden="true">›</span>
-              </a>
+            <li class="ss-drawer-nav-item{% if link.links != blank %} ss-drawer-has-dropdown{% endif %}">
+              {% if link.links != blank %}
+                <div class="ss-drawer-nav-row">
+                  <a href="{{ link.url }}" class="ss-drawer-nav-link ss-drawer-parent-link">
+                    <span class="ss-drawer-nav-label-wrap">
+                      {% if link.title contains 'FSSAI' or link.title contains 'Quality' %}
+                        <span class="ss-green-dot" aria-hidden="true"></span>
+                      {% endif %}
+                      {{ link.title }}
+                    </span>
+                  </a>
+                  <button type="button" class="ss-drawer-toggle-btn" aria-expanded="false" aria-label="Toggle {{ link.title }} submenu">
+                    <svg class="ss-drawer-toggle-icon" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="1 1 5 5 9 1"></polyline>
+                    </svg>
+                  </button>
+                </div>
+                <div class="ss-drawer-submenu" hidden>
+                  <ul class="ss-drawer-subnav-list">
+                    {% for child_link in link.links %}
+                      <li class="ss-drawer-subnav-item{% if child_link.links != blank %} ss-drawer-has-grandchild{% endif %}">
+                        {% if child_link.links != blank %}
+                          <div class="ss-drawer-subnav-row">
+                            <a href="{{ child_link.url }}" class="ss-drawer-subnav-link ss-drawer-subparent-link">
+                              {{ child_link.title }}
+                            </a>
+                            <button type="button" class="ss-drawer-grandchild-toggle-btn" aria-expanded="false" aria-label="Toggle {{ child_link.title }} submenu">
+                              <svg class="ss-drawer-toggle-icon" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="1 1 5 5 9 1"></polyline>
+                              </svg>
+                            </button>
+                          </div>
+                          <div class="ss-drawer-grandchild-menu" hidden>
+                            <ul class="ss-drawer-grandchild-list">
+                              {% for grandchild_link in child_link.links %}
+                                <li class="ss-drawer-grandchild-item">
+                                  <a href="{{ grandchild_link.url }}" class="ss-drawer-grandchild-link">
+                                    {{ grandchild_link.title }}
+                                  </a>
+                                </li>
+                              {% endfor %}
+                            </ul>
+                          </div>
+                        {% else %}
+                          <a href="{{ child_link.url }}" class="ss-drawer-subnav-link">
+                            <span>{{ child_link.title }}</span>
+                            <span class="ss-drawer-subnav-arrow" aria-hidden="true">›</span>
+                          </a>
+                        {% endif %}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% else %}
+                <a href="{{ link.url }}" class="ss-drawer-nav-link">
+                  <span class="ss-drawer-nav-label-wrap">
+                    {% if link.title contains 'FSSAI' or link.title contains 'Quality' %}
+                      <span class="ss-green-dot" aria-hidden="true"></span>
+                    {% endif %}
+                    {{ link.title }}
+                  </span>
+                  <span class="ss-drawer-nav-arrow" aria-hidden="true">›</span>
+                </a>
+              {% endif %}
             </li>
           {% endfor %}
         {% else %}
