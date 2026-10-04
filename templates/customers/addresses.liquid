@@ -1,0 +1,490 @@
+{% comment %}
+  SWAAD SAMVAAD - Customer Addresses Template
+{% endcomment %}
+
+<div class="ss-account-page-wrapper">
+  <div class="ss-account-container">
+    {% comment %} Header {% endcomment %}
+    <div class="ss-account-header">
+      <div class="ss-account-header-text">
+        <span class="ss-account-badge">SWAAD SAMVAAD</span>
+        <h1 class="ss-account-title">My Addresses</h1>
+        <p class="ss-account-subtitle">Manage your shipping and billing addresses for faster checkout.</p>
+      </div>
+      <div class="ss-account-header-actions">
+        <button type="button" class="ss-account-secondary-btn" onclick="document.getElementById('AddAddressModal').style.display='flex'">
+          + Add New Address
+        </button>
+        <a href="{{ routes.account_url }}" class="ss-account-action-link">
+          ← Return to Account
+        </a>
+      </div>
+    </div>
+
+    {% comment %} Address List {% endcomment %}
+    <div class="ss-addresses-grid">
+      {% for address in customer.addresses %}
+        <div class="ss-address-card {% if address == customer.default_address %}is-default{% endif %}">
+          {% if address == customer.default_address %}
+            <span class="ss-default-badge">DEFAULT ADDRESS</span>
+          {% endif %}
+          <div class="ss-address-details">
+            <h3 class="ss-address-name">{{ address.name }}</h3>
+            {% if address.company != blank %}<p class="ss-address-line">{{ address.company }}</p>{% endif %}
+            <p class="ss-address-line">{{ address.street }}</p>
+            <p class="ss-address-line">{{ address.city }}{% if address.province_code %}, {{ address.province_code }}{% endif %} {{ address.zip }}</p>
+            <p class="ss-address-line">{{ address.country }}</p>
+            {% if address.phone != blank %}<p class="ss-address-line ss-phone">{{ address.phone }}</p>{% endif %}
+          </div>
+          <div class="ss-address-actions">
+            <button
+              type="button"
+              class="ss-addr-btn"
+              onclick="document.getElementById('EditAddress_{{ address.id }}').style.display='flex'"
+            >
+              Edit
+            </button>
+            <form
+              method="post"
+              action="{{ routes.account_addresses_url }}/{{ address.id }}"
+              onsubmit="return confirm('Are you sure you want to delete this address?');"
+              style="display:inline;"
+            >
+              <input type="hidden" name="_method" value="delete">
+              <button type="submit" class="ss-addr-btn is-delete">Delete</button>
+            </form>
+          </div>
+        </div>
+
+        {% comment %} Edit Address Modal {% endcomment %}
+        <div id="EditAddress_{{ address.id }}" class="ss-modal-overlay" style="display:none;">
+          <div class="ss-modal-card">
+            <div class="ss-modal-header">
+              <h2>Edit Address</h2>
+              <button type="button" class="ss-modal-close" onclick="document.getElementById('EditAddress_{{ address.id }}').style.display='none'">✕</button>
+            </div>
+            {% form 'customer_address', address, class: 'ss-address-form' %}
+              <div class="ss-form-row">
+                <div class="ss-field">
+                  <label for="AddressFirstName_{{ address.id }}">First Name</label>
+                  <input type="text" id="AddressFirstName_{{ address.id }}" name="address[first_name]" value="{{ form.first_name }}">
+                </div>
+                <div class="ss-field">
+                  <label for="AddressLastName_{{ address.id }}">Last Name</label>
+                  <input type="text" id="AddressLastName_{{ address.id }}" name="address[last_name]" value="{{ form.last_name }}">
+                </div>
+              </div>
+              <div class="ss-field">
+                <label for="AddressCompany_{{ address.id }}">Company (Optional)</label>
+                <input type="text" id="AddressCompany_{{ address.id }}" name="address[company]" value="{{ form.company }}">
+              </div>
+              <div class="ss-field">
+                <label for="AddressAddress1_{{ address.id }}">Address 1</label>
+                <input type="text" id="AddressAddress1_{{ address.id }}" name="address[address1]" value="{{ form.address1 }}" required>
+              </div>
+              <div class="ss-field">
+                <label for="AddressAddress2_{{ address.id }}">Apartment, suite, etc. (Optional)</label>
+                <input type="text" id="AddressAddress2_{{ address.id }}" name="address[address2]" value="{{ form.address2 }}">
+              </div>
+              <div class="ss-form-row">
+                <div class="ss-field">
+                  <label for="AddressCity_{{ address.id }}">City</label>
+                  <input type="text" id="AddressCity_{{ address.id }}" name="address[city]" value="{{ form.city }}" required>
+                </div>
+                <div class="ss-field">
+                  <label for="AddressZip_{{ address.id }}">PIN / Postal Code</label>
+                  <input type="text" id="AddressZip_{{ address.id }}" name="address[zip]" value="{{ form.zip }}" required>
+                </div>
+              </div>
+              <div class="ss-field">
+                <label for="AddressCountry_{{ address.id }}">Country</label>
+                <select id="AddressCountry_{{ address.id }}" name="address[country]" data-default="{{ form.country }}">
+                  {{ all_country_option_tags }}
+                </select>
+              </div>
+              <div class="ss-field">
+                <label for="AddressPhone_{{ address.id }}">Phone</label>
+                <input type="tel" id="AddressPhone_{{ address.id }}" name="address[phone]" value="{{ form.phone }}">
+              </div>
+              <div class="ss-checkbox-field">
+                {{ form.set_as_default_checkbox }}
+                <label for="address_default_address_{{ address.id }}">Set as default address</label>
+              </div>
+              <div class="ss-modal-buttons">
+                <button type="submit" class="ss-submit-btn">Update Address</button>
+                <button type="button" class="ss-cancel-btn" onclick="document.getElementById('EditAddress_{{ address.id }}').style.display='none'">Cancel</button>
+              </div>
+            {% endform %}
+          </div>
+        </div>
+      {% else %}
+        <div class="ss-empty-addresses">
+          <p>You have not saved any addresses yet.</p>
+        </div>
+      {% endfor %}
+    </div>
+
+    {% comment %} Add New Address Modal {% endcomment %}
+    <div id="AddAddressModal" class="ss-modal-overlay" style="display:none;">
+      <div class="ss-modal-card">
+        <div class="ss-modal-header">
+          <h2>Add New Address</h2>
+          <button type="button" class="ss-modal-close" onclick="document.getElementById('AddAddressModal').style.display='none'">✕</button>
+        </div>
+        {% form 'customer_address', customer.new_address, class: 'ss-address-form' %}
+          <div class="ss-form-row">
+            <div class="ss-field">
+              <label for="AddressFirstNameNew">First Name</label>
+              <input type="text" id="AddressFirstNameNew" name="address[first_name]" value="{{ form.first_name }}">
+            </div>
+            <div class="ss-field">
+              <label for="AddressLastNameNew">Last Name</label>
+              <input type="text" id="AddressLastNameNew" name="address[last_name]" value="{{ form.last_name }}">
+            </div>
+          </div>
+          <div class="ss-field">
+            <label for="AddressCompanyNew">Company (Optional)</label>
+            <input type="text" id="AddressCompanyNew" name="address[company]" value="{{ form.company }}">
+          </div>
+          <div class="ss-field">
+            <label for="AddressAddress1New">Address 1</label>
+            <input type="text" id="AddressAddress1New" name="address[address1]" value="{{ form.address1 }}" required>
+          </div>
+          <div class="ss-field">
+            <label for="AddressAddress2New">Apartment, suite, etc. (Optional)</label>
+            <input type="text" id="AddressAddress2New" name="address[address2]" value="{{ form.address2 }}">
+          </div>
+          <div class="ss-form-row">
+            <div class="ss-field">
+              <label for="AddressCityNew">City</label>
+              <input type="text" id="AddressCityNew" name="address[city]" value="{{ form.city }}" required>
+            </div>
+            <div class="ss-field">
+              <label for="AddressZipNew">PIN / Postal Code</label>
+              <input type="text" id="AddressZipNew" name="address[zip]" value="{{ form.zip }}" required>
+            </div>
+          </div>
+          <div class="ss-field">
+            <label for="AddressCountryNew">Country</label>
+            <select id="AddressCountryNew" name="address[country]" data-default="{{ form.country }}">
+              {{ all_country_option_tags }}
+            </select>
+          </div>
+          <div class="ss-field">
+            <label for="AddressPhoneNew">Phone</label>
+            <input type="tel" id="AddressPhoneNew" name="address[phone]" value="{{ form.phone }}">
+          </div>
+          <div class="ss-checkbox-field">
+            {{ form.set_as_default_checkbox }}
+            <label for="address_default_address_new">Set as default address</label>
+          </div>
+          <div class="ss-modal-buttons">
+            <button type="submit" class="ss-submit-btn">Save Address</button>
+            <button type="button" class="ss-cancel-btn" onclick="document.getElementById('AddAddressModal').style.display='none'">Cancel</button>
+          </div>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .ss-account-page-wrapper {
+    min-height: calc(100vh - 200px);
+    background-color: var(--ss-color-cream-bg, #F9F8F3);
+    padding: 50px 20px;
+    font-family: var(--ss-font-sans, system-ui, -apple-system, sans-serif);
+  }
+
+  .ss-account-container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .ss-account-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid rgba(198, 156, 109, 0.25);
+    padding-bottom: 24px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .ss-account-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: var(--ss-color-brown-dark, #3D1E0B);
+    background: #F4ECE1;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+  }
+
+  .ss-account-title {
+    font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--ss-color-brown-dark, #3D1E0B);
+    margin: 0 0 6px 0;
+  }
+
+  .ss-account-subtitle {
+    font-size: 14px;
+    color: #6B5B53;
+    margin: 0;
+  }
+
+  .ss-account-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .ss-account-secondary-btn {
+    padding: 10px 18px;
+    background-color: var(--ss-color-brown-dark, #3D1E0B);
+    color: #FFFFFF;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .ss-account-secondary-btn:hover {
+    background-color: #2A1407;
+  }
+
+  .ss-account-action-link {
+    color: var(--ss-color-brown-dark, #3D1E0B);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .ss-account-action-link:hover {
+    text-decoration: underline;
+  }
+
+  .ss-addresses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .ss-address-card {
+    background: #FFFFFF;
+    border: 1.5px solid #EBE5DF;
+    border-radius: 14px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .ss-address-card.is-default {
+    border-color: var(--ss-color-gold-accent, #C69C6D);
+    box-shadow: 0 4px 16px rgba(198, 156, 109, 0.15);
+  }
+
+  .ss-default-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-size: 10.5px;
+    font-weight: 700;
+    background: #F4ECE1;
+    color: var(--ss-color-brown-dark, #3D1E0B);
+    padding: 3px 8px;
+    border-radius: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  .ss-address-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ss-color-brown-dark, #3D1E0B);
+    margin: 0 0 10px 0;
+  }
+
+  .ss-address-line {
+    font-size: 13.5px;
+    color: #4A3E39;
+    margin: 0 0 4px 0;
+    line-height: 1.4;
+  }
+
+  .ss-phone {
+    color: #8C7F73;
+    margin-top: 6px;
+  }
+
+  .ss-address-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #F0EAE1;
+  }
+
+  .ss-addr-btn {
+    padding: 6px 14px;
+    border: 1px solid #DED7CF;
+    background: #FFFFFF;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ss-color-brown-dark, #3D1E0B);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .ss-addr-btn:hover {
+    background: #FAF6F0;
+    border-color: var(--ss-color-brown-dark, #3D1E0B);
+  }
+
+  .ss-addr-btn.is-delete {
+    color: #CF1322;
+    border-color: #FFCCC7;
+  }
+
+  .ss-addr-btn.is-delete:hover {
+    background: #FFF1F0;
+    border-color: #CF1322;
+  }
+
+  /* Modal overlay */
+  .ss-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(30, 20, 15, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 20px;
+  }
+
+  .ss-modal-card {
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 28px 32px;
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+  }
+
+  .ss-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .ss-modal-header h2 {
+    font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    font-size: 22px;
+    color: var(--ss-color-brown-dark, #3D1E0B);
+    margin: 0;
+  }
+
+  .ss-modal-close {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #6B5B53;
+  }
+
+  .ss-address-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .ss-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .ss-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .ss-field label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ss-color-brown-dark, #3D1E0B);
+  }
+
+  .ss-field input, .ss-field select {
+    height: 42px;
+    border: 1.5px solid #DED7CF;
+    border-radius: 8px;
+    padding: 0 12px;
+    font-size: 13.5px;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    background: #FFFFFF;
+  }
+
+  .ss-field input:focus, .ss-field select:focus {
+    border-color: var(--ss-color-brown-dark, #3D1E0B);
+  }
+
+  .ss-checkbox-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    font-size: 13px;
+    color: #4A3E39;
+  }
+
+  .ss-modal-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  .ss-submit-btn {
+    flex: 1;
+    height: 44px;
+    background: var(--ss-color-brown-dark, #3D1E0B);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .ss-cancel-btn {
+    height: 44px;
+    padding: 0 20px;
+    background: #F4ECE1;
+    border: 1px solid #DED7CF;
+    color: var(--ss-color-brown-dark, #3D1E0B);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+</style>

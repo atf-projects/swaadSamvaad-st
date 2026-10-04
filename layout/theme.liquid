@@ -21,12 +21,21 @@
     {%- render 'stylesheets' -%}
     {%- render 'card-hover-effect-styles' -%}
     {%- render 'fonts' -%}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     {%- render 'scripts' -%}
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-palette' -%}
 
     {% if request.design_mode %}
       {%- render 'theme-editor' -%}
+    {% endif %}
+
+    {% if template.name == '404' and request.path contains '/account' %}
+      <script>
+        window.location.replace('{{ routes.account_url }}');
+      </script>
     {% endif %}
 
     {{ content_for_header }}

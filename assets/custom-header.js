@@ -243,11 +243,84 @@ document.addEventListener('DOMContentLoaded', function () {
     btn.addEventListener('click', closeMobileDrawer);
   });
 
+  // ==========================================
+  // 5. Account / Sign-In Modal & shopify-account Anchoring
+  // ==========================================
+  const accountTriggers = document.querySelectorAll('[data-ss-trigger="account"]');
+  const accountModal = document.getElementById('SwaadAccountModal');
+  const accountCloseBtns = document.querySelectorAll('[data-ss-close="account"]');
+
+  // Anchor native shopify-account dialog to the bottom of the account button itself
+  document.addEventListener(
+    'open',
+    (event) => {
+      const { target } = event;
+      if (!(target instanceof HTMLElement) || !target.matches('shopify-account')) return;
+
+      const bottom = Math.max(0, Math.round(target.getBoundingClientRect().bottom));
+      target.style.setProperty('--account-dialog-top', `${bottom}px`);
+    },
+    true
+  );
+
+  function positionAccountCard() {
+    if (!accountModal) return;
+    const accountBtn = document.querySelector('.ss-account-btn');
+    const accountCard = accountModal.querySelector('.ss-account-card');
+    if (accountBtn && accountCard && window.innerWidth > 768) {
+      const rect = accountBtn.getBoundingClientRect();
+      const topPos = rect.bottom + 8;
+      accountCard.style.top = `${topPos}px`;
+      const rightPos = Math.max(16, window.innerWidth - rect.right);
+      accountCard.style.right = `${rightPos}px`;
+    }
+  }
+
+  function openAccountModal() {
+    if (!accountModal) return;
+    if (mobileDrawer && mobileDrawer.classList.contains('is-active')) {
+      closeMobileDrawer();
+    }
+    positionAccountCard();
+    accountModal.classList.add('is-active');
+    accountModal.removeAttribute('hidden');
+    setScrollLock(true);
+  }
+
+  function closeAccountModal() {
+    if (!accountModal) return;
+    accountModal.classList.remove('is-active');
+    accountModal.setAttribute('hidden', '');
+    setScrollLock(false);
+  }
+
+  accountTriggers.forEach(trigger => {
+    trigger.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (accountModal && accountModal.classList.contains('is-active')) {
+        closeAccountModal();
+      } else {
+        openAccountModal();
+      }
+    });
+  });
+
+  window.addEventListener('resize', () => {
+    if (accountModal && accountModal.classList.contains('is-active')) {
+      positionAccountCard();
+    }
+  });
+
+  accountCloseBtns.forEach(btn => {
+    btn.addEventListener('click', closeAccountModal);
+  });
+
   // Global Backdrop Click & Escape Key Listeners
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
       closeSearchModal();
       closeScanModal();
+      closeAccountModal();
       closeMobileDrawer();
     }
   });

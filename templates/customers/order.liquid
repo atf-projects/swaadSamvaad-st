@@ -1,0 +1,330 @@
+{% comment %}
+  SWAAD SAMVAAD - Customer Order Detail Template
+{% endcomment %}
+
+<div class="ss-account-page-wrapper">
+  <div class="ss-account-container">
+    <div class="ss-account-header">
+      <div class="ss-account-header-text">
+        <span class="ss-account-badge">ORDER DETAILS</span>
+        <h1 class="ss-account-title">Order {{ order.name }}</h1>
+        <p class="ss-account-subtitle">Placed on {{ order.created_at | time_tag: format: 'date_at_time' }}</p>
+      </div>
+      <div class="ss-account-header-actions">
+        <a href="{{ routes.account_url }}" class="ss-account-action-link">
+          ← Back to Account
+        </a>
+      </div>
+    </div>
+
+    {% if order.cancelled %}
+      <div class="ss-order-cancelled-banner">
+        <strong>Order Cancelled on {{ order.cancelled_at | time_tag: format: 'date_at_time' }}</strong>
+        <p>Reason: {{ order.cancel_reason_label }}</p>
+      </div>
+    {% endif %}
+
+    <div class="ss-order-layout">
+      <!-- Order Items Table -->
+      <div class="ss-order-main-card">
+        <table class="ss-order-items-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>SKU</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th style="text-align: right;">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for line_item in order.line_items %}
+              <tr>
+                <td>
+                  <div class="ss-item-details">
+                    <span class="ss-item-title">{{ line_item.title }}</span>
+                    {% if line_item.selling_plan_allocation %}
+                      <span class="ss-item-sub">{{ line_item.selling_plan_allocation.selling_plan.name }}</span>
+                    {% endif %}
+                  </div>
+                </td>
+                <td><span class="ss-item-sku">{{ line_item.sku | default: '—' }}</span></td>
+                <td>{{ line_item.final_price | money }}</td>
+                <td>{{ line_item.quantity }}</td>
+                <td style="text-align: right; font-weight: 700;">{{ line_item.final_line_price | money }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4">Subtotal</td>
+              <td style="text-align: right;">{{ order.line_items_subtotal_price | money }}</td>
+            </tr>
+            {% for discount_application in order.discount_applications %}
+              <tr>
+                <td colspan="4">Discount ({{ discount_application.title }})</td>
+                <td style="text-align: right;">-{{ discount_application.total_allocated_amount | money }}</td>
+              </tr>
+            {% endfor %}
+            {% for shipping_method in order.shipping_methods %}
+              <tr>
+                <td colspan="4">Shipping ({{ shipping_method.title }})</td>
+                <td style="text-align: right;">{{ shipping_method.price | money }}</td>
+              </tr>
+            {% endfor %}
+            {% for tax_line in order.tax_lines %}
+              <tr>
+                <td colspan="4">Tax ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%)</td>
+                <td style="text-align: right;">{{ tax_line.price | money }}</td>
+              </tr>
+            {% endfor %}
+            <tr class="ss-total-row">
+              <td colspan="4">Total</td>
+              <td style="text-align: right;">{{ order.total_price | money_with_currency }}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- Order Summary & Shipping Details -->
+      <div class="ss-order-side-card">
+        <div class="ss-side-section">
+          <h3>Fulfillment Status</h3>
+          <span class="ss-status-pill ss-fulfillment-{{ order.fulfillment_status }}">
+            {{ order.fulfillment_status_label }}
+          </span>
+          {% if order.shipping_address %}
+            <div class="ss-address-box">
+              <h4>Shipping Address</h4>
+              <p>{{ order.shipping_address.name }}</p>
+              <p>{{ order.shipping_address.street }}</p>
+              <p>{{ order.shipping_address.city }}, {{ order.shipping_address.province_code }} {{ order.shipping_address.zip }}</p>
+              <p>{{ order.shipping_address.country }}</p>
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="ss-side-section">
+          <h3>Payment Status</h3>
+          <span class="ss-status-pill ss-financial-{{ order.financial_status }}">
+            {{ order.financial_status_label }}
+          </span>
+          {% if order.billing_address %}
+            <div class="ss-address-box">
+              <h4>Billing Address</h4>
+              <p>{{ order.billing_address.name }}</p>
+              <p>{{ order.billing_address.street }}</p>
+              <p>{{ order.billing_address.city }}, {{ order.billing_address.province_code }} {{ order.billing_address.zip }}</p>
+              <p>{{ order.billing_address.country }}</p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .ss-account-page-wrapper {
+    min-height: calc(100vh - 200px);
+    background-color: var(--ss-color-cream-bg, #F9F8F3);
+    padding: 50px 20px;
+    font-family: var(--ss-font-sans, system-ui, -apple-system, sans-serif);
+  }
+
+  .ss-account-container {
+    max-width: 1050px;
+    margin: 0 auto;
+  }
+
+  .ss-account-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid rgba(198, 156, 109, 0.25);
+    padding-bottom: 24px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .ss-account-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: var(--ss-color-brown-dark, #3D1E0B);
+    background: #F4ECE1;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+  }
+
+  .ss-account-title {
+    font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--ss-color-brown-dark, #3D1E0B);
+    margin: 0 0 6px 0;
+  }
+
+  .ss-account-subtitle {
+    font-size: 14px;
+    color: #6B5B53;
+    margin: 0;
+  }
+
+  .ss-account-action-link {
+    color: var(--ss-color-brown-dark, #3D1E0B);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .ss-account-action-link:hover {
+    text-decoration: underline;
+  }
+
+  .ss-order-cancelled-banner {
+    background: #FFF1F0;
+    border: 1px solid #FFCCC7;
+    color: #CF1322;
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+  }
+
+  .ss-order-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+
+  .ss-order-main-card, .ss-order-side-card {
+    background: #FFFFFF;
+    border: 1px solid rgba(198, 156, 109, 0.25);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 16px rgba(61, 30, 11, 0.04);
+  }
+
+  .ss-order-items-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .ss-order-items-table th {
+    text-align: left;
+    padding: 12px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #8C7F73;
+    border-bottom: 1.5px solid #EBE5DF;
+  }
+
+  .ss-order-items-table td {
+    padding: 14px 10px;
+    border-bottom: 1px solid #F0EAE1;
+    color: #2B2523;
+  }
+
+  .ss-item-title {
+    font-weight: 600;
+    color: var(--ss-color-brown-dark, #3D1E0B);
+    display: block;
+  }
+
+  .ss-item-sub {
+    font-size: 12px;
+    color: #8C7F73;
+  }
+
+  .ss-item-sku {
+    font-family: monospace;
+    font-size: 12px;
+    color: #8C7F73;
+  }
+
+  .ss-order-items-table tfoot td {
+    border-bottom: none;
+    padding: 8px 10px;
+    color: #6B5B53;
+  }
+
+  .ss-total-row td {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ss-color-brown-dark, #3D1E0B);
+    padding-top: 14px;
+    border-top: 1.5px solid #EBE5DF;
+  }
+
+  .ss-side-section {
+    margin-bottom: 24px;
+  }
+
+  .ss-side-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .ss-side-section h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ss-color-brown-dark, #3D1E0B);
+    margin: 0 0 10px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .ss-status-pill {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #F4ECE1;
+    color: var(--ss-color-brown-dark, #3D1E0B);
+  }
+
+  .ss-financial-paid, .ss-fulfillment-fulfilled {
+    background: #E6F4EA;
+    color: #137333;
+  }
+
+  .ss-financial-pending {
+    background: #FEF7E0;
+    color: #B06000;
+  }
+
+  .ss-address-box {
+    margin-top: 14px;
+    background: #FAF6F0;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #4A3E39;
+  }
+
+  .ss-address-box h4 {
+    margin: 0 0 6px 0;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #8C7F73;
+  }
+
+  .ss-address-box p {
+    margin: 0 0 3px 0;
+  }
+
+  @media (max-width: 768px) {
+    .ss-order-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

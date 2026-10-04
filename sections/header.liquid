@@ -178,19 +178,39 @@
           </button>
         {% endif %}
 
-        <!-- Customer Account / Login Icon -->
+        <!-- Customer Account / Login Component -->
         {% if shop.customer_accounts_enabled or section.settings.show_account %}
-          <a
-            href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
-            class="ss-icon-btn ss-account-btn"
-            aria-label="{% if customer %}My Account{% else %}Log in to Account{% endif %}"
-            title="{% if customer %}My Account{% else %}Log in{% endif %}"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-          </a>
+          <div class="ss-account-wrapper">
+            {% if customer %}
+              <a
+                href="{{ routes.account_url }}"
+                class="ss-icon-btn ss-account-btn is-logged-in"
+                aria-label="My Account"
+                title="My Account ({{ customer.first_name }})"
+              >
+                <span class="ss-account-initials">{{ customer.first_name | slice: 0, 1 | upcase }}</span>
+              </a>
+            {% else %}
+              <button
+                type="button"
+                class="ss-icon-btn ss-account-btn"
+                data-ss-trigger="account"
+                aria-label="Sign in or Account"
+                title="Sign in or create account"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </button>
+            {% endif %}
+
+            {% if shop.customer_accounts_enabled %}
+              <div style="display:none;" aria-hidden="true">
+                <shopify-account></shopify-account>
+              </div>
+            {% endif %}
+          </div>
         {% endif %}
 
         <!-- Cart Trigger -->
@@ -306,6 +326,96 @@
   </div>
 </div>
 
+{% comment %} 5. INTERACTIVE ACCOUNT / SIGN-IN POPUP MODAL (DESKTOP POPOVER & MOBILE BOTTOM SHEET) {% endcomment %}
+<div id="SwaadAccountModal" class="ss-account-modal-container" role="dialog" aria-modal="true" aria-label="Sign in or create account" hidden>
+  <div class="ss-search-backdrop" data-ss-close="account"></div>
+  <div class="ss-account-card">
+    <div class="ss-account-card-header">
+      <h3 class="ss-account-card-title">Sign in or create account</h3>
+      <button type="button" class="ss-account-close-btn" data-ss-close="account" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="ss-account-card-body">
+      <!-- Sign in with Shop Button (Clean Modern Style matching user's preferred modal) -->
+      <a href="/services/login_with_shop/authorize?locale={{ request.locale.iso_code }}" class="ss-shop-login-btn" aria-label="Sign in with Shop">
+        <span class="ss-shop-btn-text">Sign in with</span>
+        <span class="ss-shop-logo-text">shop</span>
+      </a>
+
+      <!-- Divider -->
+      <div class="ss-account-divider">
+        <span>OR</span>
+      </div>
+
+      <!-- Email Login Form -->
+      <form action="{{ routes.account_login_url }}" method="post" class="ss-account-email-form">
+        <input type="hidden" name="form_type" value="customer_login" />
+        <input type="hidden" name="utf8" value="✓" />
+        <input type="hidden" name="return_to" value="{{ routes.account_url }}" />
+        <div class="ss-account-input-group">
+          <input
+            type="email"
+            name="customer[email]"
+            class="ss-account-email-input"
+            placeholder="Email"
+            required
+            autocomplete="email"
+          />
+          <button type="submit" class="ss-account-submit-arrow" aria-label="Submit Email">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </button>
+        </div>
+
+        <label class="ss-account-checkbox-label">
+          <input type="checkbox" name="customer[accepts_marketing]" checked="checked" />
+          <span>Email me with news and offers</span>
+        </label>
+      </form>
+
+      <!-- Bottom Quick Navigation Buttons: Orders & Profile -->
+      <div class="ss-account-footer-grid">
+        <a
+          href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}?return_to={{ routes.account_url | url_encode }}{% endif %}"
+          class="ss-account-footer-btn"
+          title="{% if customer %}View Orders{% else %}Log in to view orders{% endif %}"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <rect x="3" y="4" width="18" height="16" rx="2" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+            <line x1="10" y1="14" x2="14" y2="14" />
+          </svg>
+          <span>Orders</span>
+        </a>
+        <a
+          href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}?return_to={{ routes.account_url | url_encode }}{% endif %}"
+          class="ss-account-footer-btn"
+          title="{% if customer %}View Profile{% else %}Log in to view profile{% endif %}"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          <span>Profile</span>
+        </a>
+      </div>
+
+      <!-- Quick Register Link -->
+      <div class="ss-account-signup-row">
+        <span>Don't have an account?</span>
+        <a href="{{ routes.account_register_url }}" class="ss-account-register-link">Create one</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% comment %} 5. PREMIUM MOBILE NAVIGATION DRAWER {% endcomment %}
 <div id="SwaadMobileDrawer" class="ss-mobile-drawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation" hidden>
   <div class="ss-drawer-backdrop" data-ss-close="mobile-drawer"></div>
@@ -406,22 +516,30 @@
 
       <!-- Mobile Drawer Customer Account Link -->
       {% if shop.customer_accounts_enabled or section.settings.show_account %}
-        <a
-          href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
-          class="ss-drawer-account-link"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-            <circle cx="12" cy="7" r="4" />
-          </svg>
-          <span>
-            {% if customer %}
-              My Account ({{ customer.first_name | default: 'Profile' }})
-            {% else %}
-              Log in / Sign up
-            {% endif %}
-          </span>
-        </a>
+        {% if customer %}
+          <a
+            href="{{ routes.account_url }}"
+            class="ss-drawer-account-link"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            <span>My Account ({{ customer.first_name | default: 'Profile' }})</span>
+          </a>
+        {% else %}
+          <button
+            type="button"
+            class="ss-drawer-account-link"
+            data-ss-trigger="account"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            <span>Log in / Sign up</span>
+          </button>
+        {% endif %}
       {% endif %}
 
       <!-- Premium WhatsApp Order CTA Card -->
