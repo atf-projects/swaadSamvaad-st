@@ -48,6 +48,7 @@ assets/*.d.ts
 ehthumbs.db
 Thumbs.db
 desktop.ini
+.code-review-graph
 
 # ==========================================
 # Environment Variables & Secret Keys

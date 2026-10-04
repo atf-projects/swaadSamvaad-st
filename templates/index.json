@@ -93,6 +93,55 @@
         "overlap_banner": true
       }
     },
+    "ss_featured_products_main": {
+      "type": "ss-featured-products",
+      "blocks": {
+        "tab_all": {
+          "type": "category_tab",
+          "settings": {
+            "title": "All"
+          }
+        },
+        "tab_gud": {
+          "type": "category_tab",
+          "settings": {
+            "title": "Gud Thekua"
+          }
+        },
+        "tab_sugar": {
+          "type": "category_tab",
+          "settings": {
+            "title": "Sugar Thekua"
+          }
+        },
+        "tab_dryfruit": {
+          "type": "category_tab",
+          "settings": {
+            "title": "Dry Fruit Thekua"
+          }
+        }
+      },
+      "block_order": [
+        "tab_all",
+        "tab_gud",
+        "tab_sugar",
+        "tab_dryfruit"
+      ],
+      "settings": {
+        "eyebrow_text": "HANDPICKED FOR YOU",
+        "heading": "Authentic Mithila Handcrafted Thekua",
+        "subheading": "Made with 100% Pure Desi Ghee, Traditional Wood Mold patterns & Zero Preservatives.",
+        "bg_color": "#FAF6F0",
+        "show_bg_art": true,
+        "enable_wishlist": true,
+        "savings_suffix": "– no other discounts",
+        "btn_text": "ADD",
+        "see_all_label": "See All",
+        "see_all_link": "/collections/all",
+        "padding_top": 60,
+        "padding_bottom": 70
+      }
+    },
     "hero_G7CAX9": {
       "type": "hero",
       "disabled": true,
@@ -1181,6 +1230,7 @@
   "order": [
     "ss_hero_banner_main",
     "ss_usp_strip_main",
+    "ss_featured_products_main",
     "hero_G7CAX9",
     "section",
     "product_list_YidTcf",

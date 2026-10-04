@@ -1,0 +1,1044 @@
+{% comment %}
+  Section: SS Featured Products / Handpicked Mithila Thekua Collection
+  Brand: Swaad Samvaad (Authentic Handcrafted Mithila Thekua)
+  Features:
+  - Top & Bottom Traditional Mithila Border Patterns
+  - Sacred Cow (Gaumata) & Mithila Pastoral Landscape Background Art
+  - On-Hover Flanking Navigation Arrows with Dedicated Gutters
+  - 100% Responsive Grid: 4 Desktop, 3 Tablet, 2 Mobile
+  - Sweet "Coming Soon" Empty State for Pending Flavors/Categories
+  - Real Shopify Products Mapping with Dynamic Pricing & Discounts
+  - Product display limit setting
+  - Category filter tabs (All, Gud Thekua, Sugar Thekua, Dry Fruit Thekua)
+  - Wishlist Heart Button with LocalStorage persistence
+  - Direct Ajax Add-To-Cart
+{% endcomment %}
+
+{{ 'ss-featured-products.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'ss-featured-products.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign section_id = section.id
+  assign eyebrow = section.settings.eyebrow_text | default: 'HANDPICKED FOR YOU'
+  assign heading = section.settings.heading | default: 'Authentic Mithila Handcrafted Thekua'
+  assign subheading = section.settings.subheading | default: 'Made with 100% Pure Desi Ghee, Traditional Wood Mold patterns & Zero Preservatives.'
+  assign target_collection = section.settings.collection | default: collections.all
+  assign products_limit = section.settings.products_to_show | default: 8
+  assign see_all_label = section.settings.see_all_label | default: 'See All'
+  assign see_all_link = section.settings.see_all_link | default: '/collections/all'
+  assign bg_color = section.settings.bg_color | default: '#FAF5EE'
+  assign enable_wishlist = section.settings.enable_wishlist
+  assign savings_suffix = section.settings.savings_suffix | default: '– no other discounts'
+  assign empty_badge = section.settings.empty_badge_text | default: '✨ Fresh Artisan Batch in Making ✨'
+  assign empty_title_suffix = section.settings.empty_title_suffix | default: '— Coming Soon! 🍯'
+  assign empty_text = section.settings.empty_text | default: 'Mithila ke hamare dastkar 100% Pure Desi Ghee aur crunchy roasted Kaju, Badam & Pista ke sath ek lajawab fresh batch taiyar kar rahe hain. Jald hi aapke darwaze par hoga!'
+  assign empty_btn_text = section.settings.empty_btn_text | default: 'Explore Gud & Sugar Thekua'
+
+  assign tab_blocks = section.blocks | where: 'type', 'category_tab'
+  assign curated_cards = section.blocks | where: 'type', 'curated_product'
+
+  assign has_real_products = false
+  if target_collection != blank and target_collection.products_count > 0
+    assign has_real_products = true
+  endif
+-%}
+
+<div
+  id="ss-featured-products-{{ section_id }}"
+  class="ss-featured-prods"
+  style="
+    --ss-fp-pad-top: {{ section.settings.padding_top | default: 64 }}px;
+    --ss-fp-pad-bottom: {{ section.settings.padding_bottom | default: 72 }}px;
+    --ss-color-cream-bg: {{ bg_color }};
+    --ss-color-btn-bg: {{ section.settings.btn_bg_color | default: '#B4552B' }};
+    --ss-color-btn-text: {{ section.settings.btn_text_color | default: '#FFFFFF' }};
+  "
+>
+  {%- if section.settings.show_bg_art -%}
+    <div class="ss-featured-prods__bg-art" aria-hidden="true">
+      {%- if section.settings.bg_image != blank -%}
+        <img
+          src="{{ section.settings.bg_image | image_url: width: 1800 }}"
+          alt=""
+          loading="lazy"
+          class="ss-featured-prods__bg-art-img"
+          width="1800"
+          height="550"
+        >
+      {%- else -%}
+        <!-- Traditional Mithila Top Border Pattern -->
+        <div class="ss-featured-prods__border-strip ss-featured-prods__border-strip--top">
+          <svg width="100%" height="24" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="ss-fp-border-pat-top-{{ section_id }}" x="0" y="0" width="28" height="24" patternUnits="userSpaceOnUse">
+                <!-- Outer chevron -->
+                <path d="M0 6 L14 18 L28 6" fill="none" stroke="#A63F24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Inner chevron -->
+                <path d="M0 10 L14 22 L28 10" fill="none" stroke="#DE8626" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Center auspicious dot -->
+                <circle cx="14" cy="9" r="2" fill="#A63F24"/>
+                <circle cx="14" cy="9" r="0.8" fill="#FFF2D6"/>
+              </pattern>
+            </defs>
+            <rect x="0" y="0" width="100%" height="4" fill="#A63F24"/>
+            <rect x="0" y="4" width="100%" height="2" fill="#DE8626"/>
+            <rect x="0" y="6" width="100%" height="16" fill="url(#ss-fp-border-pat-top-{{ section_id }})" opacity="0.45"/>
+            <line x1="0" y1="23" x2="100%" y2="23" stroke="#1F4E3D" stroke-width="1" opacity="0.35"/>
+          </svg>
+        </div>
+
+        <!-- Mithila Atmosphere: Traditional Surya Dev on Left, Lord Ganesha on Right -->
+        <div class="ss-featured-prods__art-layer">
+          <svg viewBox="0 0 1440 500" fill="none" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="ss-fp-bg-fade-{{ section_id }}" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#FAF1E3" stop-opacity="0.95"/>
+                <stop offset="50%" stop-color="#FAF5EE" stop-opacity="0.75"/>
+                <stop offset="100%" stop-color="{{ bg_color }}" stop-opacity="0.95"/>
+              </linearGradient>
+              <linearGradient id="ss-fp-sun-glow-{{ section_id }}" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FDB813" stop-opacity="0.4"/>
+                <stop offset="60%" stop-color="#E67E22" stop-opacity="0.2"/>
+                <stop offset="100%" stop-color="#A63F24" stop-opacity="0"/>
+              </linearGradient>
+              <linearGradient id="ss-fp-ganesha-glow-{{ section_id }}" x1="100%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#FCE5B5" stop-opacity="0.45"/>
+                <stop offset="100%" stop-color="#FAF5EE" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Background Gradient Canvas -->
+            <rect width="1440" height="500" fill="url(#ss-fp-bg-fade-{{ section_id }})"/>
+
+            <!-- ========================================================
+                 LEFT: Traditional Mithila / Chhath Puja Surya Dev
+                 ======================================================== -->
+            <g transform="translate(50, 40)" opacity="0.32">
+              <!-- Radiant Sun Aura -->
+              <circle cx="100" cy="100" r="76" fill="url(#ss-fp-sun-glow-{{ section_id }})"/>
+              <!-- Multi-tier decorative sun rings -->
+              <circle cx="100" cy="100" r="56" fill="#FFF4DC" stroke="#DE8626" stroke-width="2"/>
+              <circle cx="100" cy="100" r="42" fill="#FCE5B5" stroke="#A63F24" stroke-width="1.8"/>
+              <circle cx="100" cy="100" r="38" stroke="#1F4E3D" stroke-width="0.8" stroke-dasharray="2 3" fill="none"/>
+              
+              <!-- Traditional Radiant Rays (Triangular + Pointed Flares) -->
+              <g stroke="#DE8626" stroke-width="2.2" stroke-linecap="round">
+                <!-- Cardinal Rays -->
+                <line x1="100" y1="14" x2="100" y2="34"/>
+                <line x1="100" y1="166" x2="100" y2="186"/>
+                <line x1="14" y1="100" x2="34" y2="100"/>
+                <line x1="166" y1="100" x2="186" y2="100"/>
+                <!-- Diagonal Rays -->
+                <line x1="38" y1="38" x2="52" y2="52"/>
+                <line x1="148" y1="148" x2="162" y2="162"/>
+                <line x1="38" y1="162" x2="52" y2="148"/>
+                <line x1="148" y1="52" x2="162" y2="38"/>
+                <!-- Secondary Soft Flares -->
+                <line x1="100" y1="22" x2="94" y2="36" stroke="#A63F24" stroke-width="1.2"/>
+                <line x1="100" y1="22" x2="106" y2="36" stroke="#A63F24" stroke-width="1.2"/>
+                <line x1="22" y1="100" x2="36" y2="94" stroke="#A63F24" stroke-width="1.2"/>
+                <line x1="22" y1="100" x2="36" y2="106" stroke="#A63F24" stroke-width="1.2"/>
+              </g>
+
+              <!-- Mithila Surya Face Features -->
+              <!-- Chandan / Tilak on Forehead -->
+              <ellipse cx="100" cy="80" rx="3.5" ry="7" fill="#9E1B22"/>
+              <circle cx="100" cy="91" r="2.2" fill="#DE8626"/>
+              
+              <!-- Divine Lotus Petal Eyes -->
+              <path d="M82 92 C88 88 94 92 94 95 C88 97 82 95 82 92 Z" fill="#FFFDF9" stroke="#3D2412" stroke-width="1.4"/>
+              <circle cx="88" cy="93.5" r="2" fill="#3D2412"/>
+              
+              <path d="M106 95 C106 92 112 88 118 92 C118 95 112 97 106 95 Z" fill="#FFFDF9" stroke="#3D2412" stroke-width="1.4"/>
+              <circle cx="112" cy="93.5" r="2" fill="#3D2412"/>
+              
+              <!-- Serene Nose & Loving Smile -->
+              <path d="M99 92 L101 103 L97 104" stroke="#A63F24" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+              <path d="M92 110 Q100 118 108 110" stroke="#A63F24" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+              <!-- Auspicious Cheek Dots -->
+              <circle cx="78" cy="104" r="2" fill="#DE8626"/>
+              <circle cx="122" cy="104" r="2" fill="#DE8626"/>
+            </g>
+
+            <!-- ========================================================
+                 RIGHT: Auspicious Lord Ganesha (Traditional Mithila Folk Art)
+                 ======================================================== -->
+            <g transform="translate(1170, 36)" opacity="0.34">
+              <!-- Divine Aura -->
+              <circle cx="115" cy="115" r="90" fill="url(#ss-fp-ganesha-glow-{{ section_id }})"/>
+              
+              <!-- Auspicious Mukut (Crown) -->
+              <path d="M90 52 L115 12 L140 52 Z" fill="#DE8626" stroke="#A63F24" stroke-width="2"/>
+              <path d="M102 52 L115 28 L128 52 Z" fill="#FFF2D6" stroke="#9E1B22" stroke-width="1.5"/>
+              <circle cx="115" cy="20" r="3.5" fill="#9E1B22"/>
+              <circle cx="115" cy="40" r="2.5" fill="#DE8626"/>
+              <!-- Crown Base Band -->
+              <rect x="82" y="52" width="66" height="8" rx="3" fill="#A63F24"/>
+              <circle cx="95" cy="56" r="1.8" fill="#FFFDF9"/>
+              <circle cx="115" cy="56" r="1.8" fill="#FFFDF9"/>
+              <circle cx="135" cy="56" r="1.8" fill="#FFFDF9"/>
+
+              <!-- Large Majestic Ears (Shurpa-Karna) with Mithila hatching -->
+              <!-- Left Ear -->
+              <path d="M84 62 C50 62 42 95 54 122 C64 135 82 128 86 115 Z" fill="#FFF4DC" stroke="#3D2412" stroke-width="2.2"/>
+              <path d="M76 74 C58 74 54 98 62 114" stroke="#A63F24" stroke-width="1.5" fill="none"/>
+              <path d="M68 84 C62 90 60 102 66 110" stroke="#DE8626" stroke-width="1.2" fill="none"/>
+              
+              <!-- Right Ear -->
+              <path d="M146 62 C180 62 188 95 176 122 C166 135 148 128 144 115 Z" fill="#FFF4DC" stroke="#3D2412" stroke-width="2.2"/>
+              <path d="M154 74 C172 74 176 98 168 114" stroke="#A63F24" stroke-width="1.5" fill="none"/>
+              <path d="M162 84 C168 90 170 102 164 110" stroke="#DE8626" stroke-width="1.2" fill="none"/>
+
+              <!-- Holy Forehead with Trishul / Tilak -->
+              <path d="M84 60 C84 60 115 62 146 60 C146 82 140 102 135 110 C125 115 105 115 95 110 C90 102 84 82 84 60 Z" fill="#FAF1E3" stroke="#3D2412" stroke-width="2"/>
+              <!-- Trishul Tilak -->
+              <path d="M115 68 L115 92" stroke="#9E1B22" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M108 74 Q115 82 122 74" stroke="#DE8626" stroke-width="2" fill="none"/>
+              <circle cx="115" cy="95" r="2.2" fill="#DE8626"/>
+
+              <!-- Divine Loving Eyes -->
+              <ellipse cx="98" cy="88" rx="4.5" ry="3" fill="#FFFDF9" stroke="#3D2412" stroke-width="1.2"/>
+              <circle cx="99" cy="88" r="1.8" fill="#3D2412"/>
+              <ellipse cx="132" cy="88" rx="4.5" ry="3" fill="#FFFDF9" stroke="#3D2412" stroke-width="1.2"/>
+              <circle cx="131" cy="88" r="1.8" fill="#3D2412"/>
+
+              <!-- Single Tusk (Ekdanta) -->
+              <path d="M96 112 L86 118 L94 122 Z" fill="#FFFFFF" stroke="#3D2412" stroke-width="1.2"/>
+
+              <!-- Graceful Long Trunk (Vakratunda) with Modak -->
+              <path d="M110 105 C108 125 106 148 94 165 C84 178 64 175 60 160 C58 148 68 142 74 146 C80 150 78 162 70 162" stroke="#3D2412" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+              <path d="M112 108 C110 126 108 146 98 160 C90 170 74 170 68 158 C66 150 72 146 76 148" stroke="#DE8626" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+              
+              <!-- Golden Modak / Laddoo in Trunk -->
+              <circle cx="68" cy="144" r="7" fill="#FDB813" stroke="#DE8626" stroke-width="1.8"/>
+              <circle cx="68" cy="144" r="4.5" fill="#FFE599"/>
+              <circle cx="66" cy="142" r="1.2" fill="#A63F24"/>
+              <circle cx="70" cy="143" r="1" fill="#A63F24"/>
+
+              <!-- Auspicious Flower Garland -->
+              <path d="M75 180 Q115 205 155 180" stroke="#DE8626" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <circle cx="95" cy="192" r="3.5" fill="#9E1B22"/>
+              <circle cx="115" cy="195" r="4.5" fill="#FDB813"/>
+              <circle cx="135" cy="192" r="3.5" fill="#9E1B22"/>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Traditional Mithila Bottom Border Pattern -->
+        <div class="ss-featured-prods__border-strip ss-featured-prods__border-strip--bottom">
+          <svg width="100%" height="24" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="ss-fp-border-pat-bottom-{{ section_id }}" x="0" y="0" width="28" height="24" patternUnits="userSpaceOnUse">
+                <!-- Inverted chevron -->
+                <path d="M0 18 L14 6 L28 18" fill="none" stroke="#A63F24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M0 14 L14 2 L28 14" fill="none" stroke="#DE8626" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="14" cy="15" r="2" fill="#A63F24"/>
+                <circle cx="14" cy="15" r="0.8" fill="#FFF2D6"/>
+              </pattern>
+            </defs>
+            <line x1="0" y1="0" x2="100%" y2="0" stroke="#1F4E3D" stroke-width="1" opacity="0.35"/>
+            <rect x="0" y="2" width="100%" height="16" fill="url(#ss-fp-border-pat-bottom-{{ section_id }})" opacity="0.45"/>
+            <rect x="0" y="18" width="100%" height="2" fill="#DE8626"/>
+            <rect x="0" y="20" width="100%" height="4" fill="#A63F24"/>
+          </svg>
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <ss-featured-products data-section-id="{{ section_id }}" class="ss-featured-prods__container">
+    <!-- Header Area -->
+    <div class="ss-featured-prods__header">
+      {%- if eyebrow != blank -%}
+        <div class="ss-featured-prods__eyebrow">{{ eyebrow }}</div>
+      {%- endif -%}
+
+      {%- if heading != blank -%}
+        <h2 class="ss-featured-prods__heading">{{ heading }}</h2>
+      {%- endif -%}
+
+      {%- if subheading != blank -%}
+        <p class="ss-featured-prods__subheading">{{ subheading }}</p>
+      {%- endif -%}
+    </div>
+
+    <!-- Category Filter Tabs -->
+    <div class="ss-featured-prods__tabs-row">
+      <div class="ss-featured-prods__tabs" role="tablist">
+        {%- if tab_blocks.size > 0 -%}
+          {%- for block in tab_blocks -%}
+            <button
+              type="button"
+              role="tab"
+              class="ss-featured-prods__tab-btn {% if forloop.first %}is-active{% endif %}"
+              data-category="{{ block.settings.title | downcase }}"
+              {{ block.shopify_attributes }}
+            >
+              {{ block.settings.title }}
+            </button>
+          {%- endfor -%}
+        {%- else -%}
+          <button type="button" role="tab" class="ss-featured-prods__tab-btn is-active" data-category="all">All</button>
+          <button type="button" role="tab" class="ss-featured-prods__tab-btn" data-category="gud thekua">Gud Thekua</button>
+          <button type="button" role="tab" class="ss-featured-prods__tab-btn" data-category="sugar thekua">Sugar Thekua</button>
+          <button type="button" role="tab" class="ss-featured-prods__tab-btn" data-category="dry fruit">Dry Fruit Thekua</button>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <!-- Carousel Container with On-Hover Side Arrows -->
+    <div class="ss-featured-prods__carousel-container">
+      <!-- Left Side Arrow (Reveals on Hover) -->
+      <button type="button" class="ss-featured-prods__nav-arrow ss-featured-prods__nav-arrow--prev" aria-label="Previous products" disabled>
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+
+      <!-- Carousel Track Viewport -->
+      <div class="ss-featured-prods__carousel-wrapper">
+        <div class="ss-featured-prods__track">
+          {%- if curated_cards.size > 0 -%}
+            {%- for block in curated_cards limit: products_limit -%}
+              {%- liquid
+                assign prod = block.settings.product
+                assign title = block.settings.custom_title | default: prod.title | default: 'Pure Desi Ghee Gud Thekua 500g'
+                assign price = block.settings.custom_price | default: '449.00'
+                assign compare_price = block.settings.custom_compare_price | default: '599.00'
+                assign discount = block.settings.discount_label | default: '25% OFF'
+                assign custom_tag = block.settings.custom_badge
+                assign volume_pip = block.settings.volume_pip | default: '500g'
+                assign rating = block.settings.rating_value | default: '4.9'
+                assign reviews = block.settings.review_count | default: '1653'
+                assign savings = block.settings.custom_savings | default: '150.00'
+                assign category = block.settings.category_tag | default: 'gud thekua all' | downcase
+                assign image = block.settings.custom_image | default: prod.featured_image
+                assign url = prod.url | default: '#'
+                assign variant_id = prod.selected_or_first_available_variant.id
+              -%}
+              <div class="ss-prod-card" data-category="{{ category }}" {{ block.shopify_attributes }}>
+                <a href="{{ url }}" class="ss-prod-card__media-wrap" aria-label="{{ title }}">
+                  {%- if image != blank -%}
+                    <img
+                      src="{{ image | image_url: width: 600 }}"
+                      alt="{{ title | escape }}"
+                      loading="lazy"
+                      class="ss-prod-card__image"
+                      width="600"
+                      height="600"
+                    >
+                  {%- else -%}
+                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #FFFDF9 0%, #F5ECDF 100%);">
+                      <svg width="150" height="150" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M80 20 C115 45 130 95 105 130 C75 150 45 135 35 100 C28 60 62 28 80 20 Z" fill="#C27D38" stroke="#8E4F1B" stroke-width="2.5"/>
+                        <path d="M80 28 C108 48 120 88 98 120 C72 138 48 122 40 95 C34 60 65 35 80 28 Z" fill="#D9944D"/>
+                        <path d="M80 36 L72 116" stroke="#7A3F12" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M77 52 L100 40 M76 68 L105 58 M74 84 L102 78 M73 100 L95 98" stroke="#7A3F12" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M77 52 L55 42 M75 68 L50 60 M73 84 L52 80 M72 100 L56 98" stroke="#7A3F12" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="68" cy="48" r="2.5" fill="#FFEAA7"/>
+                        <circle cx="92" cy="68" r="2" fill="#FFEAA7"/>
+                        <circle cx="60" cy="88" r="2.5" fill="#FFEAA7"/>
+                        <circle cx="88" cy="105" r="2" fill="#FFEAA7"/>
+                      </svg>
+                    </div>
+                  {%- endif -%}
+
+                  <div class="ss-prod-card__badges">
+                    {%- if discount != blank -%}
+                      <div class="ss-prod-card__discount-badge">{{ discount | split: ' ' | first }}<span>{{ discount | split: ' ' | last }}</span></div>
+                    {%- endif -%}
+                  </div>
+
+                  {%- if enable_wishlist -%}
+                    <button type="button" class="ss-prod-card__wishlist-btn" aria-label="Add to wishlist" data-product-handle="{{ prod.handle | default: title | handleize }}" data-product-id="{{ prod.id | default: forloop.index }}">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </button>
+                  {%- endif -%}
+
+                  {%- if custom_tag != blank -%}
+                    <div class="ss-prod-card__tag-badge">{{ custom_tag }}</div>
+                  {%- endif -%}
+                </a>
+
+                <div class="ss-prod-card__body">
+                  <a href="{{ url }}" class="ss-prod-card__title">{{ title }}</a>
+
+                  <div class="ss-prod-card__rating-row">
+                    <span class="ss-prod-card__rating-star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> {{ rating }}</span>
+                    <span class="ss-prod-card__rating-count">({{ reviews }} reviews)</span>
+                  </div>
+
+                  <div class="ss-prod-card__price-row">
+                    {%- if compare_price != blank -%}
+                      <span class="ss-prod-card__compare-price">Rs. {{ compare_price }}</span>
+                    {%- endif -%}
+                    <span class="ss-prod-card__regular-price">Rs. {{ price }}</span>
+                  </div>
+
+                  {%- if savings != blank -%}
+                    <div class="ss-prod-card__savings">Save Rs. {{ savings }} {{ savings_suffix }}</div>
+                  {%- endif -%}
+
+                  <button type="button" class="ss-prod-card__add-btn" data-variant-id="{{ variant_id }}" data-product-url="{{ url }}">
+                    <span class="ss-prod-card__btn-spinner"></span>
+                    <span class="ss-prod-card__btn-text">{{ section.settings.btn_text | default: 'ADD' }}</span>
+                    <svg class="ss-prod-card__btn-icon" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                  </button>
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- elsif has_real_products -%}
+            <!-- Real Store Products from Collection -->
+            {%- for prod in target_collection.products limit: products_limit -%}
+              {%- liquid
+                assign compare_at = prod.compare_at_price
+                assign price = prod.price
+                assign savings_amount = 0
+                assign discount_pct = 0
+                if compare_at > price
+                  assign savings_amount = compare_at | minus: price
+                  assign discount_pct = savings_amount | times: 100.0 | divided_by: compare_at | round
+                endif
+                assign first_variant = prod.selected_or_first_available_variant
+                
+                assign category_tag = 'all'
+                for tag in prod.tags
+                  assign tag_down = tag | downcase
+                  assign category_tag = category_tag | append: ' ' | append: tag_down
+                endfor
+                assign prod_title_down = prod.title | downcase
+                if prod_title_down contains 'gud'
+                  assign category_tag = category_tag | append: ' gud thekua'
+                endif
+                if prod_title_down contains 'sugar'
+                  assign category_tag = category_tag | append: ' sugar thekua'
+                endif
+                if prod_title_down contains 'dry fruit' or prod_title_down contains 'dryfruit'
+                  assign category_tag = category_tag | append: ' dry fruit'
+                endif
+              -%}
+              <div class="ss-prod-card" data-category="{{ category_tag }}">
+                <a href="{{ prod.url }}" class="ss-prod-card__media-wrap" aria-label="{{ prod.title }}">
+                  {%- if prod.featured_image != blank -%}
+                    <img
+                      src="{{ prod.featured_image | image_url: width: 600 }}"
+                      alt="{{ prod.title | escape }}"
+                      loading="lazy"
+                      class="ss-prod-card__image"
+                      width="600"
+                      height="600"
+                    >
+                    {%- if prod.images[1] != blank -%}
+                      <img
+                        src="{{ prod.images[1] | image_url: width: 600 }}"
+                        alt="{{ prod.title | escape }}"
+                        loading="lazy"
+                        class="ss-prod-card__image-secondary"
+                        width="600"
+                        height="600"
+                      >
+                    {%- endif -%}
+                  {%- else -%}
+                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #FFFDF9 0%, #F5ECDF 100%);">
+                      <svg width="150" height="150" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M80 20 C115 45 130 95 105 130 C75 150 45 135 35 100 C28 60 62 28 80 20 Z" fill="#C27D38" stroke="#8E4F1B" stroke-width="2.5"/>
+                        <path d="M80 28 C108 48 120 88 98 120 C72 138 48 122 40 95 C34 60 65 35 80 28 Z" fill="#D9944D"/>
+                        <path d="M80 36 L72 116" stroke="#7A3F12" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M77 52 L100 40 M76 68 L105 58 M74 84 L102 78 M73 100 L95 98" stroke="#7A3F12" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M77 52 L55 42 M75 68 L50 60 M73 84 L52 80 M72 100 L56 98" stroke="#7A3F12" stroke-width="2" stroke-linecap="round"/>
+                      </svg>
+                    </div>
+                  {%- endif -%}
+
+                  <div class="ss-prod-card__badges">
+                    {%- if discount_pct > 0 -%}
+                      <div class="ss-prod-card__discount-badge">
+                        {{ discount_pct }}%
+                        <span>OFF</span>
+                      </div>
+                    {%- endif -%}
+                  </div>
+
+                  {%- if enable_wishlist -%}
+                    <button
+                      type="button"
+                      class="ss-prod-card__wishlist-btn"
+                      aria-label="Add to wishlist"
+                      data-product-handle="{{ prod.handle }}"
+                      data-product-id="{{ prod.id }}"
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </button>
+                  {%- endif -%}
+
+                  {%- if prod.tags contains "bestseller" or prod.tags contains "Bestseller" -%}
+                    <div class="ss-prod-card__tag-badge">★ Mithila's Best</div>
+                  {%- endif -%}
+                </a>
+
+                <div class="ss-prod-card__body">
+                  <a href="{{ prod.url }}" class="ss-prod-card__title">{{ prod.title }}</a>
+
+                  <div class="ss-prod-card__rating-row">
+                    <span class="ss-prod-card__rating-star">
+                      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                      4.9
+                    </span>
+                    <span class="ss-prod-card__rating-count">(1653 reviews)</span>
+                  </div>
+
+                  <div class="ss-prod-card__price-row">
+                    {%- if compare_at > price -%}
+                      <span class="ss-prod-card__compare-price">{{ compare_at | money }}</span>
+                    {%- endif -%}
+                    <span class="ss-prod-card__regular-price">{{ price | money }}</span>
+                  </div>
+
+                  {%- if savings_amount > 0 -%}
+                    <div class="ss-prod-card__savings">
+                      Save {{ savings_amount | money }} {{ savings_suffix }}
+                    </div>
+                  {%- endif -%}
+
+                  <button
+                    type="button"
+                    class="ss-prod-card__add-btn"
+                    data-variant-id="{{ first_variant.id }}"
+                    data-product-url="{{ prod.url }}"
+                    {% unless first_variant.available %}disabled{% endunless %}
+                  >
+                    <span class="ss-prod-card__btn-spinner"></span>
+                    <span class="ss-prod-card__btn-text">
+                      {%- if first_variant.available -%}
+                        {{ section.settings.btn_text | default: 'ADD' }}
+                      {%- else -%}
+                        Sold Out
+                      {%- endif -%}
+                    </span>
+                    <svg class="ss-prod-card__btn-icon" viewBox="0 0 24 24">
+                      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                      <line x1="3" y1="6" x2="21" y2="6"></line>
+                      <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            <!-- Authentic Swaad Samvaad Mithila Thekua Demo Products -->
+            
+            <!-- Card 1: Pure Desi Ghee Gud Thekua 500g -->
+            <div class="ss-prod-card" data-category="gud thekua all">
+              <div class="ss-prod-card__media-wrap">
+                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #FFFDF9 0%, #F5ECDF 100%);">
+                  <svg width="150" height="150" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M80 20 C115 45 130 95 105 130 C75 150 45 135 35 100 C28 60 62 28 80 20 Z" fill="#C27D38" stroke="#8E4F1B" stroke-width="2.5"/>
+                    <path d="M80 28 C108 48 120 88 98 120 C72 138 48 122 40 95 C34 60 65 35 80 28 Z" fill="#D9944D"/>
+                    <path d="M80 36 L72 116" stroke="#7A3F12" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M77 52 L100 40 M76 68 L105 58 M74 84 L102 78 M73 100 L95 98" stroke="#7A3F12" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M77 52 L55 42 M75 68 L50 60 M73 84 L52 80 M72 100 L56 98" stroke="#7A3F12" stroke-width="2" stroke-linecap="round"/>
+                    <circle cx="68" cy="48" r="2.5" fill="#FFEAA7"/>
+                    <circle cx="92" cy="68" r="2" fill="#FFEAA7"/>
+                    <circle cx="60" cy="88" r="2.5" fill="#FFEAA7"/>
+                    <circle cx="88" cy="105" r="2" fill="#FFEAA7"/>
+                  </svg>
+                </div>
+                <div class="ss-prod-card__badges">
+                  <div class="ss-prod-card__discount-badge">25%<span>OFF</span></div>
+                </div>
+                {%- if enable_wishlist -%}
+                  <button type="button" class="ss-prod-card__wishlist-btn" aria-label="Add to wishlist" data-product-handle="pure-desi-ghee-gud-thekua-500g">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  </button>
+                {%- endif -%}
+                <div class="ss-prod-card__tag-badge">★ Mithila's Best</div>
+              </div>
+              <div class="ss-prod-card__body">
+                <a href="/collections/all" class="ss-prod-card__title">Pure Desi Ghee Gud Thekua 500g</a>
+                <div class="ss-prod-card__rating-row">
+                  <span class="ss-prod-card__rating-star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 4.9</span>
+                  <span class="ss-prod-card__rating-count">(1653 reviews)</span>
+                </div>
+                <div class="ss-prod-card__price-row">
+                  <span class="ss-prod-card__compare-price">Rs. 599.00</span>
+                  <span class="ss-prod-card__regular-price">Rs. 449.00</span>
+                </div>
+                <div class="ss-prod-card__savings">Save Rs. 150.00 {{ savings_suffix }}</div>
+                <button type="button" class="ss-prod-card__add-btn" data-product-url="/collections/all">
+                  <span class="ss-prod-card__btn-spinner"></span>
+                  <span class="ss-prod-card__btn-text">{{ section.settings.btn_text | default: 'ADD' }}</span>
+                  <svg class="ss-prod-card__btn-icon" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Card 2: Pure Desi Ghee Gud Thekua 1 Kg -->
+            <div class="ss-prod-card" data-category="gud thekua all">
+              <div class="ss-prod-card__media-wrap">
+                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #FFFDF9 0%, #F5ECDF 100%);">
+                  <svg width="150" height="150" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="68" cy="85" rx="36" ry="46" transform="rotate(-15 68 85)" fill="#B56E29" stroke="#7A3F12" stroke-width="2"/>
+                    <ellipse cx="94" cy="78" rx="38" ry="48" transform="rotate(10 94 78)" fill="#D48A3D" stroke="#8E4F1B" stroke-width="2.5"/>
+                    <ellipse cx="94" cy="78" rx="32" ry="42" transform="rotate(10 94 78)" fill="#E59E4E"/>
+                    <line x1="94" y1="40" x2="94" y2="115" stroke="#7A3F12" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="94" y1="58" x2="118" y2="48" stroke="#7A3F12" stroke-width="2"/>
+                    <line x1="94" y1="78" x2="122" y2="68" stroke="#7A3F12" stroke-width="2"/>
+                    <line x1="94" y1="98" x2="116" y2="92" stroke="#7A3F12" stroke-width="2"/>
+                    <line x1="94" y1="58" x2="70" y2="50" stroke="#7A3F12" stroke-width="2"/>
+                    <line x1="94" y1="78" x2="68" y2="72" stroke="#7A3F12" stroke-width="2"/>
+                    <line x1="94" y1="98" x2="72" y2="94" stroke="#7A3F12" stroke-width="2"/>
+                    <circle cx="85" cy="62" r="2.5" fill="#FFEAA7"/>
+                    <circle cx="108" cy="82" r="2" fill="#FFEAA7"/>
+                    <circle cx="82" cy="98" r="2.5" fill="#FFEAA7"/>
+                  </svg>
+                </div>
+                <div class="ss-prod-card__badges">
+                  <div class="ss-prod-card__discount-badge">27%<span>OFF</span></div>
+                </div>
+                {%- if enable_wishlist -%}
+                  <button type="button" class="ss-prod-card__wishlist-btn" aria-label="Add to wishlist" data-product-handle="pure-desi-ghee-gud-thekua-1kg">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  </button>
+                {%- endif -%}
+                <div class="ss-prod-card__tag-badge">★ Bestseller</div>
+              </div>
+              <div class="ss-prod-card__body">
+                <a href="/collections/all" class="ss-prod-card__title">Pure Desi Ghee Gud Thekua 1 Kg</a>
+                <div class="ss-prod-card__rating-row">
+                  <span class="ss-prod-card__rating-star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 4.95</span>
+                  <span class="ss-prod-card__rating-count">(2410 reviews)</span>
+                </div>
+                <div class="ss-prod-card__price-row">
+                  <span class="ss-prod-card__compare-price">Rs. 1,099.00</span>
+                  <span class="ss-prod-card__regular-price">Rs. 799.00</span>
+                </div>
+                <div class="ss-prod-card__savings">Save Rs. 300.00 {{ savings_suffix }}</div>
+                <button type="button" class="ss-prod-card__add-btn" data-product-url="/collections/all">
+                  <span class="ss-prod-card__btn-spinner"></span>
+                  <span class="ss-prod-card__btn-text">{{ section.settings.btn_text | default: 'ADD' }}</span>
+                  <svg class="ss-prod-card__btn-icon" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Card 3: Pure Desi Ghee Sugar Thekua 500g -->
+            <div class="ss-prod-card" data-category="sugar thekua all">
+              <div class="ss-prod-card__media-wrap">
+                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #FFFDF9 0%, #F5ECDF 100%);">
+                  <svg width="150" height="150" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="80" cy="80" r="48" fill="#D99B52" stroke="#94531E" stroke-width="2.5"/>
+                    <circle cx="80" cy="80" r="42" fill="#E8AE63"/>
+                    <circle cx="80" cy="80" r="14" fill="#C57E34"/>
+                    <path d="M80 44 Q88 62 80 66 Q72 62 80 44 Z" fill="#995822"/>
+                    <path d="M80 116 Q88 98 80 94 Q72 98 80 116 Z" fill="#995822"/>
+                    <path d="M44 80 Q62 88 66 80 Q62 72 44 80 Z" fill="#995822"/>
+                    <path d="M116 80 Q98 88 94 80 Q98 72 116 80 Z" fill="#995822"/>
+                    <circle cx="80" cy="80" r="6" fill="#FFEAA7"/>
+                  </svg>
+                </div>
+                <div class="ss-prod-card__badges">
+                  <div class="ss-prod-card__discount-badge">22%<span>OFF</span></div>
+                </div>
+                {%- if enable_wishlist -%}
+                  <button type="button" class="ss-prod-card__wishlist-btn" aria-label="Add to wishlist" data-product-handle="pure-desi-ghee-sugar-thekua-500g">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  </button>
+                {%- endif -%}
+                <div class="ss-prod-card__tag-badge">★ Crispy Crunch</div>
+              </div>
+              <div class="ss-prod-card__body">
+                <a href="/collections/all" class="ss-prod-card__title">Pure Desi Ghee Sugar Thekua 500g</a>
+                <div class="ss-prod-card__rating-row">
+                  <span class="ss-prod-card__rating-star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 4.88</span>
+                  <span class="ss-prod-card__rating-count">(980 reviews)</span>
+                </div>
+                <div class="ss-prod-card__price-row">
+                  <span class="ss-prod-card__compare-price">Rs. 549.00</span>
+                  <span class="ss-prod-card__regular-price">Rs. 429.00</span>
+                </div>
+                <div class="ss-prod-card__savings">Save Rs. 120.00 {{ savings_suffix }}</div>
+                <button type="button" class="ss-prod-card__add-btn" data-product-url="/collections/all">
+                  <span class="ss-prod-card__btn-spinner"></span>
+                  <span class="ss-prod-card__btn-text">{{ section.settings.btn_text | default: 'ADD' }}</span>
+                  <svg class="ss-prod-card__btn-icon" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Card 4: Pure Desi Ghee Sugar Thekua 1 Kg -->
+            <div class="ss-prod-card" data-category="sugar thekua all">
+              <div class="ss-prod-card__media-wrap">
+                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #FFFDF9 0%, #F5ECDF 100%);">
+                  <svg width="150" height="150" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="80" cy="80" r="48" fill="#D99B52" stroke="#94531E" stroke-width="2.5"/>
+                    <circle cx="80" cy="80" r="42" fill="#E8AE63"/>
+                    <path d="M80 38 L122 80 L80 122 L38 80 Z" stroke="#8E4F1B" stroke-width="2.5" fill="none"/>
+                    <line x1="50" y1="68" x2="92" y2="110" stroke="#8E4F1B" stroke-width="1.8"/>
+                    <line x1="68" y1="50" x2="110" y2="92" stroke="#8E4F1B" stroke-width="1.8"/>
+                    <line x1="110" y1="68" x2="68" y2="110" stroke="#8E4F1B" stroke-width="1.8"/>
+                    <line x1="92" y1="50" x2="50" y2="92" stroke="#8E4F1B" stroke-width="1.8"/>
+                    <circle cx="80" cy="80" r="4" fill="#FFEAA7"/>
+                  </svg>
+                </div>
+                <div class="ss-prod-card__badges">
+                  <div class="ss-prod-card__discount-badge">25%<span>OFF</span></div>
+                </div>
+                {%- if enable_wishlist -%}
+                  <button type="button" class="ss-prod-card__wishlist-btn" aria-label="Add to wishlist" data-product-handle="pure-desi-ghee-sugar-thekua-1kg">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  </button>
+                {%- endif -%}
+                <div class="ss-prod-card__tag-badge">★ Pure Desi Ghee</div>
+              </div>
+              <div class="ss-prod-card__body">
+                <a href="/collections/all" class="ss-prod-card__title">Pure Desi Ghee Sugar Thekua 1 Kg</a>
+                <div class="ss-prod-card__rating-row">
+                  <span class="ss-prod-card__rating-star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 4.89</span>
+                  <span class="ss-prod-card__rating-count">(1101 reviews)</span>
+                </div>
+                <div class="ss-prod-card__price-row">
+                  <span class="ss-prod-card__compare-price">Rs. 999.00</span>
+                  <span class="ss-prod-card__regular-price">Rs. 749.00</span>
+                </div>
+                <div class="ss-prod-card__savings">Save Rs. 250.00 {{ savings_suffix }}</div>
+                <button type="button" class="ss-prod-card__add-btn" data-product-url="/collections/all">
+                  <span class="ss-prod-card__btn-spinner"></span>
+                  <span class="ss-prod-card__btn-text">{{ section.settings.btn_text | default: 'ADD' }}</span>
+                  <svg class="ss-prod-card__btn-icon" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                </button>
+              </div>
+            </div>
+
+          {%- endif -%}
+        </div>
+      </div>
+
+      <!-- Right Side Arrow (Reveals on Hover) -->
+      <button type="button" class="ss-featured-prods__nav-arrow ss-featured-prods__nav-arrow--next" aria-label="Next products">
+        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+
+      <!-- Sweet "Coming Soon" Empty State (Displayed when category has 0 items) -->
+      <div class="ss-featured-prods__empty-state">
+        <div class="ss-featured-prods__empty-badge">{{ empty_badge }}</div>
+        <div class="ss-featured-prods__empty-icon-wrap">
+          <svg class="ss-featured-prods__empty-sparkle" viewBox="0 0 24 24">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+          </svg>
+        </div>
+        <h3 class="ss-featured-prods__empty-title">
+          <span class="ss-featured-prods__empty-category">Dry Fruit Thekua</span> {{ empty_title_suffix }}
+        </h3>
+        <p class="ss-featured-prods__empty-text">
+          {{ empty_text }}
+        </p>
+        <button type="button" class="ss-featured-prods__empty-btn">
+          <span>{{ empty_btn_text }}</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Centered Footer Area (See All Button) -->
+    {%- if see_all_label != blank and see_all_link != blank -%}
+      <div class="ss-featured-prods__footer">
+        <a href="{{ see_all_link }}" class="ss-featured-prods__see-all-btn">
+          {{ see_all_label }}
+          <svg viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+    {%- endif -%}
+  </ss-featured-products>
+</div>
+
+{% schema %}
+{
+  "name": "SS Featured Products",
+  "tag": "section",
+  "class": "ss-featured-products-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading & Copy"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Eyebrow Text",
+      "default": "HANDPICKED FOR YOU"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Authentic Mithila Handcrafted Thekua"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Made with 100% Pure Desi Ghee, Traditional Wood Mold patterns & Zero Preservatives."
+    },
+    {
+      "type": "header",
+      "content": "Product Source & Limit"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Select Collection (Optional - defaults to All Products)"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 4,
+      "max": 20,
+      "step": 2,
+      "default": 8,
+      "label": "Maximum Products to Show"
+    },
+    {
+      "type": "header",
+      "content": "Card Features & Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_wishlist",
+      "label": "Enable Wishlist Button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "savings_suffix",
+      "label": "Savings Line Suffix",
+      "default": "– no other discounts"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Add Button Text",
+      "default": "ADD"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg_color",
+      "label": "Add Button Background Color",
+      "default": "#B4552B"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Add Button Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "text",
+      "id": "see_all_label",
+      "label": "\"See All\" Button Label",
+      "default": "See All"
+    },
+    {
+      "type": "url",
+      "id": "see_all_link",
+      "label": "\"See All\" Link",
+      "default": "/collections/all"
+    },
+    {
+      "type": "header",
+      "content": "Appearance & Background"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#FAF5EE"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bg_art",
+      "label": "Show Mithila Folk Background Art (Surya & Ganesha)",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Custom Background Image (Optional)"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 72
+    },
+    {
+      "type": "header",
+      "content": "Empty / Coming Soon State"
+    },
+    {
+      "type": "text",
+      "id": "empty_badge_text",
+      "label": "Badge Text",
+      "default": "✨ Fresh Artisan Batch in Making ✨"
+    },
+    {
+      "type": "text",
+      "id": "empty_title_suffix",
+      "label": "Title Suffix",
+      "default": "— Coming Soon! 🍯"
+    },
+    {
+      "type": "textarea",
+      "id": "empty_text",
+      "label": "Description Text",
+      "default": "Mithila ke hamare dastkar 100% Pure Desi Ghee aur crunchy roasted Kaju, Badam & Pista ke sath ek lajawab fresh batch taiyar kar rahe hain. Jald hi aapke darwaze par hoga!"
+    },
+    {
+      "type": "text",
+      "id": "empty_btn_text",
+      "label": "Button Text",
+      "default": "Explore Gud & Sugar Thekua"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category_tab",
+      "name": "Category Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Tab Title",
+          "default": "Gud Thekua"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection (Optional)"
+        }
+      ]
+    },
+    {
+      "type": "curated_product",
+      "name": "Curated Product Card",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Link Shopify Product (Optional)"
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Product Title",
+          "default": "Pure Desi Ghee Gud Thekua 1 Kg"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image",
+          "label": "Custom Product Image"
+        },
+        {
+          "type": "text",
+          "id": "discount_label",
+          "label": "Discount Badge (e.g. 27% OFF)",
+          "default": "27% OFF"
+        },
+        {
+          "type": "text",
+          "id": "custom_badge",
+          "label": "Highlight Badge (e.g. ★ Mithila's Best)",
+          "default": "★ Mithila's Best"
+        },
+        {
+          "type": "text",
+          "id": "volume_pip",
+          "label": "Weight Pip (e.g. 500g, 1 Kg)",
+          "default": "1 Kg"
+        },
+        {
+          "type": "text",
+          "id": "rating_value",
+          "label": "Rating Score",
+          "default": "4.95"
+        },
+        {
+          "type": "text",
+          "id": "review_count",
+          "label": "Review Count",
+          "default": "2410"
+        },
+        {
+          "type": "text",
+          "id": "custom_compare_price",
+          "label": "Original Strikethrough Price (e.g. 1,099.00)",
+          "default": "1,099.00"
+        },
+        {
+          "type": "text",
+          "id": "custom_price",
+          "label": "Selling Price (e.g. 799.00)",
+          "default": "799.00"
+        },
+        {
+          "type": "text",
+          "id": "custom_savings",
+          "label": "Savings Amount (e.g. 300.00)",
+          "default": "300.00"
+        },
+        {
+          "type": "text",
+          "id": "category_tag",
+          "label": "Category for filter tabs (e.g. gud thekua, all)",
+          "default": "gud thekua all"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SS Featured Products",
+      "blocks": [
+        {
+          "type": "category_tab",
+          "settings": {
+            "title": "All"
+          }
+        },
+        {
+          "type": "category_tab",
+          "settings": {
+            "title": "Gud Thekua"
+          }
+        },
+        {
+          "type": "category_tab",
+          "settings": {
+            "title": "Sugar Thekua"
+          }
+        },
+        {
+          "type": "category_tab",
+          "settings": {
+            "title": "Dry Fruit Thekua"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

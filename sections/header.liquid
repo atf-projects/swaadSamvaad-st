@@ -294,7 +294,7 @@
     <div class="ss-popular-searches-section">
       <div class="ss-popular-label">Popular Searches:</div>
       <div class="ss-popular-pills-list">
-        {% assign popular_tags = section.settings.popular_tags | default: 'Desi Gud 500g, Chini Thekua 1kg, Pure Ghee Mithila Sweets' | split: ',' %}
+        {% assign popular_tags = section.settings.popular_tags | default: 'Desi Gud 500g, Sugar Thekua 1kg, Pure Ghee Mithila Sweets' | split: ',' %}
         {% for tag in popular_tags %}
           {% assign tag_clean = tag | strip %}
           {% if tag_clean != blank %}
@@ -814,7 +814,7 @@
       "type": "textarea",
       "id": "popular_tags",
       "label": "Popular Search Tags (Comma Separated)",
-      "default": "Desi Gud 500g, Chini Thekua 1kg, Pure Ghee Mithila Sweets"
+      "default": "Desi Gud 500g, Sugar Thekua 1kg, Pure Ghee Mithila Sweets"
     },
     {
       "type": "header",
