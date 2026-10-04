@@ -1,0 +1,438 @@
+{% comment %}
+  SWAAD SAMVAAD - Main Header Section
+  Includes Top Announcement Bar, Main Navigation, Search Popup Overlay, Scan Order Modal & Mobile Drawer
+{% endcomment %}
+
+{{ 'custom-header.css' | asset_url | stylesheet_tag }}
+
+<header
+  id="header-component"
+  class="ss-header-section {% if section.settings.enable_sticky %}ss-header-section--sticky{% endif %} {% if section.settings.enable_overlay and template.name == 'index' %}ss-header-section--overlay{% endif %}"
+  style="
+    --ss-color-brown-dark: {{ section.settings.color_accent | default: '#3D1E0B' }};
+    --ss-color-cream-bg: {{ section.settings.color_bg | default: '#F9F8F3' }};
+  "
+>
+  {% comment %} 1. TOP ANNOUNCEMENT BAR {% endcomment %}
+  {% if section.settings.show_announcement %}
+    <div
+      class="ss-announcement-bar"
+      style="
+        background-color: {{ section.settings.announcement_bg | default: '#3D1E0B' }};
+        color: {{ section.settings.announcement_text_color | default: '#F0E6D8' }};
+      "
+    >
+      <div class="ss-announcement-content">
+        <span class="ss-announcement-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M17,8C8,10 5,16 3,21C8,20 15,17 18,12C19,10.3 19,8.5 17,8Z" />
+            <path d="M3,21C4.33,16.67 8.33,12 17,8" stroke="currentColor" stroke-width="1.5" fill="none" />
+          </svg>
+        </span>
+        <span class="ss-announcement-text">
+          {{ section.settings.announcement_text | default: 'FSSAI Certified License No. : 233220030000077' }}
+        </span>
+      </div>
+    </div>
+  {% endif %}
+
+  {% comment %} 2. MAIN HEADER {% endcomment %}
+  <div class="ss-main-header">
+    <div class="ss-main-header__container">
+      {% comment %} Mobile Menu Hamburger Toggle {% endcomment %}
+      <button
+        type="button"
+        class="ss-mobile-toggle-btn"
+        data-ss-trigger="mobile-drawer"
+        aria-label="Open Navigation Menu"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
+
+      {% comment %} Brand Logo / Badge {% endcomment %}
+      <div class="ss-branding">
+        <a href="{{ routes.root_url }}" class="ss-brand-logo-link" aria-label="Swaad Samvaad Home">
+          {% if section.settings.logo != blank %}
+            {{ section.settings.logo | image_url: width: 220 | image_tag: class: 'ss-custom-logo-img', alt: shop.name }}
+          {% else %}
+            <div class="ss-logo-badge">
+              {{ section.settings.logo_initials | default: 'SS' }}
+            </div>
+            <div class="ss-brand-text-group">
+              <span class="ss-brand-title">{{ section.settings.brand_title | default: 'SWAAD SAMVAAD' }}</span>
+              <span class="ss-brand-tagline">{{ section.settings.brand_tagline | default: 'TASTE OF MITHILA & HOME' }}</span>
+            </div>
+          {% endif %}
+        </a>
+      </div>
+
+      {% comment %} Desktop Navigation Menu {% endcomment %}
+      <nav class="ss-nav-menu" aria-label="Main Navigation">
+        <ul class="ss-nav-list">
+          {% if section.settings.menu != blank and linklists[section.settings.menu].links.size > 0 %}
+            {% for link in linklists[section.settings.menu].links %}
+              <li class="ss-nav-item">
+                <a href="{{ link.url }}" class="ss-nav-link">
+                  {% if link.title contains 'FSSAI' or link.title contains 'Quality' %}
+                    <span class="ss-green-dot" aria-hidden="true"></span>
+                  {% endif %}
+                  {{ link.title }}
+                </a>
+              </li>
+            {% endfor %}
+          {% else %}
+            {% comment %} Default reference menu items {% endcomment %}
+            <li class="ss-nav-item">
+              <a href="{{ routes.all_products_collection_url }}" class="ss-nav-link">Shop Thekua</a>
+            </li>
+            <li class="ss-nav-item">
+              <a href="/pages/why-desi-ghee" class="ss-nav-link">Why Desi Ghee?</a>
+            </li>
+            <li class="ss-nav-item">
+              <a href="/pages/our-story" class="ss-nav-link">Our Story</a>
+            </li>
+            <li class="ss-nav-item">
+              <a href="/pages/fssai-quality" class="ss-nav-link">
+                <span class="ss-green-dot" aria-hidden="true"></span>
+                FSSAI & Quality
+              </a>
+            </li>
+            <li class="ss-nav-item">
+              <a href="/pages/refund-policy" class="ss-nav-link">100% Refund</a>
+            </li>
+            <li class="ss-nav-item">
+              <a href="#reviews" class="ss-nav-link">Reviews</a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+
+      {% comment %} Header Utilities (Search, Scan Order, Cart) {% endcomment %}
+      <div class="ss-header-actions">
+        <!-- Search Trigger -->
+        <button
+          type="button"
+          class="ss-icon-btn"
+          data-ss-trigger="search"
+          aria-label="Search"
+          title="Search Products"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="11" cy="11" r="7" />
+            <line x1="16.5" y1="16.5" x2="22" y2="22" />
+          </svg>
+        </button>
+
+        <!-- Scan Order Badge Button -->
+        <a href="#" class="ss-scan-order-btn" data-ss-trigger="scan" title="Scan to Order">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v3h-3v-3zm-5 0h3v3h-3v-3zm0 5h3v3h-3v-3zm5 0h3v3h-3v-3z" />
+          </svg>
+          <span>Scan Order</span>
+        </a>
+
+        <!-- Cart Trigger -->
+        <a href="{{ routes.cart_url }}" class="ss-icon-btn ss-cart-btn" aria-label="Shopping Cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4H6z" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <path d="M16 10a4 4 0 01-8 0" />
+          </svg>
+          <span class="ss-cart-count-badge">{{ cart.item_count }}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+{% comment %} 3. INTERACTIVE SEARCH POPUP OVERLAY MODAL {% endcomment %}
+<div id="SwaadSearchModal" class="ss-search-modal-container" role="dialog" aria-modal="true" aria-label="Search Popup" hidden>
+  <div class="ss-search-backdrop" data-ss-close="search"></div>
+  <div class="ss-search-card">
+    <form action="{{ routes.search_url }}" method="get" role="search" class="ss-search-form">
+      <div class="ss-search-input-wrapper">
+        <span class="ss-search-input-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="11" cy="11" r="7" />
+            <line x1="16.5" y1="16.5" x2="22" y2="22" />
+          </svg>
+        </span>
+        <input
+          type="search"
+          name="q"
+          class="ss-search-field"
+          placeholder="{{ section.settings.search_placeholder | default: 'Search Desi Gud Thekua, Sugar Thekua, Ghee snacks...' }}"
+          autocomplete="off"
+          autocorrect="off"
+          capitalize="off"
+          spellcheck="false"
+        >
+        <button type="button" class="ss-search-close-btn" data-ss-close="search">Close</button>
+      </div>
+    </form>
+
+    <div class="ss-popular-searches-section">
+      <div class="ss-popular-label">Popular Searches:</div>
+      <div class="ss-popular-pills-list">
+        {% assign popular_tags = section.settings.popular_tags | default: 'Desi Gud 500g, Chini Thekua 1kg, Pure Ghee Mithila Sweets' | split: ',' %}
+        {% for tag in popular_tags %}
+          {% assign tag_clean = tag | strip %}
+          {% if tag_clean != blank %}
+            <button type="button" class="ss-popular-pill-tag" data-query="{{ tag_clean }}">
+              {{ tag_clean }}
+            </button>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Predictive Search Live Container -->
+    <div class="ss-predictive-results" hidden></div>
+  </div>
+</div>
+
+{% comment %} 4. SCAN ORDER QR CODE MODAL {% endcomment %}
+<div id="SwaadScanModal" class="ss-scan-modal-container" role="dialog" aria-modal="true" aria-label="Scan Order QR Code" hidden>
+  <div class="ss-search-backdrop" data-ss-close="scan"></div>
+  <div class="ss-scan-card">
+    <button type="button" class="ss-scan-close-btn" data-ss-close="scan" aria-label="Close Modal">✕</button>
+    <h3 class="ss-scan-title">Scan to Order</h3>
+    <p class="ss-scan-subtitle">Scan QR code using camera/WhatsApp to order authentic Mithila Thekua directly!</p>
+    <div class="ss-qr-box">
+      <svg viewBox="0 0 100 100" fill="#3D1E0B">
+        <!-- Styled QR Code Vector Pattern -->
+        <rect x="10" y="10" width="25" height="25" fill="#3D1E0B"/>
+        <rect x="15" y="15" width="15" height="15" fill="#FFFFFF"/>
+        <rect x="18" y="18" width="9" height="9" fill="#3D1E0B"/>
+        
+        <rect x="65" y="10" width="25" height="25" fill="#3D1E0B"/>
+        <rect x="70" y="15" width="15" height="15" fill="#FFFFFF"/>
+        <rect x="73" y="18" width="9" height="9" fill="#3D1E0B"/>
+        
+        <rect x="10" y="65" width="25" height="25" fill="#3D1E0B"/>
+        <rect x="15" y="70" width="15" height="15" fill="#FFFFFF"/>
+        <rect x="18" y="73" width="9" height="9" fill="#3D1E0B"/>
+        
+        <!-- Data dots -->
+        <rect x="42" y="12" width="6" height="6"/>
+        <rect x="52" y="18" width="6" height="6"/>
+        <rect x="42" y="28" width="12" height="6"/>
+        <rect x="12" y="42" width="12" height="6"/>
+        <rect x="28" y="42" width="6" height="12"/>
+        <rect x="42" y="42" width="16" height="16"/>
+        <rect x="65" y="42" width="10" height="6"/>
+        <rect x="80" y="42" width="8" height="14"/>
+        <rect x="42" y="65" width="10" height="10"/>
+        <rect x="58" y="65" width="10" height="6"/>
+        <rect x="72" y="65" width="16" height="6"/>
+        <rect x="58" y="78" width="10" height="12"/>
+        <rect x="74" y="78" width="14" height="12"/>
+      </svg>
+    </div>
+    <span style="font-size:12px; font-weight:600; color:#C69C6D;">SWAAD SAMVAAD • TASTE OF MITHILA</span>
+  </div>
+</div>
+
+{% comment %} 5. MOBILE NAVIGATION DRAWER {% endcomment %}
+<div id="SwaadMobileDrawer" class="ss-mobile-drawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation" hidden>
+  <div class="ss-drawer-backdrop" data-ss-close="mobile-drawer"></div>
+  <div class="ss-drawer-content">
+    <div class="ss-drawer-header">
+      <div class="ss-logo-badge" style="width:36px; height:36px; font-size:15px;">
+        {{ section.settings.logo_initials | default: 'SS' }}
+      </div>
+      <span class="ss-brand-title" style="font-size:17px;">SWAAD SAMVAAD</span>
+      <button type="button" class="ss-drawer-close-btn" data-ss-close="mobile-drawer" aria-label="Close Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <div class="ss-drawer-body">
+      <!-- Quick Search Trigger in Drawer -->
+      <button
+        type="button"
+        class="ss-scan-order-btn"
+        style="justify-content:center; width:100%;"
+        data-ss-trigger="search"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style="width:16px; height:16px;">
+          <circle cx="11" cy="11" r="7" />
+          <line x1="16.5" y1="16.5" x2="22" y2="22" />
+        </svg>
+        <span>Search Desi Gud, Thekua...</span>
+      </button>
+
+      <!-- Navigation List -->
+      <ul class="ss-drawer-nav-list">
+        {% if section.settings.menu != blank and linklists[section.settings.menu].links.size > 0 %}
+          {% for link in linklists[section.settings.menu].links %}
+            <li>
+              <a href="{{ link.url }}" class="ss-drawer-nav-link">
+                {% if link.title contains 'FSSAI' or link.title contains 'Quality' %}
+                  <span class="ss-green-dot" aria-hidden="true"></span>
+                {% endif %}
+                {{ link.title }}
+              </a>
+            </li>
+          {% endfor %}
+        {% else %}
+          <li><a href="{{ routes.all_products_collection_url }}" class="ss-drawer-nav-link">Shop Thekua</a></li>
+          <li><a href="/pages/why-desi-ghee" class="ss-drawer-nav-link">Why Desi Ghee?</a></li>
+          <li><a href="/pages/our-story" class="ss-drawer-nav-link">Our Story</a></li>
+          <li>
+            <a href="/pages/fssai-quality" class="ss-drawer-nav-link">
+              <span class="ss-green-dot" aria-hidden="true"></span>
+              FSSAI & Quality
+            </a>
+          </li>
+          <li><a href="/pages/refund-policy" class="ss-drawer-nav-link">100% Refund</a></li>
+          <li><a href="#reviews" class="ss-drawer-nav-link">Reviews</a></li>
+        {% endif %}
+      </ul>
+
+      <!-- Scan Order Action -->
+      <div class="ss-drawer-actions">
+        <a href="#" class="ss-scan-order-btn" style="justify-content:center;" data-ss-trigger="scan">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v3h-3v-3zm-5 0h3v3h-3v-3zm0 5h3v3h-3v-3zm5 0h3v3h-3v-3z" />
+          </svg>
+          <span>Scan Order QR</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'custom-header.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "header-section",
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Announcement Bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "Show Announcement Bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement Text",
+      "default": "FSSAI Certified License No. : 233220030000077"
+    },
+    {
+      "type": "color",
+      "id": "announcement_bg",
+      "label": "Announcement Background",
+      "default": "#3D1E0B"
+    },
+    {
+      "type": "color",
+      "id": "announcement_text_color",
+      "label": "Announcement Text Color",
+      "default": "#F0E6D8"
+    },
+    {
+      "type": "header",
+      "content": "Branding & Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Custom Logo Image"
+    },
+    {
+      "type": "text",
+      "id": "logo_initials",
+      "label": "Badge Initials",
+      "default": "SS"
+    },
+    {
+      "type": "text",
+      "id": "brand_title",
+      "label": "Brand Title",
+      "default": "SWAAD SAMVAAD"
+    },
+    {
+      "type": "text",
+      "id": "brand_tagline",
+      "label": "Brand Tagline",
+      "default": "TASTE OF MITHILA & HOME"
+    },
+    {
+      "type": "header",
+      "content": "Navigation Menu"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Header Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Search Overlay Settings"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search Input Placeholder",
+      "default": "Search Desi Gud Thekua, Sugar Thekua, Ghee snacks..."
+    },
+    {
+      "type": "textarea",
+      "id": "popular_tags",
+      "label": "Popular Search Tags (Comma Separated)",
+      "default": "Desi Gud 500g, Chini Thekua 1kg, Pure Ghee Mithila Sweets"
+    },
+    {
+      "type": "header",
+      "content": "Header Styling & Behaviors"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky",
+      "label": "Enable Sticky Header",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_overlay",
+      "label": "Overlay Homepage Hero",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "color_bg",
+      "label": "Header Background Color",
+      "default": "#F9F8F3"
+    },
+    {
+      "type": "color",
+      "id": "color_accent",
+      "label": "Dark Accent Color",
+      "default": "#3D1E0B"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Header"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,864 @@
+/* ==========================================================================
+   SWAAD SAMVAAD - Custom Header & Search Overlay Styles
+   ========================================================================== */
+
+:root {
+  --ss-color-brown-dark: #3D1E0B;
+  --ss-color-brown-medium: #5D331A;
+  --ss-color-gold-accent: #C69C6D;
+  --ss-color-gold-light: #E6C594;
+  --ss-color-cream-bg: #F9F8F3;
+  --ss-color-cream-pill: #F4ECE1;
+  --ss-color-pill-border: #C4A482;
+  --ss-color-green-fssai: #2E7D32;
+  --ss-color-text-dark: #2B2523;
+  --ss-color-text-muted: #8C6D53;
+  --ss-font-serif: "Playfair Display", "Times New Roman", Georgia, serif;
+  --ss-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --ss-transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  --ss-transition-smooth: 0.3s ease;
+}
+
+/* Base Header Container */
+.ss-header-section {
+  position: relative;
+  width: 100%;
+  z-index: 999;
+  font-family: var(--ss-font-sans);
+  background-color: var(--ss-color-cream-bg);
+  box-sizing: border-box;
+}
+
+.ss-header-section *,
+.ss-header-section *::before,
+.ss-header-section *::after {
+  box-sizing: border-box;
+}
+
+.ss-header-section--sticky {
+  position: sticky;
+  top: 0;
+  box-shadow: 0 4px 20px rgba(61, 30, 11, 0.08);
+  transition: transform var(--ss-transition-smooth), box-shadow var(--ss-transition-smooth);
+}
+
+.ss-header-section--overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(249, 248, 243, 0.95);
+  backdrop-filter: blur(8px);
+}
+
+/* ==========================================================================
+   1. Top Announcement Bar
+   ========================================================================== */
+.ss-announcement-bar {
+  background-color: var(--ss-color-brown-dark);
+  color: #F0E6D8;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  position: relative;
+  z-index: 10;
+}
+
+.ss-announcement-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  line-height: 1.3;
+}
+
+.ss-announcement-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #81C784;
+}
+
+.ss-announcement-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.ss-announcement-text {
+  color: #F0E6D8;
+  text-decoration: none;
+}
+
+.ss-announcement-text:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   2. Main Header Layout
+   ========================================================================== */
+.ss-main-header {
+  background-color: var(--ss-color-cream-bg);
+  padding: 14px 32px;
+  border-bottom: 1px solid rgba(198, 156, 109, 0.15);
+  transition: padding var(--ss-transition-smooth), background-color var(--ss-transition-smooth);
+}
+
+.ss-main-header__container {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+/* Logo & Branding */
+.ss-branding {
+  display: flex;
+  align-items: center;
+}
+
+.ss-brand-logo-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.ss-logo-badge {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background-color: var(--ss-color-brown-dark);
+  border: 2px solid var(--ss-color-gold-accent);
+  color: var(--ss-color-gold-accent);
+  font-family: var(--ss-font-serif);
+  font-size: 19px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: -0.5px;
+  box-shadow: 0 2px 8px rgba(61, 30, 11, 0.2);
+  flex-shrink: 0;
+  transition: transform var(--ss-transition-fast);
+}
+
+.ss-brand-logo-link:hover .ss-logo-badge {
+  transform: scale(1.05);
+}
+
+.ss-brand-text-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ss-brand-title {
+  font-family: var(--ss-font-serif);
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--ss-color-brown-dark);
+  letter-spacing: 1.2px;
+  line-height: 1.1;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.ss-brand-tagline {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--ss-color-text-muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 3px;
+  line-height: 1;
+}
+
+.ss-custom-logo-img {
+  max-height: 50px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Navigation Links (Desktop) */
+.ss-nav-menu {
+  display: flex;
+  align-items: center;
+}
+
+.ss-nav-list {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ss-nav-item {
+  position: relative;
+}
+
+.ss-nav-link {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ss-color-text-dark);
+  text-decoration: none;
+  padding: 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color var(--ss-transition-fast);
+  white-space: nowrap;
+}
+
+.ss-nav-link:hover {
+  color: var(--ss-color-brown-dark);
+}
+
+.ss-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background-color: var(--ss-color-brown-dark);
+  transition: width var(--ss-transition-fast);
+  border-radius: 2px;
+}
+
+.ss-nav-link:hover::after {
+  width: 100%;
+}
+
+.ss-green-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--ss-color-green-fssai);
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.2);
+}
+
+/* Header Right Utilities / Actions */
+.ss-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Action Buttons Base */
+.ss-icon-btn {
+  background: transparent;
+  border: none;
+  padding: 8px;
+  border-radius: 50%;
+  color: var(--ss-color-text-dark);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--ss-transition-fast), color var(--ss-transition-fast);
+  position: relative;
+  text-decoration: none;
+}
+
+.ss-icon-btn:hover {
+  background-color: rgba(61, 30, 11, 0.06);
+  color: var(--ss-color-brown-dark);
+}
+
+.ss-icon-btn svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  fill: none;
+}
+
+/* Scan Order Button */
+.ss-scan-order-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: var(--ss-color-cream-pill);
+  border: 1.5px solid var(--ss-color-pill-border);
+  border-radius: 30px;
+  color: var(--ss-color-brown-dark);
+  font-size: 13.5px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--ss-transition-fast);
+  white-space: nowrap;
+}
+
+.ss-scan-order-btn:hover {
+  background-color: var(--ss-color-brown-dark);
+  border-color: var(--ss-color-brown-dark);
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(61, 30, 11, 0.2);
+}
+
+.ss-scan-order-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+/* Cart Icon & Badge */
+.ss-cart-btn {
+  position: relative;
+}
+
+.ss-cart-count-badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  background-color: var(--ss-color-brown-dark);
+  color: #FFFFFF;
+  font-size: 10.5px;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  line-height: 1;
+}
+
+/* Mobile Toggle Hamburger */
+.ss-mobile-toggle-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--ss-color-brown-dark);
+}
+
+.ss-mobile-toggle-btn svg {
+  width: 26px;
+  height: 26px;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+/* ==========================================================================
+   3. Interactive Search Popup Overlay Modal
+   ========================================================================== */
+.ss-search-modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 10vh;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--ss-transition-fast), visibility var(--ss-transition-fast);
+}
+
+.ss-search-modal-container.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.ss-search-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(30, 20, 15, 0.45);
+  backdrop-filter: blur(5px);
+  z-index: 1;
+}
+
+.ss-search-card {
+  position: relative;
+  z-index: 2;
+  background: #FFFFFF;
+  width: 90%;
+  max-width: 640px;
+  border-radius: 16px;
+  padding: 24px 28px;
+  box-shadow: 0 20px 50px rgba(61, 30, 11, 0.25);
+  transform: translateY(-20px) scale(0.97);
+  transition: transform var(--ss-transition-fast);
+}
+
+.ss-search-modal-container.is-active .ss-search-card {
+  transform: translateY(0) scale(1);
+}
+
+/* Input Row */
+.ss-search-form {
+  margin: 0;
+  padding: 0;
+}
+
+.ss-search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1.5px solid #EBE5DF;
+  padding-bottom: 14px;
+}
+
+.ss-search-input-icon {
+  color: var(--ss-color-brown-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ss-search-input-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+.ss-search-field {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ss-color-text-dark);
+  padding: 4px 0;
+  font-family: inherit;
+}
+
+.ss-search-field::placeholder {
+  color: #A09890;
+  font-weight: 400;
+}
+
+.ss-search-close-btn {
+  background: transparent;
+  border: none;
+  color: #7D736A;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: color var(--ss-transition-fast), background-color var(--ss-transition-fast);
+}
+
+.ss-search-close-btn:hover {
+  color: var(--ss-color-brown-dark);
+  background-color: #F5EFE6;
+}
+
+/* Popular Searches */
+.ss-popular-searches-section {
+  margin-top: 18px;
+}
+
+.ss-popular-label {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ss-color-text-dark);
+  margin-bottom: 12px;
+}
+
+.ss-popular-pills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ss-popular-pill-tag {
+  background-color: #FFFFFF;
+  border: 1px solid #E5DCD3;
+  border-radius: 20px;
+  padding: 7px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6E645A;
+  cursor: pointer;
+  transition: all var(--ss-transition-fast);
+  outline: none;
+}
+
+.ss-popular-pill-tag:hover {
+  border-color: var(--ss-color-brown-dark);
+  color: var(--ss-color-brown-dark);
+  background-color: #FAF6F0;
+  box-shadow: 0 2px 8px rgba(61, 30, 11, 0.08);
+}
+
+/* Predictive Search Results */
+.ss-predictive-results {
+  margin-top: 16px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.ss-predictive-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color var(--ss-transition-fast);
+}
+
+.ss-predictive-item:hover {
+  background-color: #FAF6F0;
+}
+
+.ss-predictive-img {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.ss-predictive-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.ss-predictive-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ss-color-text-dark);
+}
+
+.ss-predictive-price {
+  font-size: 13px;
+  color: var(--ss-color-brown-dark);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   4. Scan Order QR Modal Overlay
+   ========================================================================== */
+.ss-scan-modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10005;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--ss-transition-fast), visibility var(--ss-transition-fast);
+}
+
+.ss-scan-modal-container.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.ss-scan-card {
+  position: relative;
+  z-index: 2;
+  background: #FFFFFF;
+  width: 90%;
+  max-width: 420px;
+  border-radius: 20px;
+  padding: 28px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(61, 30, 11, 0.3);
+  transform: scale(0.95);
+  transition: transform var(--ss-transition-fast);
+}
+
+.ss-scan-modal-container.is-active .ss-scan-card {
+  transform: scale(1);
+}
+
+.ss-scan-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: #F5EFE6;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--ss-color-brown-dark);
+  font-size: 16px;
+}
+
+.ss-scan-title {
+  font-family: var(--ss-font-serif);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ss-color-brown-dark);
+  margin-bottom: 6px;
+}
+
+.ss-scan-subtitle {
+  font-size: 13px;
+  color: var(--ss-color-text-muted);
+  margin-bottom: 20px;
+}
+
+.ss-qr-box {
+  background: #FAF6F0;
+  border: 2px dashed var(--ss-color-gold-accent);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px auto;
+  width: 180px;
+  height: 180px;
+}
+
+.ss-qr-box svg {
+  width: 140px;
+  height: 140px;
+}
+
+/* ==========================================================================
+   5. Mobile Drawer Navigation
+   ========================================================================== */
+.ss-mobile-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10002;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--ss-transition-fast), visibility var(--ss-transition-fast);
+}
+
+.ss-mobile-drawer.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.ss-drawer-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(30, 20, 15, 0.45);
+  backdrop-filter: blur(4px);
+}
+
+.ss-drawer-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 82%;
+  max-width: 360px;
+  height: 100%;
+  background-color: var(--ss-color-cream-bg);
+  box-shadow: 4px 0 25px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform var(--ss-transition-smooth);
+  z-index: 2;
+  overflow-y: auto;
+}
+
+.ss-mobile-drawer.is-active .ss-drawer-content {
+  transform: translateX(0);
+}
+
+.ss-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(198, 156, 109, 0.2);
+}
+
+.ss-drawer-close-btn {
+  background: transparent;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--ss-color-brown-dark);
+}
+
+.ss-drawer-close-btn svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.ss-drawer-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ss-drawer-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ss-drawer-nav-link {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ss-color-text-dark);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.ss-drawer-actions {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ==========================================================================
+   6. Responsiveness & Breakpoints
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .ss-main-header {
+    padding: 12px 20px;
+  }
+
+  .ss-nav-list {
+    gap: 16px;
+  }
+
+  .ss-nav-link {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 991px) {
+  .ss-nav-menu {
+    display: none;
+  }
+
+  .ss-mobile-toggle-btn {
+    display: flex;
+  }
+
+  .ss-main-header__container {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+  }
+
+  .ss-branding {
+    justify-content: center;
+  }
+
+  .ss-brand-title {
+    font-size: 18px;
+  }
+
+  .ss-brand-tagline {
+    font-size: 8.5px;
+  }
+
+  .ss-logo-badge {
+    width: 40px;
+    height: 40px;
+    font-size: 17px;
+  }
+
+  .ss-scan-order-btn span {
+    display: none;
+  }
+
+  .ss-scan-order-btn {
+    padding: 8px;
+    border-radius: 50%;
+  }
+
+  .ss-header-actions {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .ss-announcement-bar {
+    font-size: 11.5px;
+    padding: 6px 12px;
+  }
+
+  .ss-main-header {
+    padding: 10px 14px;
+  }
+
+  .ss-brand-title {
+    font-size: 16px;
+    letter-spacing: 0.8px;
+  }
+
+  .ss-brand-tagline {
+    display: none;
+  }
+
+  .ss-logo-badge {
+    width: 36px;
+    height: 36px;
+    font-size: 15px;
+  }
+
+  .ss-search-card {
+    padding: 18px 20px;
+    width: 94%;
+  }
+
+  .ss-popular-pills-list {
+    gap: 6px;
+  }
+
+  .ss-popular-pill-tag {
+    font-size: 12px;
+    padding: 5px 12px;
+  }
+}

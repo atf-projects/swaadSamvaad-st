@@ -1,0 +1,27 @@
+{
+  "type": "header",
+  "name": "t:names.header",
+  "sections": {
+    "header_section": {
+      "type": "header",
+      "settings": {
+        "show_announcement": true,
+        "announcement_text": "FSSAI Certified License No. : 233220030000077",
+        "announcement_bg": "#3D1E0B",
+        "announcement_text_color": "#F0E6D8",
+        "logo_initials": "SS",
+        "brand_title": "SWAAD SAMVAAD",
+        "brand_tagline": "TASTE OF MITHILA & HOME",
+        "menu": "main-menu",
+        "popular_tags": "Desi Gud 500g, Chini Thekua 1kg, Pure Ghee Mithila Sweets",
+        "enable_sticky": true,
+        "enable_overlay": false,
+        "color_bg": "#F9F8F3",
+        "color_accent": "#3D1E0B"
+      }
+    }
+  },
+  "order": [
+    "header_section"
+  ]
+}
