@@ -1,0 +1,506 @@
+{% comment %}
+  Section contract.
+  Swaad Samvaad - Luxury Traditional Mithila Single Blog Article Page (sections/ss-article-page.liquid)
+  Clean, responsive, focused editorial layout with Mithila cultural motifs.
+{% endcomment %}
+
+{{ 'ss-article-page.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'ss-article-page.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign words = article.content | strip_html | split: ' ' | size
+  assign read_time = words | divided_by: 180 | at_least: 3
+  assign share_url = shop.url | append: article.url
+  assign share_title = article.title | url_encode
+-%}
+
+<article
+  id="ss-article-page-{{ section.id }}"
+  class="ss-article-page"
+  data-ss-article-page
+  style="
+    --ss-art-pad-top: {{ section.settings.padding_top | default: 25 }}px;
+    --ss-art-pad-bottom: {{ section.settings.padding_bottom | default: 60 }}px;
+  "
+>
+  <div class="ss-article-page__container">
+
+    {%- comment -%} 1. Top Breadcrumbs & Back Link {%- endcomment -%}
+    <div class="ss-article-page__top-bar">
+      <nav class="ss-article-breadcrumbs" aria-label="Breadcrumbs">
+        <a href="{{ routes.root_url }}">Home</a>
+        <span class="ss-article-breadcrumbs__sep">❖</span>
+        <a href="{{ blog.url }}">{{ blog.title | default: 'Mithila Patrika' }}</a>
+        <span class="ss-article-breadcrumbs__sep">❖</span>
+        <span class="ss-article-breadcrumbs__current">{{ article.title }}</span>
+      </nav>
+
+      <a href="{{ blog.url }}" class="ss-article-back-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span>Back to All Stories</span>
+      </a>
+    </div>
+
+    {%- comment -%} 2. Editorial Header {%- endcomment -%}
+    <header class="ss-article-header">
+      <div class="ss-article-header__badge-wrap">
+        {%- if article.tags.first != blank -%}
+          <span class="ss-article-badge">✨ {{ article.tags.first }}</span>
+        {%- else -%}
+          <span class="ss-article-badge">✨ Mithila Heritage</span>
+        {%- endif -%}
+        <span class="ss-article-badge ss-article-badge--subtle">Handcrafted Tradition</span>
+      </div>
+
+      <h1 class="ss-article-header__title">
+        {{ article.title }}
+      </h1>
+
+      <div class="ss-article-header__motif-divider" aria-hidden="true">
+        <span>❖</span>
+        <div class="ss-article-header__motif-line"></div>
+        <span>🪔</span>
+        <div class="ss-article-header__motif-line"></div>
+        <span>❖</span>
+      </div>
+
+      {%- comment -%} Meta Information Bar {%- endcomment -%}
+      <div class="ss-article-meta-bar">
+        <div class="ss-article-meta-author">
+          <div class="ss-article-meta-author__avatar">👩‍🍳</div>
+          <div class="ss-article-meta-author__info">
+            <span class="ss-article-meta-author__name">{{ article.author | default: 'Swaad Samvaad Rasoi' }}</span>
+            <span class="ss-article-meta-author__role">Master Artisan of Mithila</span>
+          </div>
+        </div>
+
+        <div class="ss-article-meta-pills">
+          <span class="ss-article-meta-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            {{ article.published_at | date: '%b %d, %Y' }}
+          </span>
+          <span class="ss-article-meta-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            {{ read_time }} Min Read
+          </span>
+        </div>
+
+        <div class="ss-article-meta-shares">
+          <span class="ss-article-meta-share-label">Share:</span>
+          <a
+            href="https://api.whatsapp.com/send?text={{ share_title }}%20{{ share_url | url_encode }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="ss-article-share-btn ss-article-share-btn--wa"
+            title="Share on WhatsApp"
+            aria-label="Share on WhatsApp"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.886 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </a>
+          <button
+            type="button"
+            class="ss-article-share-btn ss-article-share-btn--copy"
+            data-ss-copy-url="{{ share_url }}"
+            title="Copy Article Link"
+            aria-label="Copy Article Link"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    {%- comment -%} 3. Featured Hero Media Banner {%- endcomment -%}
+    <div class="ss-article-hero-media">
+      <div class="ss-article-hero-media__frame">
+        {%- if article.image != blank -%}
+          <img
+            src="{{ article.image | image_url: width: 1400 }}"
+            alt="{{ article.title | escape }}"
+            class="ss-article-hero-media__img"
+            width="1400"
+            height="700"
+            loading="eager"
+            fetchpriority="high"
+          >
+        {%- else -%}
+          <img
+            src="{{ 'ss-thekua-crafting-art.jpg' | asset_url }}"
+            alt="{{ article.title | escape }}"
+            class="ss-article-hero-media__img"
+            width="1400"
+            height="700"
+            loading="eager"
+            fetchpriority="high"
+          >
+        {%- endif -%}
+
+        <div class="ss-article-hero-media__tag">
+          <span>❖ Mithila Rasoi Parampara</span>
+        </div>
+      </div>
+      <div class="ss-article-hero-media__caption">
+        Handcrafted with sacred traditions: Authentic wooden sancha impression on pure cow desi ghee thekua.
+      </div>
+    </div>
+
+    {%- comment -%} 4. Main Two-Column Layout (Editorial Body + Sticky Mithila Sidebar) {%- endcomment -%}
+    <div class="ss-article-layout">
+      
+      {%- comment -%} Primary Editorial Column {%- endcomment -%}
+      <div class="ss-article-content-column">
+        
+        <div class="ss-article-prose rte">
+          {%- if article.content != blank and article.content.size > 80 -%}
+            {{ article.content }}
+          {%- else -%}
+            {%- comment -%} Rich Fallback Story for Unpopulated or Brief Articles {%- endcomment -%}
+            <p class="ss-article-lead">
+              In every traditional Mithila household, the aroma of stone-ground whole wheat flour simmering in golden cow desi ghee is more than just cooking — it is the sacred heartbeat of our culture. As the holy festival of Chhath approaches, families gather around clay chulhas, singing folk songs in Maithili, preparing the divine prasaad that connects generations.
+            </p>
+
+            <h2>The Sacred Geometry of Wooden Sanchas (सांचा)</h2>
+            <p>
+              Unlike machine-pressed snacks, authentic Mithila Thekua is shaped by hand using heirloom <em>Sheesham wood sanchas</em>. These wooden molds are carved by village artisans with sacred motifs: the holy Sun (Surya Dev), flowing lotus petals, and auspicious leaf designs. Each press creates distinct ridges that allow the hot ghee to cook the dough evenly to the center, producing that iconic crunchy outer shell with a tender, melt-in-the-mouth heart.
+            </p>
+
+            <blockquote class="ss-article-quote">
+              <span class="ss-article-quote__mark">“</span>
+              <p>
+                The secret of real Thekua is slow patience. If the ghee is too hot, it browns too quickly outside while staying raw inside. If the ghee is pure and kept at medium wood-flame, the jaggery caramelizes into pure gold.
+              </p>
+              <cite>— Dadi Kaushalya Devi, Master Rasoi Elder of Madhubani</cite>
+            </blockquote>
+
+            <h2>Why 100% Pure Cow Desi Ghee is Irreplaceable</h2>
+            <p>
+              In recent times, commercial sweets have compromised with refined oils and hydrogenated fats. At <strong>Swaad Samvaad</strong>, we uphold the sacred vow of purity. Pure cow desi ghee has a high smoke point, rich aromatic butyric acids, and natural digestive virtues that make Thekua a nourishing festive prasaad rather than a heavy confection.
+            </p>
+
+            {%- comment -%} Dadi Ke Nuskhe Highlight Box {%- endcomment -%}
+            <div class="ss-article-nuskhe-box">
+              <div class="ss-article-nuskhe-box__header">
+                <span class="ss-article-nuskhe-box__icon">🍯</span>
+                <h3 class="ss-article-nuskhe-box__title">Dadi Ke Nuskhe: Authentic Rasoi Secret</h3>
+              </div>
+              <p class="ss-article-nuskhe-box__text">
+                Always dissolve the organic Desi Gud (jaggery) in warm water and filter it through a fine muslin cloth before kneading. Never over-knead the dough like roti — keep it slightly coarse (Khasta) so the natural flaky layers develop inside during the slow fry.
+              </p>
+            </div>
+
+            <h2>From Sacred Ghats to Your Family Living Room</h2>
+            <p>
+              Whether enjoyed during festive Chhath prasaad, as a nostalgic companion to evening chai, or gifted to loved ones across the country, each bite of our handcrafted thekua brings you the authentic blessings, warmth, and culinary purity of Mithila.
+            </p>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Article Tags Cloud {%- endcomment -%}
+        {%- if article.tags.size > 0 -%}
+          <div class="ss-article-tags-wrap">
+            <span class="ss-article-tags-label">Topics:</span>
+            <div class="ss-article-tags-list">
+              {%- for tag in article.tags -%}
+                <a href="{{ blog.url }}/tagged/{{ tag | handle }}" class="ss-article-tag-chip">
+                  #{{ tag }}
+                </a>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Social Sharing & Engagement Bar {%- endcomment -%}
+        <div class="ss-article-share-bar">
+          <div class="ss-article-share-bar__left">
+            <span class="ss-article-share-bar__title">Enjoyed this story?</span>
+            <span class="ss-article-share-bar__sub">Share the heritage with family and friends:</span>
+          </div>
+          <div class="ss-article-share-bar__buttons">
+            <a
+              href="https://api.whatsapp.com/send?text={{ share_title }}%20{{ share_url | url_encode }}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="ss-article-share-pill ss-article-share-pill--wa"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.886 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              <span>Share WhatsApp</span>
+            </a>
+            <button
+              type="button"
+              class="ss-article-share-pill ss-article-share-pill--copy"
+              data-ss-copy-url="{{ share_url }}"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+              <span class="ss-copy-text">Copy Link</span>
+            </button>
+          </div>
+        </div>
+
+        {%- comment -%} Previous / Next Story Navigation {%- endcomment -%}
+        {%- if blog.previous_article or blog.next_article -%}
+          <div class="ss-article-nav {% if blog.previous_article and blog.next_article %}ss-article-nav--both{% elsif blog.previous_article %}ss-article-nav--only-prev{% else %}ss-article-nav--only-next{% endif %}">
+            {%- if blog.previous_article -%}
+              <a href="{{ blog.previous_article.url }}" class="ss-article-nav__card ss-article-nav__card--prev">
+                <span class="ss-article-nav__label">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                  Previous Story
+                </span>
+                <span class="ss-article-nav__title">{{ blog.previous_article.title }}</span>
+              </a>
+            {%- endif -%}
+
+            {%- if blog.next_article -%}
+              <a href="{{ blog.next_article.url }}" class="ss-article-nav__card ss-article-nav__card--next">
+                <span class="ss-article-nav__label">
+                  Next Story
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </span>
+                <span class="ss-article-nav__title">{{ blog.next_article.title }}</span>
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Shopify Native Comments {%- endcomment -%}
+        {%- if blog.comments_enabled? -%}
+          <section id="comments" class="ss-article-comments">
+            <h3 class="ss-article-comments__title">
+              Conversations & Reflections ({{ article.comments_count }})
+            </h3>
+
+            {%- if article.comments_count > 0 -%}
+              <div class="ss-article-comments__list">
+                {%- for comment in article.comments -%}
+                  <div id="{{ comment.id }}" class="ss-article-comment-item">
+                    <div class="ss-article-comment-item__header">
+                      <div class="ss-article-comment-item__avatar">💬</div>
+                      <div>
+                        <strong class="ss-article-comment-item__author">{{ comment.author }}</strong>
+                        <span class="ss-article-comment-item__date">{{ comment.created_at | date: '%b %d, %Y' }}</span>
+                      </div>
+                    </div>
+                    <div class="ss-article-comment-item__body">
+                      {{ comment.content }}
+                    </div>
+                  </div>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+
+            {%- form 'new_comment', article -%}
+              <div class="ss-article-comment-form">
+                <h4 class="ss-article-comment-form__title">Leave a Sacred Reflection</h4>
+                <p class="ss-article-comment-form__desc">Share your family's thekua memories or ask a question about authentic Mithila recipes.</p>
+
+                {%- if form.posted_successfully? -%}
+                  <div class="ss-article-comment-success">
+                    ✓ Your reflection has been posted successfully! Dhanyavaad.
+                  </div>
+                {%- endif -%}
+
+                {%- if form.errors -%}
+                  <div class="ss-article-comment-error">
+                    {{ form.errors | default_errors }}
+                  </div>
+                {%- endif -%}
+
+                <div class="ss-article-form-grid">
+                  <div class="ss-article-form-group">
+                    <label for="CommentAuthor">Your Name *</label>
+                    <input type="text" name="comment[author]" id="CommentAuthor" class="ss-article-input" placeholder="e.g. Priyadarshini Jha" required>
+                  </div>
+                  <div class="ss-article-form-group">
+                    <label for="CommentEmail">Your Email *</label>
+                    <input type="email" name="comment[email]" id="CommentEmail" class="ss-article-input" placeholder="e.g. name@domain.com" required>
+                  </div>
+                </div>
+
+                <div class="ss-article-form-group">
+                  <label for="CommentBody">Your Message *</label>
+                  <textarea name="comment[body]" id="CommentBody" rows="4" class="ss-article-textarea" placeholder="Write your reflection here..." required></textarea>
+                </div>
+
+                <button type="submit" class="ss-article-comment-submit">
+                  <span>Post Reflection</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+              </div>
+            {%- endform -%}
+          </section>
+        {%- endif -%}
+
+      </div>
+
+      {%- comment -%} Secondary Column: Sticky Mithila Sidebar {%- endcomment -%}
+      {%- if section.settings.show_sidebar -%}
+        <aside class="ss-article-sidebar">
+          <div class="ss-article-sidebar__sticky-wrap">
+
+            {%- comment -%} Sidebar Widget 1: Taste This Story (Product CTA) {%- endcomment -%}
+            {%- liquid
+              assign side_collection = section.settings.featured_collection | default: collections['all']
+              assign side_prod = side_collection.products.first
+            -%}
+            {%- if side_prod != blank -%}
+              <div class="ss-article-side-card ss-article-side-card--product">
+                <div class="ss-article-side-card__badge">✨ TASTE THIS STORY</div>
+                <h3 class="ss-article-side-card__heading">Authentic Pure Desi Ghee Thekua</h3>
+                <p class="ss-article-side-card__sub">Crafted fresh on order using traditional wood sanchas.</p>
+
+                <a href="{{ side_prod.url }}" class="ss-article-side-prod__img-wrap" aria-label="{{ side_prod.title | escape }}">
+                  {%- if side_prod.featured_image != blank -%}
+                    <img src="{{ side_prod.featured_image | image_url: width: 320 }}" alt="{{ side_prod.title | escape }}" width="280" height="280" loading="lazy">
+                  {%- else -%}
+                    <img src="{{ 'ss-thekua-crafting-art.jpg' | asset_url }}" alt="{{ side_prod.title | escape }}" width="280" height="280" loading="lazy">
+                  {%- endif -%}
+                </a>
+
+                <a href="{{ side_prod.url }}" class="ss-article-side-prod__title">
+                  {{ side_prod.title }}
+                </a>
+
+                <div class="ss-article-side-prod__price-row">
+                  {%- if side_prod.compare_at_price > side_prod.price -%}
+                    <span class="ss-article-side-prod__compare">{{ side_prod.compare_at_price | money }}</span>
+                  {%- endif -%}
+                  <span class="ss-article-side-prod__price">{{ side_prod.price | money }}</span>
+                  <span class="ss-article-side-prod__rating">★ 4.9 (1.6k+)</span>
+                </div>
+
+                {%- assign side_variant = side_prod.selected_or_first_available_variant -%}
+                <button
+                  type="button"
+                  class="ss-article-side-prod__add-btn"
+                  data-variant-id="{{ side_variant.id | default: 1 }}"
+                  data-ss-article-add-cart
+                  aria-label="Add {{ side_prod.title | escape }} to basket"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                  <span>+ ADD TO BASKET</span>
+                </button>
+
+                <a href="{{ side_prod.url }}" class="ss-article-side-prod__link">
+                  View Full Recipe & Details →
+                </a>
+              </div>
+            {%- endif -%}
+
+            {%- comment -%} Sidebar Widget 2: Mithila Heritage Purity Seal {%- endcomment -%}
+            <div class="ss-article-side-card ss-article-side-card--trust">
+              <h4 class="ss-article-trust__title">
+                <span>❖</span> Swaad Samvaad Purity Vow
+              </h4>
+              <ul class="ss-article-trust__list">
+                <li>
+                  <span class="ss-article-trust__icon">🧈</span>
+                  <div>
+                    <strong>100% Pure Cow Desi Ghee</strong>
+                    <p>Slow-cooked in small village batches.</p>
+                  </div>
+                </li>
+                <li>
+                  <span class="ss-article-trust__icon">🪵</span>
+                  <div>
+                    <strong>Carved Sheesham Wood Sancha</strong>
+                    <p>No industrial stamping, pure artisanal touch.</p>
+                  </div>
+                </li>
+                <li>
+                  <span class="ss-article-trust__icon">🌿</span>
+                  <div>
+                    <strong>Zero Preservatives & Palm Oil</strong>
+                    <p>Pure wholesome ingredients, just like home.</p>
+                  </div>
+                </li>
+                <li>
+                  <span class="ss-article-trust__icon">📦</span>
+                  <div>
+                    <strong>Aroma-Lock Fresh Dispatch</strong>
+                    <p>Delivered across India within 3-5 days.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            {%- comment -%} Sidebar Widget 3: Popular Articles from Blog {%- endcomment -%}
+            {%- if blog.articles.size > 1 -%}
+              <div class="ss-article-side-card ss-article-side-card--stories">
+                <h4 class="ss-article-side-stories__title">
+                  <span>✦</span> More From Rasoi Patrika
+                </h4>
+                <div class="ss-article-side-stories__list">
+                  {%- for pop_article in blog.articles limit: 3 -%}
+                    {%- if pop_article.id == article.id -%}{%- continue -%}{%- endif -%}
+                    <a href="{{ pop_article.url }}" class="ss-article-side-story-item">
+                      <div class="ss-article-side-story-item__img-wrap">
+                        {%- if pop_article.image != blank -%}
+                          <img src="{{ pop_article.image | image_url: width: 120 }}" alt="{{ pop_article.title | escape }}" width="60" height="60" loading="lazy">
+                        {%- else -%}
+                          <img src="{{ 'ss-hero-slide-2.jpg' | asset_url }}" alt="{{ pop_article.title | escape }}" width="60" height="60" loading="lazy">
+                        {%- endif -%}
+                      </div>
+                      <div class="ss-article-side-story-item__info">
+                        <span class="ss-article-side-story-item__date">{{ pop_article.published_at | date: '%b %d, %Y' }}</span>
+                        <h5 class="ss-article-side-story-item__title">{{ pop_article.title | truncate: 50 }}</h5>
+                      </div>
+                    </a>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endif -%}
+
+          </div>
+        </aside>
+      {%- endif -%}
+
+    </div>
+
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Swaad Single Article Page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Sidebar Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sidebar",
+      "label": "Show Sticky Mithila Sidebar",
+      "default": true
+    },
+    {
+      "type": "collection",
+      "id": "featured_collection",
+      "label": "Featured Sidebar Product Collection"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top Spacing",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom Spacing",
+      "min": 20,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 60
+    }
+  ]
+}
+{% endschema %}
