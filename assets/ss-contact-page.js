@@ -11,26 +11,10 @@
     const section = document.querySelector('[data-ss-contact-page]');
     if (!section) return;
 
-    // 1. Subject Chips Handler
-    const chips = section.querySelectorAll('.ss-contact-chip');
-    const subjectInput = section.querySelector('#ss-contact-subject-input');
-
-    if (chips.length > 0 && subjectInput) {
-      chips.forEach((chip) => {
-        chip.addEventListener('click', () => {
-          chips.forEach((c) => c.classList.remove('is-active'));
-          chip.classList.add('is-active');
-          const subject = chip.getAttribute('data-subject');
-          if (subject) {
-            subjectInput.value = subject;
-          }
-        });
-      });
-    }
-
-    // 2. Form Submit State
+    // 1. Form Submit State Indicator
     const contactForm = section.querySelector('#ss-main-contact-form');
-    if (contactForm) {
+    if (contactForm && !contactForm.dataset.initialized) {
+      contactForm.dataset.initialized = 'true';
       contactForm.addEventListener('submit', () => {
         const submitBtn = contactForm.querySelector('.ss-contact-submit-btn');
         if (submitBtn) {
@@ -41,19 +25,22 @@
       });
     }
 
-    // 3. FAQ Accordion Single Open Behavior (Optional Enhancement)
+    // 2. FAQ Accordion Single Open Behavior
     const faqDetails = section.querySelectorAll('.ss-contact-faq-item');
     if (faqDetails.length > 0) {
       faqDetails.forEach((targetDetail) => {
-        targetDetail.addEventListener('toggle', () => {
-          if (targetDetail.open) {
-            faqDetails.forEach((detail) => {
-              if (detail !== targetDetail && detail.open) {
-                detail.open = false;
-              }
-            });
-          }
-        });
+        if (!targetDetail.dataset.initialized) {
+          targetDetail.dataset.initialized = 'true';
+          targetDetail.addEventListener('toggle', () => {
+            if (targetDetail.open) {
+              faqDetails.forEach((detail) => {
+                if (detail !== targetDetail && detail.open) {
+                  detail.open = false;
+                }
+              });
+            }
+          });
+        }
       });
     }
   }

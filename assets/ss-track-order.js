@@ -287,33 +287,24 @@
       });
     }
 
-    // 4. FAQ Accordion Toggle
+    // 4. FAQ Accordion Toggle (Single-open helper)
     var faqItems = trackSection.querySelectorAll('.ss-track-faq-item');
-    faqItems.forEach(function (item) {
-      var trigger = item.querySelector('.ss-track-faq-trigger');
-      if (trigger) {
-        trigger.addEventListener('click', function () {
-          var isOpen = item.classList.contains('is-open');
-          
-          // Optional: close other accordions
-          faqItems.forEach(function (other) {
-            if (other !== item) {
-              other.classList.remove('is-open');
-              var otherTrigger = other.querySelector('.ss-track-faq-trigger');
-              if (otherTrigger) otherTrigger.setAttribute('aria-expanded', 'false');
+    if (faqItems.length > 0) {
+      faqItems.forEach(function (targetDetail) {
+        if (!targetDetail.dataset.initialized) {
+          targetDetail.dataset.initialized = 'true';
+          targetDetail.addEventListener('toggle', function () {
+            if (targetDetail.open) {
+              faqItems.forEach(function (detail) {
+                if (detail !== targetDetail && detail.open) {
+                  detail.open = false;
+                }
+              });
             }
           });
-
-          if (isOpen) {
-            item.classList.remove('is-open');
-            trigger.setAttribute('aria-expanded', 'false');
-          } else {
-            item.classList.add('is-open');
-            trigger.setAttribute('aria-expanded', 'true');
-          }
-        });
-      }
-    });
+        }
+      });
+    }
 
     // 5. URL Query Parameter Support (e.g. ?order_id=SS-9821)
     var urlParams = new URLSearchParams(window.location.search);

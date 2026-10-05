@@ -2,10 +2,57 @@
   "sections": {
     "main": {
       "type": "ss-track-order",
+      "blocks": {
+        "faq-1": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How long does delivery take across India?",
+            "answer": "We dispatch all fresh batches directly from our traditional rasoi in Darbhanga, Bihar via Express Air Cargo (BlueDart, Delhivery, DTDC). Standard delivery times are 2-3 working days for Metro cities and 3-5 working days for other regional pin codes across India.",
+            "open_by_default": true
+          }
+        },
+        "faq-2": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How does Swaad Samvaad ensure the Thekua stays fresh during transit?",
+            "answer": "Our thekua is fried in 100% Pure Desi Ghee (which acts as a natural Vedic preservative). Each batch is cooled to room temperature, packed in food-grade airtight bags with moisture-absorbers, and housed in our signature gold-embossed crush-resistant box. This guarantees 100% crispiness and aroma for up to 90 days.",
+            "open_by_default": false
+          }
+        },
+        "faq-3": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Can I update my delivery address or phone number after ordering?",
+            "answer": "Yes, if your order is still in the 'Wood-Fire Crafted' or 'Packing' stage (typically within 4-6 hours of placing the order), you can message us instantly on WhatsApp (+91 98765 43210) with your Order ID to update the destination address.",
+            "open_by_default": false
+          }
+        },
+        "faq-4": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What should I do if my tracking status is not updating?",
+            "answer": "Air courier scans are updated at each transit hub. Occasionally, scans take 6-12 hours to reflect on the online portal while the flight is in transit. If your tracking has not updated for more than 24 hours, our dispatch team will actively escalate it with the courier manager.",
+            "open_by_default": false
+          }
+        }
+      },
+      "block_order": [
+        "faq-1",
+        "faq-2",
+        "faq-3",
+        "faq-4"
+      ],
       "settings": {
+        "show_breadcrumbs": true,
+        "breadcrumb_home_text": "Home",
+        "breadcrumb_current_text": "Track Order",
         "eyebrow_text": "✦ SWAAD SAMVAAD DISPATCH & LOGISTICS ✦",
         "heading": "Track Your Sacred Mithila Parcel",
         "subheading": "Enter your Order ID (e.g. #SS-9821) along with your registered Phone / Email or AWB Number to check the live batch crafting and express courier status.",
+        "show_faqs": true,
+        "faq_eyebrow": "✦ FREQUENTLY ASKED QUESTIONS ✦",
+        "faq_heading": "Courier & Dispatch Guidelines",
+        "faq_subheading": "",
         "padding_top": 25,
         "padding_bottom": 75
       }

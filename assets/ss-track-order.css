@@ -1005,6 +1005,7 @@
   transition: var(--ss-track-transition);
 }
 
+.ss-track-faq-item[open],
 .ss-track-faq-item.is-open {
   border-color: var(--ss-track-gold);
   background: #FFF;
@@ -1025,7 +1026,13 @@
   color: var(--ss-track-maroon);
   text-align: left;
   cursor: pointer;
+  user-select: none;
+  list-style: none;
   gap: 16px;
+}
+
+.ss-track-faq-trigger::-webkit-details-marker {
+  display: none;
 }
 
 .ss-track-faq-icon {
@@ -1036,19 +1043,12 @@
   flex-shrink: 0;
 }
 
+.ss-track-faq-item[open] .ss-track-faq-icon,
 .ss-track-faq-item.is-open .ss-track-faq-icon {
   transform: rotate(180deg);
 }
 
 .ss-track-faq-panel {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.35s ease, padding 0.35s ease;
-  padding: 0 20px;
-}
-
-.ss-track-faq-item.is-open .ss-track-faq-panel {
-  max-height: 400px;
   padding: 0 20px 18px 20px;
 }
 

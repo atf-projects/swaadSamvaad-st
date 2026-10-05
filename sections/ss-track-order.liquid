@@ -136,19 +136,21 @@
           </button>
         </div>
 
-        <!-- Demo Order Chips -->
-        <div class="ss-track-demo-chips">
-          <span class="ss-track-demo-title">⚡ Try Demo Sample Orders:</span>
-          <button type="button" class="ss-track-chip" data-demo-order="SS-9821" data-demo-contact="9876543210" title="Click to test In-Transit order">
-            <span>#SS-9821 (In Transit • Air)</span>
-          </button>
-          <button type="button" class="ss-track-chip" data-demo-order="SS-8743" data-demo-contact="priyanshu@example.com" title="Click to test Out for Delivery order">
-            <span>#SS-8743 (Out for Delivery)</span>
-          </button>
-          <button type="button" class="ss-track-chip" data-demo-order="SS-3104" data-demo-contact="9811223344" title="Click to test Fresh Wood-Fire Crafting order">
-            <span>#SS-3104 (Fresh Wood-Fire Crafting)</span>
-          </button>
-        </div>
+        {%- if section.settings.show_demo_chips -%}
+          <!-- Demo Order Chips -->
+          <div class="ss-track-demo-chips">
+            <span class="ss-track-demo-title">⚡ Try Demo Sample Orders:</span>
+            <button type="button" class="ss-track-chip" data-demo-order="SS-9821" data-demo-contact="9876543210" title="Click to test In-Transit order">
+              <span>#SS-9821 (In Transit • Air)</span>
+            </button>
+            <button type="button" class="ss-track-chip" data-demo-order="SS-8743" data-demo-contact="priyanshu@example.com" title="Click to test Out for Delivery order">
+              <span>#SS-8743 (Out for Delivery)</span>
+            </button>
+            <button type="button" class="ss-track-chip" data-demo-order="SS-3104" data-demo-contact="9811223344" title="Click to test Fresh Wood-Fire Crafting order">
+              <span>#SS-3104 (Fresh Wood-Fire Crafting)</span>
+            </button>
+          </div>
+        {%- endif -%}
       </form>
 
       <!-- Tab 2: By Courier AWB Tracking Number -->
@@ -190,15 +192,17 @@
           </button>
         </div>
 
-        <div class="ss-track-demo-chips">
-          <span class="ss-track-demo-title">⚡ Try Demo AWB:</span>
-          <button type="button" class="ss-track-chip" data-demo-awb="BD849201948IN">
-            <span>BlueDart: BD849201948IN</span>
-          </button>
-          <button type="button" class="ss-track-chip" data-demo-awb="DEL99281744IN">
-            <span>Delhivery: DEL99281744IN</span>
-          </button>
-        </div>
+        {%- if section.settings.show_demo_chips -%}
+          <div class="ss-track-demo-chips">
+            <span class="ss-track-demo-title">⚡ Try Demo AWB:</span>
+            <button type="button" class="ss-track-chip" data-demo-awb="BD849201948IN">
+              <span>BlueDart: BD849201948IN</span>
+            </button>
+            <button type="button" class="ss-track-chip" data-demo-awb="DEL99281744IN">
+              <span>Delhivery: DEL99281744IN</span>
+            </button>
+          </div>
+        {%- endif -%}
       </form>
     </div>
 
@@ -389,133 +393,88 @@
 
     </div>
 
-    {%- comment -%} 5. Need Assistance & Contact Helpdesk Cards {%- endcomment -%}
-    <div class="ss-track-help-section">
-      <div class="ss-track-help-header">
-        <span class="ss-track-help-eyebrow">✦ DEDICATED RASOI HELPDESK ✦</span>
-        <h3 class="ss-track-help-title">Need Help with Your Order Delivery?</h3>
-        <p class="ss-track-help-subtitle">Our Darbhanga support team is available 9 AM to 8 PM (Mon-Sat) to assist with live location updates, address modifications, and priority delivery requests.</p>
-      </div>
+    {%- comment -%} 5. Tracking & Shipping FAQs Accordion (Fully Editable) {%- endcomment -%}
+    {%- if section.settings.show_faqs -%}
+      <div class="ss-track-faq-card">
+        <div class="ss-track-faq-header">
+          {%- if section.settings.faq_eyebrow != blank -%}
+            <span class="ss-track-faq-eyebrow">{{ section.settings.faq_eyebrow }}</span>
+          {%- endif -%}
+          <h3 class="ss-track-faq-title">{{ section.settings.faq_heading | default: 'Courier & Dispatch Guidelines' }}</h3>
+          {%- if section.settings.faq_subheading != blank -%}
+            <p class="ss-track-faq-subheading">{{ section.settings.faq_subheading }}</p>
+          {%- endif -%}
+        </div>
 
-      <div class="ss-track-help-grid">
-        <!-- Help Card 1: WhatsApp -->
-        <a
-          href="https://wa.me/919876543210?text=Namaste%20Swaad%20Samvaad!%20Please%20help%20me%20with%20my%20Order%20Status."
-          class="ss-track-help-card"
-          target="_blank"
-          rel="noopener"
-          data-whatsapp-help-link
-        >
-          <div class="ss-track-help-card__icon ss-track-help-card__icon--whatsapp">
-<<<<<<< HEAD
-            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-=======
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
->>>>>>> fa2c0a37888f655a843347cf191cc9782bfb246f
-            </svg>
-          </div>
-          <div class="ss-track-help-card__body">
-            <span class="ss-track-help-card__tag">Fastest Reply • ~5 Mins</span>
-            <strong class="ss-track-help-card__name">WhatsApp Dispatch Desk</strong>
-            <span class="ss-track-help-card__val">+91 98765 43210</span>
-          </div>
-        </a>
+        <div class="ss-track-faq-list" data-faq-list>
+          {%- if section.blocks.size > 0 -%}
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'faq_item' -%}
+                <details class="ss-track-faq-item" {% if block.settings.open_by_default %}open{% endif %} {{ block.shopify_attributes }}>
+                  <summary class="ss-track-faq-trigger">
+                    <span>{{ block.settings.question }}</span>
+                    <svg class="ss-track-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </summary>
+                  <div class="ss-track-faq-panel">
+                    <p>{{ block.settings.answer }}</p>
+                  </div>
+                </details>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- else -%}
+            <details class="ss-track-faq-item" open>
+              <summary class="ss-track-faq-trigger">
+                <span>How long does delivery take across India?</span>
+                <svg class="ss-track-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </summary>
+              <div class="ss-track-faq-panel">
+                <p>We dispatch all fresh batches directly from our traditional rasoi in Darbhanga, Bihar via Express Air Cargo (BlueDart, Delhivery, DTDC). Standard delivery times are <strong>2-3 working days</strong> for Metro cities (Delhi NCR, Patna, Kolkata, Mumbai, Bangalore) and <strong>3-5 working days</strong> for other regional pin codes across India.</p>
+              </div>
+            </details>
 
-        <!-- Help Card 2: Email -->
-        <a href="mailto:support@swaadsamvaad.com?subject=Order%20Status%20Inquiry" class="ss-track-help-card">
-          <div class="ss-track-help-card__icon ss-track-help-card__icon--email">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-              <polyline points="22,6 12,13 2,6"></polyline>
-            </svg>
-          </div>
-          <div class="ss-track-help-card__body">
-            <span class="ss-track-help-card__tag">Priority Email Support</span>
-            <strong class="ss-track-help-card__name">Delivery Support Desk</strong>
-            <span class="ss-track-help-card__val">orders@swaadsamvaad.com</span>
-          </div>
-        </a>
+            <details class="ss-track-faq-item">
+              <summary class="ss-track-faq-trigger">
+                <span>How does Swaad Samvaad ensure the Thekua stays fresh during transit?</span>
+                <svg class="ss-track-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </summary>
+              <div class="ss-track-faq-panel">
+                <p>Our thekua is fried in 100% Pure Desi Ghee (which acts as a natural Vedic preservative). Each batch is cooled to room temperature, packed in food-grade airtight bags with moisture-absorbers, and housed in our signature gold-embossed crush-resistant box. This guarantees 100% crispiness and aroma for up to 90 days.</p>
+              </div>
+            </details>
 
-        <!-- Help Card 3: Address Modification -->
-        <div class="ss-track-help-card ss-track-help-card--static">
-          <div class="ss-track-help-card__icon ss-track-help-card__icon--shipping">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"></path>
-              <circle cx="12" cy="10" r="3"></circle>
-            </svg>
-          </div>
-          <div class="ss-track-help-card__body">
-            <span class="ss-track-help-card__tag">Address Changes</span>
-            <strong class="ss-track-help-card__name">Before Dispatch (within 6 hrs)</strong>
-            <span class="ss-track-help-card__val">Contact directly via WhatsApp</span>
-          </div>
+            <details class="ss-track-faq-item">
+              <summary class="ss-track-faq-trigger">
+                <span>Can I update my delivery address or phone number after ordering?</span>
+                <svg class="ss-track-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </summary>
+              <div class="ss-track-faq-panel">
+                <p>Yes, if your order is still in the "Wood-Fire Crafted" or "Packing" stage (typically within 4-6 hours of placing the order), you can message us instantly on WhatsApp (+91 98765 43210) with your Order ID to update the destination address.</p>
+              </div>
+            </details>
+
+            <details class="ss-track-faq-item">
+              <summary class="ss-track-faq-trigger">
+                <span>What should I do if my tracking status is not updating?</span>
+                <svg class="ss-track-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </summary>
+              <div class="ss-track-faq-panel">
+                <p>Air courier scans are updated at each transit hub (e.g. Darbhanga Airport -> Patna Hub -> Destination Airport). Occasionally, scans take 6-12 hours to reflect on the online portal while the flight is in transit. If your tracking has not updated for more than 24 hours, our dispatch team will actively escalate it with the courier manager.</p>
+              </div>
+            </details>
+          {%- endif -%}
         </div>
       </div>
-    </div>
-
-    {%- comment -%} 6. Tracking & Shipping FAQs Accordion {%- endcomment -%}
-    <div class="ss-track-faq-card">
-      <div class="ss-track-faq-header">
-        <span class="ss-track-faq-eyebrow">✦ FREQUENTLY ASKED QUESTIONS ✦</span>
-        <h3 class="ss-track-faq-title">Courier & Dispatch Guidelines</h3>
-      </div>
-
-      <div class="ss-track-faq-list" data-faq-list>
-        <!-- FAQ 1 -->
-        <div class="ss-track-faq-item is-open">
-          <button type="button" class="ss-track-faq-trigger" aria-expanded="true">
-            <span>How long does delivery take across India?</span>
-            <svg class="ss-track-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
-          <div class="ss-track-faq-panel">
-            <p>We dispatch all fresh batches directly from our traditional rasoi in Darbhanga, Bihar via Express Air Cargo (BlueDart, Delhivery, DTDC). Standard delivery times are <strong>2-3 working days</strong> for Metro cities (Delhi NCR, Patna, Kolkata, Mumbai, Bangalore) and <strong>3-5 working days</strong> for other regional pin codes across India.</p>
-          </div>
-        </div>
-
-        <!-- FAQ 2 -->
-        <div class="ss-track-faq-item">
-          <button type="button" class="ss-track-faq-trigger" aria-expanded="false">
-            <span>How does Swaad Samvaad ensure the Thekua stays fresh during transit?</span>
-            <svg class="ss-track-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
-          <div class="ss-track-faq-panel">
-            <p>Our thekua is fried in 100% Pure Desi Ghee (which acts as a natural Vedic preservative). Each batch is cooled to room temperature, packed in food-grade airtight bags with moisture-absorbers, and housed in our signature gold-embossed crush-resistant box. This guarantees 100% crispiness and aroma for up to 90 days.</p>
-          </div>
-        </div>
-
-        <!-- FAQ 3 -->
-        <div class="ss-track-faq-item">
-          <button type="button" class="ss-track-faq-trigger" aria-expanded="false">
-            <span>Can I update my delivery address or phone number after ordering?</span>
-            <svg class="ss-track-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
-          <div class="ss-track-faq-panel">
-            <p>Yes, if your order is still in the "Wood-Fire Crafted" or "Packing" stage (typically within 4-6 hours of placing the order), you can message us instantly on WhatsApp (+91 98765 43210) with your Order ID to update the destination address.</p>
-          </div>
-        </div>
-
-        <!-- FAQ 4 -->
-        <div class="ss-track-faq-item">
-          <button type="button" class="ss-track-faq-trigger" aria-expanded="false">
-            <span>What should I do if my tracking status is not updating?</span>
-            <svg class="ss-track-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
-          <div class="ss-track-faq-panel">
-            <p>Air courier scans are updated at each transit hub (e.g. Darbhanga Airport -> Patna Hub -> Destination Airport). Occasionally, scans take 6-12 hours to reflect on the online portal while the flight is in transit. If your tracking has not updated for more than 24 hours, our dispatch team will actively escalate it with the courier manager.</p>
-          </div>
-        </div>
-      </div>
-    </div>
+    {%- endif -%}
 
   </div>
 </section>
@@ -524,6 +483,32 @@
 {
   "name": "Swaad Track Order",
   "settings": [
+    {
+      "type": "header",
+      "content": "Breadcrumbs & Navigation"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "label": "Show Breadcrumbs",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_home_text",
+      "label": "Breadcrumb Home Label",
+      "default": "Home"
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_current_text",
+      "label": "Breadcrumb Current Label",
+      "default": "Track Order"
+    },
+    {
+      "type": "header",
+      "content": "Hero Header"
+    },
     {
       "type": "text",
       "id": "eyebrow_text",
@@ -541,6 +526,44 @@
       "id": "subheading",
       "label": "Subheading Description",
       "default": "Enter your Order ID (e.g. #SS-9821) along with your registered Phone / Email or AWB Number to check the live batch crafting and express courier status."
+    },
+    {
+      "type": "header",
+      "content": "Demo / Testing Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_demo_chips",
+      "label": "Show Demo Sample Orders (For Testing)",
+      "default": false,
+      "info": "Turn ON during testing/development to show quick sample order buttons (#SS-9821, #SS-8743). Turn OFF for live customers."
+    },
+    {
+      "type": "header",
+      "content": "FAQ Section Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_faqs",
+      "label": "Show FAQ Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "faq_eyebrow",
+      "label": "FAQ Eyebrow Tag",
+      "default": "✦ FREQUENTLY ASKED QUESTIONS ✦"
+    },
+    {
+      "type": "text",
+      "id": "faq_heading",
+      "label": "FAQ Heading",
+      "default": "Courier & Dispatch Guidelines"
+    },
+    {
+      "type": "textarea",
+      "id": "faq_subheading",
+      "label": "FAQ Subheading Description"
     },
     {
       "type": "header",
@@ -565,6 +588,71 @@
       "step": 5,
       "unit": "px",
       "default": 75
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "FAQ Question & Answer",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "How long does delivery take across India?"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Answer",
+          "default": "We dispatch all fresh batches directly from our traditional rasoi in Darbhanga, Bihar via Express Air Cargo (BlueDart, Delhivery, DTDC). Standard delivery times are 2-3 working days for Metro cities and 3-5 working days for other regional pin codes across India."
+        },
+        {
+          "type": "checkbox",
+          "id": "open_by_default",
+          "label": "Open by Default",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Swaad Track Order",
+      "blocks": [
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "How long does delivery take across India?",
+            "answer": "We dispatch all fresh batches directly from our traditional rasoi in Darbhanga, Bihar via Express Air Cargo (BlueDart, Delhivery, DTDC). Standard delivery times are 2-3 working days for Metro cities and 3-5 working days for other regional pin codes across India.",
+            "open_by_default": true
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "How does Swaad Samvaad ensure the Thekua stays fresh during transit?",
+            "answer": "Our thekua is fried in 100% Pure Desi Ghee (which acts as a natural Vedic preservative). Each batch is cooled to room temperature, packed in food-grade airtight bags with moisture-absorbers, and housed in our signature gold-embossed crush-resistant box. This guarantees 100% crispiness and aroma for up to 90 days.",
+            "open_by_default": false
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Can I update my delivery address or phone number after ordering?",
+            "answer": "Yes, if your order is still in the 'Wood-Fire Crafted' or 'Packing' stage (typically within 4-6 hours of placing the order), you can message us instantly on WhatsApp (+91 98765 43210) with your Order ID to update the destination address.",
+            "open_by_default": false
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "What should I do if my tracking status is not updating?",
+            "answer": "Air courier scans are updated at each transit hub. Occasionally, scans take 6-12 hours to reflect on the online portal while the flight is in transit. If your tracking has not updated for more than 24 hours, our dispatch team will actively escalate it with the courier manager.",
+            "open_by_default": false
+          }
+        }
+      ]
     }
   ]
 }
