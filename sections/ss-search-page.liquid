@@ -1,0 +1,722 @@
+{% comment %}
+  Section: Swaad Samvaad - Luxury Traditional Mithila Search Results Page
+  File: sections/ss-search-page.liquid
+  Features:
+  - Heritage Mithila Header with Dynamic Query Title, Breadcrumbs & Auspicious Motifs.
+  - Interactive Luxury Search Bar with Live Clear & Trending Suggestion Pills.
+  - Sort & Live Filter Sidebar Drawer with Price Slider, Sweetener, and Weight Filters.
+  - Luxury Product Cards with 4.9★ Rating, Variant Chips, Savings Badge, Wishlist & AJAX Add to Cart.
+  - Comprehensive Empty State with Curated Delicacies Recommendations.
+  - Bottom Mithila Purity & Quality Assurance Strip.
+  - 100% Custom Scoped CSS & JavaScript.
+{% endcomment %}
+
+{{ 'ss-search-page.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'ss-search-page.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign eyebrow_text = section.settings.eyebrow_text | default: '✦ SWAAD SAMVAAD • MITHILA RASOI ✦'
+  assign show_purity_strip = section.settings.show_purity_strip
+  assign products_per_page = section.settings.products_per_page | default: 16
+  assign search_query = search.terms | default: ''
+-%}
+
+{%- paginate search.results by products_per_page -%}
+<section
+  id="ss-search-page-{{ section.id }}"
+  class="ss-search-section"
+  data-ss-search-page
+  style="
+    --ss-sp-pad-top: {{ section.settings.padding_top | default: 36 }}px;
+    --ss-sp-pad-bottom: {{ section.settings.padding_bottom | default: 80 }}px;
+  "
+>
+  <div class="ss-search-container">
+    
+    <!-- 1. Breadcrumbs -->
+    <nav class="ss-search-breadcrumbs" aria-label="Breadcrumbs">
+      <a href="{{ routes.root_url }}">Home</a>
+      <span class="ss-search-breadcrumbs__sep">❖</span>
+      <a href="{{ routes.all_products_collection_url }}">Our Thekuas</a>
+      <span class="ss-search-breadcrumbs__sep">❖</span>
+      <span class="ss-search-breadcrumbs__current">Search Results</span>
+    </nav>
+
+    <!-- 2. Header Hero -->
+    <div class="ss-search-header">
+      <div class="ss-search-eyebrow">
+        <span class="ss-search-eyebrow-line"></span>
+        <span>{{ eyebrow_text }}</span>
+        <span class="ss-search-eyebrow-line"></span>
+      </div>
+
+      {%- if search.performed -%}
+        {%- if search.results_count > 0 -%}
+          <h1 class="ss-search-title">
+            Search Results for <span class="ss-search-title__query">"{{ search_query }}"</span>
+          </h1>
+          <p class="ss-search-subtitle">
+            Showing {{ search.results_count }} authentic pure desi ghee Mithila delicacies matching your search.
+          </p>
+        {%- else -%}
+          <h1 class="ss-search-title">
+            No Delicacies Found for <span class="ss-search-title__query">"{{ search_query }}"</span>
+          </h1>
+          <p class="ss-search-subtitle">
+            We couldn't find exact matches for your search, but you can explore our handcrafted traditional favorites below.
+          </p>
+        {%- endif -%}
+      {%- else -%}
+        <h1 class="ss-search-title">Explore Authentic Mithila Thekuas</h1>
+        <p class="ss-search-subtitle">Search our handcrafted Pure Desi Ghee delicacies, traditional jaggery (gud) and chini thekuas.</p>
+      {%- endif -%}
+
+      <div class="ss-search-divider" aria-hidden="true">
+        <span>❖</span>
+        <div class="ss-search-divider-bar"></div>
+        <span>🪔</span>
+        <div class="ss-search-divider-bar"></div>
+        <span>❖</span>
+      </div>
+
+      <!-- 3. Interactive Search Form Bar -->
+      <form action="{{ routes.search_url }}" method="get" role="search" class="ss-search-bar-form">
+        <input type="hidden" name="type" value="product">
+        <input type="hidden" name="options[prefix]" value="last">
+        <div class="ss-search-bar-wrap">
+          <svg class="ss-search-bar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input
+            type="search"
+            name="q"
+            value="{{ search_query | escape }}"
+            placeholder="Search for Gud Thekua, Chini Thekua, 1kg pack..."
+            class="ss-search-bar-input"
+            aria-label="Search delicacies"
+            autocomplete="off"
+            data-ss-search-input
+          >
+          {%- if search_query != blank -%}
+            <a href="{{ routes.search_url }}" class="ss-search-bar-clear" aria-label="Clear search">✕</a>
+          {%- endif -%}
+          <button type="submit" class="ss-search-bar-btn">
+            <span>Search</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </form>
+
+      <!-- Trending / Quick Search Pills -->
+      <div class="ss-search-quick-tags">
+        <span class="ss-search-quick-label">Trending Searches:</span>
+        <div class="ss-search-quick-list">
+          <a href="{{ routes.search_url }}?type=product&q=Gud+Thekua" class="ss-search-tag-pill">🍯 Gud Thekua</a>
+          <a href="{{ routes.search_url }}?type=product&q=Chini+Thekua" class="ss-search-tag-pill">✨ Chini Thekua</a>
+          <a href="{{ routes.search_url }}?type=product&q=1+Kg" class="ss-search-tag-pill">📦 1 Kg Family Pack</a>
+          <a href="{{ routes.search_url }}?type=product&q=500g" class="ss-search-tag-pill">🎁 500g Fresh Pack</a>
+        </div>
+      </div>
+    </div>
+
+    {%- liquid
+      assign search_query_lower = search_query | downcase | strip
+      assign is_sugar_search = false
+      assign is_gud_search = false
+      if search_query_lower contains 'sugar' or search_query_lower contains 'chini'
+        assign is_sugar_search = true
+      endif
+      if search_query_lower contains 'gud' or search_query_lower contains 'jaggery' or search_query_lower contains 'gur'
+        assign is_gud_search = true
+      endif
+    -%}
+
+    {%- if search.performed and search.results_count > 0 -%}
+      <!-- 4. Toolbar: Results Count, Filter Toggle & Sorting -->
+      <div class="ss-search-toolbar">
+        <div class="ss-search-toolbar__left">
+          <span class="ss-search-count-badge" data-ss-visible-count>
+            Search Results
+          </span>
+        </div>
+
+        <div class="ss-search-toolbar__right">
+          <button
+            type="button"
+            class="ss-search-filter-btn"
+            data-ss-filter-open
+            aria-label="Open Filter Sidebar"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="ss-filter-icon">
+              <line x1="4" y1="21" x2="4" y2="14"></line>
+              <line x1="4" y1="10" x2="4" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12" y2="3"></line>
+              <line x1="20" y1="21" x2="20" y2="16"></line>
+              <line x1="20" y1="12" x2="20" y2="3"></line>
+              <line x1="1" y1="14" x2="7" y2="14"></line>
+              <line x1="9" y1="8" x2="15" y2="8"></line>
+              <line x1="17" y1="16" x2="23" y2="16"></line>
+            </svg>
+            <span>Filters</span>
+            <span class="ss-filter-badge-count" data-ss-active-filter-badge style="display: none;">0</span>
+          </button>
+
+          <div class="ss-search-sort-wrap">
+            <label for="ss-search-sort" class="ss-search-sort-label">Sort by:</label>
+            <select id="ss-search-sort" class="ss-search-sort-select" data-ss-search-sort>
+              <option value="relevance" selected>Relevance</option>
+              <option value="price-ascending">Price: Low to High</option>
+              <option value="price-descending">Price: High to Low</option>
+              <option value="title-ascending">Alphabetical: A-Z</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Main Search Products Grid -->
+      <div class="ss-search-grid" data-ss-search-grid>
+        {%- for item in search.results -%}
+          {%- if item.object_type == 'product' -%}
+            {%- liquid
+              assign prod = item
+              assign title_lower = prod.title | downcase
+              if title_lower contains 'zenman' or title_lower contains 'test product' or title_lower contains 'demo'
+                continue
+              endif
+
+              # Exclude pure Gud when search query is explicitly Sugar / Chini
+              if is_sugar_search and is_gud_search == false
+                if title_lower contains 'gud' or title_lower contains 'jaggery' or title_lower contains 'gur'
+                  unless title_lower contains 'sugar' or title_lower contains 'chini' or title_lower contains 'combo'
+                    continue
+                  endunless
+                endif
+              endif
+
+              # Exclude pure Sugar/Chini when search query is explicitly Gud / Jaggery
+              if is_gud_search and is_sugar_search == false
+                if title_lower contains 'sugar' or title_lower contains 'chini'
+                  unless title_lower contains 'gud' or title_lower contains 'jaggery' or title_lower contains 'combo'
+                    continue
+                  endunless
+                endif
+              endif
+
+              assign compare_at = prod.compare_at_price
+              assign price = prod.price
+              assign savings_amount = 0
+              assign discount_pct = 0
+              if compare_at > price
+                assign savings_amount = compare_at | minus: price
+                assign discount_pct = savings_amount | times: 100.0 | divided_by: compare_at | round
+              endif
+              assign first_variant = prod.selected_or_first_available_variant
+              assign tags_lower = prod.tags | join: ' ' | downcase
+              assign type_lower = prod.type | downcase
+            -%}
+
+            <div
+              class="ss-sp-card"
+              data-ss-search-card
+              data-product-id="{{ prod.id }}"
+              data-title="{{ title_lower }}"
+              data-tags="{{ tags_lower }}"
+              data-type="{{ type_lower }}"
+              data-price="{{ price }}"
+            >
+              <a href="{{ prod.url }}" class="ss-sp-card__media-wrap" aria-label="{{ prod.title | escape }}">
+                {%- if prod.featured_image != blank -%}
+                  <img
+                    src="{{ prod.featured_image | image_url: width: 600 }}"
+                    alt="{{ prod.title | escape }}"
+                    class="ss-sp-card__img"
+                    width="500"
+                    height="500"
+                    loading="lazy"
+                  >
+                {%- else -%}
+                  <img
+                    src="{{ 'ss-thekua-crafting-art.jpg' | asset_url }}"
+                    alt="{{ prod.title | escape }}"
+                    class="ss-sp-card__img"
+                    width="500"
+                    height="500"
+                    loading="lazy"
+                  >
+                {%- endif -%}
+
+                {%- if discount_pct > 0 -%}
+                  <div class="ss-sp-card__discount-badge">{{ discount_pct }}% OFF</div>
+                {%- endif -%}
+
+                <button
+                  type="button"
+                  class="ss-sp-card__wishlist-btn"
+                  data-wishlist-id="{{ prod.id }}"
+                  aria-label="Add to Wishlist"
+                  title="Save for later"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                  </svg>
+                </button>
+              </a>
+
+              <div class="ss-sp-card__body">
+                <a href="{{ prod.url }}" class="ss-sp-card__title" title="{{ prod.title | escape }}">
+                  {{ prod.title }}
+                </a>
+
+                <div class="ss-sp-card__rating-row">
+                  <span class="ss-sp-card__star">★ 4.9</span>
+                  <span class="ss-sp-card__reviews">(1.6k+)</span>
+                </div>
+
+                {%- if prod.variants.size > 1 -%}
+                  <div class="ss-sp-card__variants">
+                    {%- for variant in prod.variants -%}
+                      <button
+                        type="button"
+                        class="ss-sp-variant-chip {% if forloop.first %}is-active{% endif %}"
+                        data-variant-id="{{ variant.id }}"
+                        data-variant-price="{{ variant.price | money }}"
+                        data-variant-compare="{{ variant.compare_at_price | money }}"
+                        data-variant-available="{{ variant.available }}"
+                        data-raw-price="{{ variant.price }}"
+                      >
+                        {{ variant.title }}
+                      </button>
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+
+                <div class="ss-sp-card__price-row">
+                  {%- if compare_at > price -%}
+                    <span class="ss-sp-card__compare-price" data-card-compare-price>{{ compare_at | money }}</span>
+                  {%- endif -%}
+                  <span class="ss-sp-card__price" data-card-price>{{ price | money }}</span>
+                </div>
+
+                {%- if savings_amount > 0 -%}
+                  <div class="ss-sp-card__savings" data-card-savings>
+                    Save {{ savings_amount | money }}
+                  </div>
+                {%- else -%}
+                  <div class="ss-sp-card__savings ss-sp-card__savings--empty" data-card-savings>
+                    100% Pure Desi Ghee
+                  </div>
+                {%- endif -%}
+
+                <div class="ss-sp-card__actions">
+                  <button
+                    type="button"
+                    class="ss-sp-card__add-btn"
+                    data-variant-id="{{ first_variant.id }}"
+                    data-ss-search-add-cart
+                    {% unless first_variant.available %}disabled{% endunless %}
+                  >
+                    <span class="ss-sp-btn-spinner" aria-hidden="true"></span>
+                    <svg class="ss-sp-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                      <line x1="3" y1="6" x2="21" y2="6"></line>
+                      <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    <span class="ss-sp-btn-label">
+                      {%- if first_variant.available -%}
+                        <span class="ss-sp-btn-text--desktop">+ ADD TO BASKET</span>
+                        <span class="ss-sp-btn-text--mobile">+ ADD</span>
+                      {%- else -%}
+                        <span class="ss-sp-btn-text--desktop">SOLD OUT</span>
+                        <span class="ss-sp-btn-text--mobile">SOLD OUT</span>
+                      {%- endif -%}
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      <!-- Empty In-Filter Filter State -->
+      <div class="ss-sp-empty-filter-state" data-ss-search-empty-state style="display: none;">
+        <div class="ss-sp-empty-icon">🪔</div>
+        <h3>No delicacies match your selected filters</h3>
+        <p>Try clearing your active filters or adjusting the price slider.</p>
+        <button type="button" class="ss-sp-empty-reset-btn" data-ss-filter-clear>
+          Reset All Filters
+        </button>
+      </div>
+
+      <!-- Pagination -->
+      {%- if paginate.pages > 1 -%}
+        <div class="ss-search-pagination">
+          <nav class="ss-search-pagination__nav" aria-label="Search pagination">
+            {%- if paginate.previous -%}
+              <a href="{{ paginate.previous.url }}" class="ss-sp-page-btn ss-sp-page-btn--prev">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                <span>Previous</span>
+              </a>
+            {%- endif -%}
+
+            <div class="ss-search-pagination__numbers">
+              {%- for part in paginate.parts -%}
+                {%- if part.is_link -%}
+                  <a href="{{ part.url }}" class="ss-sp-page-num">{{ part.title }}</a>
+                {%- else -%}
+                  {%- if part.title == paginate.current_page -%}
+                    <span class="ss-sp-page-num is-current" aria-current="page">{{ part.title }}</span>
+                  {%- else -%}
+                    <span class="ss-sp-page-num is-ellipsis">{{ part.title }}</span>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+
+            {%- if paginate.next -%}
+              <a href="{{ paginate.next.url }}" class="ss-sp-page-btn ss-sp-page-btn--next">
+                <span>Next</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            {%- endif -%}
+          </nav>
+        </div>
+      {%- endif -%}
+
+    {%- else -%}
+      <!-- 6. Zero Results Empty State + Recommended Products -->
+      <div class="ss-search-no-results">
+        <div class="ss-search-no-results__card">
+          <div class="ss-search-no-results__icon">🧺</div>
+          <h2 class="ss-search-no-results__title">No matching Mithila thekuas found</h2>
+          <p class="ss-search-no-results__desc">
+            We couldn't find any delicacies matching "{{ search_query }}". Try checking your spelling or explore our bestselling Pure Desi Ghee collections.
+          </p>
+          <div class="ss-search-no-results__actions">
+            <a href="{{ routes.all_products_collection_url }}" class="ss-search-primary-cta">
+              <span>Explore All Authentic Thekuas</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="{{ routes.collections_url }}" class="ss-search-secondary-cta">
+              <span>View Collections</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Recommended Products Grid -->
+        <div class="ss-search-recommendations">
+          <div class="ss-search-rec-header">
+            <span class="ss-search-rec-eyebrow">HANDPICKED FOR YOU</span>
+            <h3 class="ss-search-rec-title">Our Traditional Bestsellers</h3>
+          </div>
+
+          <div class="ss-search-grid">
+            {%- for prod in collections['all'].products limit: 4 -%}
+              {%- liquid
+                assign title_lower = prod.title | downcase
+                if title_lower contains 'zenman' or title_lower contains 'test product'
+                  continue
+                endif
+                assign first_variant = prod.selected_or_first_available_variant
+                assign compare_at = prod.compare_at_price
+                assign price = prod.price
+                assign savings_amount = 0
+                assign discount_pct = 0
+                if compare_at > price
+                  assign savings_amount = compare_at | minus: price
+                  assign discount_pct = savings_amount | times: 100.0 | divided_by: compare_at | round
+                endif
+              -%}
+              <div class="ss-sp-card">
+                <a href="{{ prod.url }}" class="ss-sp-card__media-wrap" aria-label="{{ prod.title | escape }}">
+                  {%- if prod.featured_image != blank -%}
+                    <img src="{{ prod.featured_image | image_url: width: 600 }}" alt="{{ prod.title | escape }}" class="ss-sp-card__img" width="500" height="500" loading="lazy">
+                  {%- else -%}
+                    <img src="{{ 'ss-thekua-crafting-art.jpg' | asset_url }}" alt="{{ prod.title | escape }}" class="ss-sp-card__img" width="500" height="500" loading="lazy">
+                  {%- endif -%}
+                  {%- if discount_pct > 0 -%}
+                    <div class="ss-sp-card__discount-badge">{{ discount_pct }}% OFF</div>
+                  {%- endif -%}
+                  <button
+                    type="button"
+                    class="ss-sp-card__wishlist-btn"
+                    data-wishlist-id="{{ prod.id }}"
+                    aria-label="Add to Wishlist"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                  </button>
+                </a>
+                <div class="ss-sp-card__body">
+                  <a href="{{ prod.url }}" class="ss-sp-card__title">{{ prod.title }}</a>
+                  <div class="ss-sp-card__rating-row">
+                    <span class="ss-sp-card__star">★ 4.9</span>
+                    <span class="ss-sp-card__reviews">(1.6k+)</span>
+                  </div>
+                  {%- if prod.variants.size > 1 -%}
+                    <div class="ss-sp-card__variants">
+                      {%- for variant in prod.variants -%}
+                        <button
+                          type="button"
+                          class="ss-sp-variant-chip {% if forloop.first %}is-active{% endif %}"
+                          data-variant-id="{{ variant.id }}"
+                          data-variant-price="{{ variant.price | money }}"
+                          data-variant-compare="{{ variant.compare_at_price | money }}"
+                          data-variant-available="{{ variant.available }}"
+                          data-raw-price="{{ variant.price }}"
+                        >
+                          {{ variant.title }}
+                        </button>
+                      {%- endfor -%}
+                    </div>
+                  {%- endif -%}
+                  <div class="ss-sp-card__price-row">
+                    {%- if compare_at > price -%}
+                      <span class="ss-sp-card__compare-price" data-card-compare-price>{{ compare_at | money }}</span>
+                    {%- endif -%}
+                    <span class="ss-sp-card__price" data-card-price>{{ price | money }}</span>
+                  </div>
+                  {%- if savings_amount > 0 -%}
+                    <div class="ss-sp-card__savings" data-card-savings>
+                      Save {{ savings_amount | money }}
+                    </div>
+                  {%- else -%}
+                    <div class="ss-sp-card__savings ss-sp-card__savings--empty" data-card-savings>
+                      100% Pure Desi Ghee
+                    </div>
+                  {%- endif -%}
+                  <div class="ss-sp-card__actions">
+                    <button
+                      type="button"
+                      class="ss-sp-card__add-btn"
+                      data-variant-id="{{ first_variant.id }}"
+                      data-ss-search-add-cart
+                      {% unless first_variant.available %}disabled{% endunless %}
+                    >
+                      <span class="ss-sp-btn-spinner" aria-hidden="true"></span>
+                      <svg class="ss-sp-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                      </svg>
+                      <span class="ss-sp-btn-label">
+                        {%- if first_variant.available -%}
+                          <span class="ss-sp-btn-text--desktop">+ ADD TO BASKET</span>
+                          <span class="ss-sp-btn-text--mobile">+ ADD</span>
+                        {%- else -%}
+                          <span class="ss-sp-btn-text--desktop">SOLD OUT</span>
+                          <span class="ss-sp-btn-text--mobile">SOLD OUT</span>
+                        {%- endif -%}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+
+    <!-- 7. Mithila Purity Guarantee Strip -->
+    {%- if show_purity_strip -%}
+      <div class="ss-search-purity-strip">
+        <div class="ss-sp-purity-item">
+          <div class="ss-sp-purity-icon">🧈</div>
+          <div class="ss-sp-purity-text">
+            <strong>100% Pure Desi Ghee</strong>
+            <p>Slow wood-fire simmered in small batches</p>
+          </div>
+        </div>
+        <div class="ss-sp-purity-item">
+          <div class="ss-sp-purity-icon">🪵</div>
+          <div class="ss-sp-purity-text">
+            <strong>Artisanal Wood Sancha</strong>
+            <p>Carved with sacred motifs by Mithila artisans</p>
+          </div>
+        </div>
+        <div class="ss-sp-purity-item">
+          <div class="ss-sp-purity-icon">🌿</div>
+          <div class="ss-sp-purity-text">
+            <strong>Zero Palm Oil & Chemicals</strong>
+            <p>No artificial colors, 100% wholesome recipe</p>
+          </div>
+        </div>
+        <div class="ss-sp-purity-item">
+          <div class="ss-sp-purity-icon">📦</div>
+          <div class="ss-sp-purity-text">
+            <strong>Aroma-Lock Fresh Dispatch</strong>
+            <p>Delivered fresh across India within 3-5 days</p>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+
+  </div>
+
+  <!-- 8. Slide-Over Filter Drawer from Right -->
+  <div class="ss-search-filter-overlay" data-ss-filter-overlay></div>
+  <aside class="ss-search-filter-drawer" data-ss-filter-drawer aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="ss-search-filter-drawer__header">
+      <div class="ss-search-filter-drawer__title-wrap">
+        <span class="ss-search-filter-drawer__motif">🪔</span>
+        <h3 class="ss-search-filter-drawer__title">Filter Search Results</h3>
+      </div>
+      <button type="button" class="ss-search-filter-drawer__close-btn" data-ss-filter-close aria-label="Close filter drawer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+
+    <div class="ss-search-filter-drawer__body">
+      <!-- 1. Price Range Slider -->
+      <div class="ss-filter-group">
+        <div class="ss-filter-group__header">
+          <div class="ss-price-range-title-row">
+            <h4>Price Range</h4>
+            <span class="ss-price-range-value">Up to ₹<strong data-ss-price-val>2,000</strong></span>
+          </div>
+        </div>
+        <div class="ss-filter-group__content">
+          <div class="ss-price-slider-wrap">
+            <input
+              type="range"
+              min="200"
+              max="2000"
+              step="50"
+              value="2000"
+              class="ss-price-slider"
+              data-ss-price-slider
+              aria-label="Filter by maximum price"
+            >
+            <div class="ss-price-slider-labels">
+              <span>₹200</span>
+              <span>₹1,000</span>
+              <span>₹2,000+</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Sweetener & Flavor Filter -->
+      <div class="ss-filter-group">
+        <div class="ss-filter-group__header">
+          <h4>Sweetener & Flavor</h4>
+        </div>
+        <div class="ss-filter-group__content">
+          <label class="ss-filter-checkbox-label">
+            <input type="checkbox" name="filter_type" value="gud" class="ss-filter-checkbox" data-filter-type="gud">
+            <span class="ss-filter-custom-check"></span>
+            <span class="ss-filter-name">Desi Gud (Jaggery) Thekua</span>
+          </label>
+          <label class="ss-filter-checkbox-label">
+            <input type="checkbox" name="filter_type" value="sugar" class="ss-filter-checkbox" data-filter-type="sugar">
+            <span class="ss-filter-custom-check"></span>
+            <span class="ss-filter-name">Traditional Chini (Sugar) Thekua</span>
+          </label>
+          <label class="ss-filter-checkbox-label">
+            <input type="checkbox" name="filter_type" value="dryfruit" class="ss-filter-checkbox" data-filter-type="dryfruit">
+            <span class="ss-filter-custom-check"></span>
+            <span class="ss-filter-name">Dry Fruits & Kaju Special</span>
+          </label>
+          <label class="ss-filter-checkbox-label">
+            <input type="checkbox" name="filter_type" value="festive" class="ss-filter-checkbox" data-filter-type="festive">
+            <span class="ss-filter-custom-check"></span>
+            <span class="ss-filter-name">Chhath & Festive Gift Packs</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 3. Pack Size / Weight Filter -->
+      <div class="ss-filter-group">
+        <div class="ss-filter-group__header">
+          <h4>Pack Size / Weight</h4>
+        </div>
+        <div class="ss-filter-group__content">
+          <label class="ss-filter-checkbox-label">
+            <input type="checkbox" name="filter_weight" value="500g" class="ss-filter-checkbox" data-filter-weight="500g">
+            <span class="ss-filter-custom-check"></span>
+            <span class="ss-filter-name">500g Fresh Pack</span>
+          </label>
+          <label class="ss-filter-checkbox-label">
+            <input type="checkbox" name="filter_weight" value="1kg" class="ss-filter-checkbox" data-filter-weight="1kg">
+            <span class="ss-filter-custom-check"></span>
+            <span class="ss-filter-name">1 Kg Family Pack</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="ss-search-filter-drawer__footer">
+      <button type="button" class="ss-search-filter-drawer__clear-btn" data-ss-filter-clear>
+        Clear All
+      </button>
+      <button type="button" class="ss-search-filter-drawer__apply-btn" data-ss-filter-close>
+        Apply Filters
+      </button>
+    </div>
+  </aside>
+</section>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "SS Search Page",
+  "tag": "section",
+  "class": "ss-search-page-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Eyebrow Text",
+      "default": "✦ SWAAD SAMVAAD • MITHILA RASOI ✦"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 36,
+      "step": 4,
+      "label": "Products Per Page",
+      "default": 16
+    },
+    {
+      "type": "checkbox",
+      "id": "show_purity_strip",
+      "label": "Show Bottom Purity Guarantee Strip",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 20,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 20,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "SS Search Page"
+    }
+  ]
+}
+{% endschema %}

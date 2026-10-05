@@ -35,7 +35,7 @@
           img: 'ss-thekua-crafting-art.jpg'
         },
         {
-          name: 'Pure Desi Ghee Sugar Thekua (500g)',
+          name: 'Pure Desi Ghee Chini Thekua (500g)',
           qty: '1 x 500g Fresh Pack',
           price: 'Rs. 449.00',
           img: 'ss-hero-slide-3.jpg'
@@ -62,7 +62,7 @@
         },
         {
           time: 'Oct 04, 02:30 PM',
-          status: 'Handcrafted on Wood-Fire using Pure Cow Desi Ghee',
+          status: 'Handcrafted on Wood-Fire using Pure Desi Ghee',
           location: 'Traditional Wood-Fire Hearth, Darbhanga',
           isLatest: false
         },
@@ -155,7 +155,7 @@
       },
       items: [
         {
-          name: 'Pure Desi Ghee Sugar Thekua (1 Kg)',
+          name: 'Pure Desi Ghee Chini Thekua (1 Kg)',
           qty: '1 x 1 Kg Family Box',
           price: 'Rs. 749.00',
           img: 'ss-hero-slide-2.jpg'
@@ -170,7 +170,7 @@
       logs: [
         {
           time: 'Today, 11:30 AM',
-          status: 'Slow-frying in Pure Cow Desi Ghee on Mango Wood Fire',
+          status: 'Slow-frying in Pure Desi Ghee on Mango Wood Fire',
           location: 'Swaad Samvaad Traditional Rasoi, Darbhanga',
           isLatest: true
         },
@@ -373,7 +373,7 @@
         activeStep: 4,
         stepTimes: {
           1: 'Confirmed',
-          2: 'Wood-Fire Fried in Pure Cow Ghee',
+          2: 'Wood-Fire Fried in Pure Desi Ghee',
           3: 'Airtight Nitrogen Box Sealed',
           4: 'In Air Transit',
           5: 'Expected in 2-3 Days'

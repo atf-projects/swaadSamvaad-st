@@ -117,7 +117,7 @@
         "tab_sugar": {
           "type": "category_tab",
           "settings": {
-            "title": "Sugar Thekua"
+            "title": "Chini Thekua"
           }
         },
         "tab_dryfruit": {
@@ -211,10 +211,10 @@
         "heading_highlight": "Mithila",
         "heading_suffix": "to your home",
         "story_p1": "In every Maithili home, thekua is not a snack \u2014 it is an offering. Molded by hand for Chhath Puja, packed into steel dabbas for traveling sons and daughters, and broken open at midnight with a glass of milk. It carries the taste of belonging.",
-        "story_p2": "Swaad Samvaad began with one stubborn belief: that this taste deserves to travel beyond Bihar without losing its soul. No maida. No preservatives. No factory shortcuts. Just atta, desi ghee, jaggery or sugar, and cardamom \u2014 pressed one piece at a time, exactly the way it has been done for generations.",
+        "story_p2": "Swaad Samvaad began with one stubborn belief: that this taste deserves to travel beyond Bihar without losing its soul. No maida. No preservatives. No factory shortcuts. Just atta, desi ghee, jaggery or chini, and cardamom \u2014 pressed one piece at a time, exactly the way it has been done for generations.",
         "feat_1_title": "Pure Desi Ghee",
         "feat_1_sub": "slow-cooked, small-batch",
-        "feat_2_title": "Jaggery & Sugar",
+        "feat_2_title": "Jaggery & Chini",
         "feat_2_sub": "no refined sweeteners",
         "feat_3_title": "Hand-Molded",
         "feat_3_sub": "one piece at a time",
@@ -354,7 +354,7 @@
           "type": "customer_review",
           "settings": {
             "rating": 5,
-            "quote": "The sugar thekua crunch is incredible! Crisp on the outside, rich inside. Loved that it is FSSAI certified and completely free of chemicals.",
+            "quote": "The chini thekua crunch is incredible! Crisp on the outside, rich inside. Loved that it is FSSAI certified and completely free of chemicals.",
             "author_initials": "AM",
             "author_name": "Ankit Mishra",
             "author_location": "New Delhi"
@@ -419,7 +419,7 @@
           "type": "faq_item",
           "settings": {
             "question": "What makes Swaad Samvaad Thekua different from factory cookies?",
-            "answer": "<p>We use 100% pure cow desi ghee, whole wheat atta, organic jaggery (gud) or cane sugar, and freshly ground cardamom. Unlike factory biscuits, our recipe has 0% palm oil, zero chemical preservatives, and is individually pressed by hand on traditional wooden sanchas.</p>",
+            "answer": "<p>We use 100% Pure Desi Ghee, whole wheat atta, organic jaggery (gud) or pure chini, and freshly ground cardamom. Unlike factory biscuits, our recipe has 0% palm oil, zero chemical preservatives, and is individually pressed by hand on traditional wooden sanchas.</p>",
             "open_by_default": true
           }
         },
@@ -451,7 +451,7 @@
           "type": "faq_item",
           "settings": {
             "question": "Which variant should I try first?",
-            "answer": "<p>If you love traditional festive warmth, our <strong>Pure Atta Gud (Jaggery) Thekua</strong> is the classic favourite. For a lighter, delicate crunch with evening tea, try our <strong>Refined Atta Chini (Sugar) Thekua</strong>. We also offer a <strong>Festive Mithila Combo Box</strong> to try all flavours!</p>",
+            "answer": "<p>If you love traditional festive warmth, our <strong>Pure Atta Gud (Jaggery) Thekua</strong> is the classic favourite. For a lighter, delicate crunch with evening tea, try our <strong>Traditional Atta Chini Thekua</strong>. We also offer a <strong>Festive Mithila Combo Box</strong> to try all flavours!</p>",
             "open_by_default": false
           }
         }

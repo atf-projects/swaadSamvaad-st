@@ -13,7 +13,7 @@
 {%- liquid
   assign eyebrow_text = section.settings.eyebrow_text | default: '✦ SWAAD SAMVAAD • MITHILA RASOI ✦'
   assign heading = section.settings.heading | default: 'Our Curated Mithila Collections'
-  assign subheading = section.settings.subheading | default: 'Explore our time-honored delicacies — slow-cooked with 100% pure cow desi ghee, organic jaggery, and traditional carved Sheesham wood sanchas.'
+  assign subheading = section.settings.subheading | default: 'Explore our time-honored delicacies — slow-cooked with 100% Pure Desi Ghee, organic jaggery, and traditional carved Sheesham wood sanchas.'
   assign show_purity_strip = section.settings.show_purity_strip
 -%}
 
@@ -100,7 +100,7 @@
                 {%- if col.description != blank -%}
                   {{ col.description | strip_html | truncate: 120 }}
                 {%- else -%}
-                  Handcrafted in pure cow desi ghee with traditional Mithila wooden sancha molds.
+                  Handcrafted in Pure Desi Ghee with traditional Mithila wooden sancha molds.
                 {%- endif -%}
               </p>
 
@@ -156,7 +156,7 @@
                   {%- if custom_desc != blank -%}
                     {{ custom_desc | strip_html | truncate: 120 }}
                   {%- else -%}
-                    Handcrafted in pure cow desi ghee with traditional Mithila wooden sancha molds.
+                    Handcrafted in Pure Desi Ghee with traditional Mithila wooden sancha molds.
                   {%- endif -%}
                 </p>
 
@@ -211,7 +211,7 @@
                     {%- if col.description != blank -%}
                       {{ col.description | strip_html | truncate: 120 }}
                     {%- else -%}
-                      Handcrafted in pure cow desi ghee with traditional Mithila wooden sancha molds.
+                      Handcrafted in Pure Desi Ghee with traditional Mithila wooden sancha molds.
                     {%- endif -%}
                   </p>
 
@@ -248,14 +248,14 @@
 
         <div class="ss-cl-card">
           <a href="{{ routes.all_products_collection_url }}" class="ss-cl-card__media-wrap">
-            <img src="{{ 'ss-hero-slide-2.jpg' | asset_url }}" alt="Sugar Thekua Collection" class="ss-cl-card__img" width="700" height="500" loading="lazy">
+            <img src="{{ 'ss-hero-slide-2.jpg' | asset_url }}" alt="Chini Thekua Collection" class="ss-cl-card__img" width="700" height="500" loading="lazy">
             <span class="ss-cl-card__count-badge">2 Delicacies</span>
           </a>
           <div class="ss-cl-card__body">
             <h2 class="ss-cl-card__title">
-              <a href="{{ routes.all_products_collection_url }}">Sugar Thekua Collection</a>
+              <a href="{{ routes.all_products_collection_url }}">Chini Thekua Collection</a>
             </h2>
-            <p class="ss-cl-card__desc">Crispy golden crust made with unrefined sugar, freshly kneaded whole wheat atta, and pure ghee.</p>
+            <p class="ss-cl-card__desc">Crispy golden crust made with traditional desi chini, freshly kneaded whole wheat atta, and pure ghee.</p>
             <a href="{{ routes.all_products_collection_url }}" class="ss-cl-card__btn">
               <span>Explore Collection</span>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -342,7 +342,7 @@
       "type": "textarea",
       "id": "subheading",
       "label": "Subheading Description",
-      "default": "Explore our time-honored delicacies — slow-cooked with 100% pure cow desi ghee, organic jaggery, and traditional carved Sheesham wood sanchas."
+      "default": "Explore our time-honored delicacies — slow-cooked with 100% Pure Desi Ghee, organic jaggery, and traditional carved Sheesham wood sanchas."
     },
     {
       "type": "checkbox",

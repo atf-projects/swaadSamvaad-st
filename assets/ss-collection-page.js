@@ -114,7 +114,7 @@
         if (filterState.types.length > 0) {
           matchesType = filterState.types.some((t) => {
             if (t === 'gud') return title.includes('gud') || tags.includes('gud') || tags.includes('jaggery');
-            if (t === 'sugar') return title.includes('sugar') || tags.includes('sugar') || tags.includes('khandsari');
+            if (t === 'sugar' || t === 'chini') return title.includes('sugar') || title.includes('chini') || tags.includes('sugar') || tags.includes('chini') || tags.includes('khandsari');
             if (t === 'dryfruit') return title.includes('dry') || tags.includes('dry') || tags.includes('kaju') || title.includes('kaju');
             if (t === 'festive') return title.includes('festive') || tags.includes('festive') || tags.includes('gift');
             return true;

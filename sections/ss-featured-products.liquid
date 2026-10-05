@@ -9,7 +9,7 @@
   - Sweet "Coming Soon" Empty State for Pending Flavors/Categories
   - Real Shopify Products Mapping with Dynamic Pricing & Discounts
   - Product display limit setting
-  - Category filter tabs (All, Gud Thekua, Sugar Thekua, Dry Fruit Thekua)
+  - Category filter tabs (All, Gud Thekua, Chini Thekua, Dry Fruit Thekua)
   - Wishlist Heart Button with LocalStorage persistence
   - Direct Ajax Add-To-Cart
 {% endcomment %}
@@ -32,7 +32,7 @@
   assign empty_badge = section.settings.empty_badge_text | default: '✨ Fresh Artisan Batch in Making ✨'
   assign empty_title_suffix = section.settings.empty_title_suffix | default: '— Coming Soon! 🍯'
   assign empty_text = section.settings.empty_text | default: 'Mithila ke hamare dastkar 100% Pure Desi Ghee aur crunchy roasted Kaju, Badam & Pista ke sath ek lajawab fresh batch taiyar kar rahe hain. Jald hi aapke darwaze par hoga!'
-  assign empty_btn_text = section.settings.empty_btn_text | default: 'Explore Gud & Sugar Thekua'
+  assign empty_btn_text = section.settings.empty_btn_text | default: 'Explore Gud & Chini Thekua'
 
   assign tab_blocks = section.blocks | where: 'type', 'category_tab'
   assign curated_cards = section.blocks | where: 'type', 'curated_product'
@@ -293,7 +293,7 @@
         {%- else -%}
           <button type="button" role="tab" class="ss-featured-prods__tab-btn is-active" data-category="all">All</button>
           <button type="button" role="tab" class="ss-featured-prods__tab-btn" data-category="gud thekua">Gud Thekua</button>
-          <button type="button" role="tab" class="ss-featured-prods__tab-btn" data-category="sugar thekua">Sugar Thekua</button>
+          <button type="button" role="tab" class="ss-featured-prods__tab-btn" data-category="chini thekua">Chini Thekua</button>
           <button type="button" role="tab" class="ss-featured-prods__tab-btn" data-category="dry fruit">Dry Fruit Thekua</button>
         {%- endif -%}
       </div>
@@ -418,11 +418,11 @@
                   assign category_tag = category_tag | append: ' ' | append: tag_down
                 endfor
                 assign prod_title_down = prod.title | downcase
-                if prod_title_down contains 'gud'
+                if prod_title_down contains 'gud' or prod_title_down contains 'jaggery'
                   assign category_tag = category_tag | append: ' gud thekua'
                 endif
-                if prod_title_down contains 'sugar'
-                  assign category_tag = category_tag | append: ' sugar thekua'
+                if prod_title_down contains 'sugar' or prod_title_down contains 'chini'
+                  assign category_tag = category_tag | append: ' chini thekua'
                 endif
                 if prod_title_down contains 'dry fruit' or prod_title_down contains 'dryfruit'
                   assign category_tag = category_tag | append: ' dry fruit'
@@ -632,8 +632,8 @@
               </div>
             </div>
 
-            <!-- Card 3: Pure Desi Ghee Sugar Thekua 500g -->
-            <div class="ss-prod-card" data-category="sugar thekua all">
+            <!-- Card 3: Pure Desi Ghee Chini Thekua 500g -->
+            <div class="ss-prod-card" data-category="chini thekua all">
               <div class="ss-prod-card__media-wrap">
                 <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #FFFDF9 0%, #F5ECDF 100%);">
                   <svg width="150" height="150" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -651,14 +651,14 @@
                   <div class="ss-prod-card__discount-badge">22%<span>OFF</span></div>
                 </div>
                 {%- if enable_wishlist -%}
-                  <button type="button" class="ss-prod-card__wishlist-btn" aria-label="Add to wishlist" data-product-handle="pure-desi-ghee-sugar-thekua-500g">
+                  <button type="button" class="ss-prod-card__wishlist-btn" aria-label="Add to wishlist" data-product-handle="pure-desi-ghee-chini-thekua-500g">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                   </button>
                 {%- endif -%}
                 <div class="ss-prod-card__tag-badge">★ Crispy Crunch</div>
               </div>
               <div class="ss-prod-card__body">
-                <a href="/collections/all" class="ss-prod-card__title">Pure Desi Ghee Sugar Thekua 500g</a>
+                <a href="/collections/all" class="ss-prod-card__title">Pure Desi Ghee Chini Thekua 500g</a>
                 <div class="ss-prod-card__rating-row">
                   <span class="ss-prod-card__rating-star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 4.88</span>
                   <span class="ss-prod-card__rating-count">(980 reviews)</span>
@@ -676,8 +676,8 @@
               </div>
             </div>
 
-            <!-- Card 4: Pure Desi Ghee Sugar Thekua 1 Kg -->
-            <div class="ss-prod-card" data-category="sugar thekua all">
+            <!-- Card 4: Pure Desi Ghee Chini Thekua 1 Kg -->
+            <div class="ss-prod-card" data-category="chini thekua all">
               <div class="ss-prod-card__media-wrap">
                 <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #FFFDF9 0%, #F5ECDF 100%);">
                   <svg width="150" height="150" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -695,14 +695,14 @@
                   <div class="ss-prod-card__discount-badge">25%<span>OFF</span></div>
                 </div>
                 {%- if enable_wishlist -%}
-                  <button type="button" class="ss-prod-card__wishlist-btn" aria-label="Add to wishlist" data-product-handle="pure-desi-ghee-sugar-thekua-1kg">
+                  <button type="button" class="ss-prod-card__wishlist-btn" aria-label="Add to wishlist" data-product-handle="pure-desi-ghee-chini-thekua-1kg">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                   </button>
                 {%- endif -%}
                 <div class="ss-prod-card__tag-badge">★ Pure Desi Ghee</div>
               </div>
               <div class="ss-prod-card__body">
-                <a href="/collections/all" class="ss-prod-card__title">Pure Desi Ghee Sugar Thekua 1 Kg</a>
+                <a href="/collections/all" class="ss-prod-card__title">Pure Desi Ghee Chini Thekua 1 Kg</a>
                 <div class="ss-prod-card__rating-row">
                   <span class="ss-prod-card__rating-star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 4.89</span>
                   <span class="ss-prod-card__rating-count">(1101 reviews)</span>
@@ -924,7 +924,7 @@
       "type": "text",
       "id": "empty_btn_text",
       "label": "Button Text",
-      "default": "Explore Gud & Sugar Thekua"
+      "default": "Explore Gud & Chini Thekua"
     }
   ],
   "blocks": [
@@ -1041,7 +1041,7 @@
         {
           "type": "category_tab",
           "settings": {
-            "title": "Sugar Thekua"
+            "title": "Chini Thekua"
           }
         },
         {

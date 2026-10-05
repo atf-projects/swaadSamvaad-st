@@ -2,7 +2,7 @@
   Section: Swaad Samvaad - Luxury Traditional Mithila Shop / Collection Page (sections/ss-collection-page.liquid)
   Features:
   - Mithila Cultural Header with Breadcrumbs & Auspicious Diya Motifs.
-  - Interactive Filter Tabs (All, Gud Thekua, Sugar Thekua, Dry Fruits & Festive Packs).
+  - Interactive Filter Tabs (All, Gud Thekua, Chini Thekua, Dry Fruits & Festive Packs).
   - Sort by Price, Best Selling, Newest with custom UI.
   - Luxury Product Cards with Pure Desi Ghee & Discount Badges, Star Rating & Savings Callouts.
   - Instant AJAX Add to Basket button with Cart Drawer integration.
@@ -57,7 +57,7 @@
           {%- if collection.description != blank -%}
             {{ collection.description }}
           {%- else -%}
-            {{ section.settings.default_description | default: 'Slow-made with 100% pure cow desi ghee, organic jaggery, and traditional carved Sheesham wood sanchas. Authentic prasaad taste delivered fresh across India.' }}
+            {{ section.settings.default_description | default: 'Slow-made with 100% Pure Desi Ghee, organic jaggery, and traditional carved Sheesham wood sanchas. Authentic prasaad taste delivered fresh across India.' }}
           {%- endif -%}
         </p>
 
@@ -317,17 +317,17 @@
         <div
           class="ss-col-card"
           data-ss-col-card
-          data-title="pure desi ghee sugar thekua 1 kg"
-          data-tags="sugar thekua khandsari desi ghee 1kg"
+          data-title="pure desi ghee chini thekua 1 kg"
+          data-tags="chini thekua khandsari desi ghee 1kg sugar"
           data-type="sugar"
           data-price="74900"
         >
           <a href="#" class="ss-col-card__media-wrap">
-            <img src="{{ 'ss-hero-slide-2.jpg' | asset_url }}" alt="Pure Desi Ghee Sugar Thekua 1 Kg" class="ss-col-card__img" width="500" height="500" loading="lazy">
+            <img src="{{ 'ss-hero-slide-2.jpg' | asset_url }}" alt="Pure Desi Ghee Chini Thekua 1 Kg" class="ss-col-card__img" width="500" height="500" loading="lazy">
             <div class="ss-col-card__discount-badge">25% OFF</div>
           </a>
           <div class="ss-col-card__body">
-            <a href="#" class="ss-col-card__title">Pure Desi Ghee Sugar Thekua 1 Kg</a>
+            <a href="#" class="ss-col-card__title">Pure Desi Ghee Chini Thekua 1 Kg</a>
             <div class="ss-col-card__rating-row">
               <span class="ss-col-card__star">★ 4.9</span>
               <span class="ss-col-card__reviews">(1.6k+ reviews)</span>
@@ -350,17 +350,17 @@
         <div
           class="ss-col-card"
           data-ss-col-card
-          data-title="pure desi ghee sugar thekua 500g"
-          data-tags="sugar thekua khandsari desi ghee 500g"
+          data-title="pure desi ghee chini thekua 500g"
+          data-tags="chini thekua khandsari desi ghee 500g sugar"
           data-type="sugar"
           data-price="44900"
         >
           <a href="#" class="ss-col-card__media-wrap">
-            <img src="{{ 'ss-hero-slide-3.jpg' | asset_url }}" alt="Pure Desi Ghee Sugar Thekua 500g" class="ss-col-card__img" width="500" height="500" loading="lazy">
+            <img src="{{ 'ss-hero-slide-3.jpg' | asset_url }}" alt="Pure Desi Ghee Chini Thekua 500g" class="ss-col-card__img" width="500" height="500" loading="lazy">
             <div class="ss-col-card__discount-badge">11% OFF</div>
           </a>
           <div class="ss-col-card__body">
-            <a href="#" class="ss-col-card__title">Pure Desi Ghee Sugar Thekua 500g</a>
+            <a href="#" class="ss-col-card__title">Pure Desi Ghee Chini Thekua 500g</a>
             <div class="ss-col-card__rating-row">
               <span class="ss-col-card__star">★ 4.9</span>
               <span class="ss-col-card__reviews">(1.6k+ reviews)</span>
@@ -433,7 +433,7 @@
         <div class="ss-col-purity-item">
           <div class="ss-col-purity-icon">🧈</div>
           <div class="ss-col-purity-text">
-            <strong>100% Pure Cow Ghee</strong>
+            <strong>100% Pure Desi Ghee</strong>
             <p>Slow wood-fire simmered in small batches</p>
           </div>
         </div>
@@ -520,7 +520,7 @@
           <label class="ss-filter-checkbox-label">
             <input type="checkbox" name="filter_type" value="sugar" class="ss-filter-checkbox" data-filter-type="sugar">
             <span class="ss-filter-custom-check"></span>
-            <span class="ss-filter-name">Khandsari Sugar Thekua</span>
+            <span class="ss-filter-name">Traditional Chini (Sugar) Thekua</span>
           </label>
           <label class="ss-filter-checkbox-label">
             <input type="checkbox" name="filter_type" value="dryfruit" class="ss-filter-checkbox" data-filter-type="dryfruit">
@@ -581,7 +581,7 @@
       "type": "textarea",
       "id": "default_description",
       "label": "Default Subheading Description",
-      "default": "Slow-made with 100% pure cow desi ghee, organic jaggery, and traditional carved Sheesham wood sanchas. Authentic prasaad taste delivered fresh across India."
+      "default": "Slow-made with 100% Pure Desi Ghee, organic jaggery, and traditional carved Sheesham wood sanchas. Authentic prasaad taste delivered fresh across India."
     },
     {
       "type": "range",
