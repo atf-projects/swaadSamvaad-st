@@ -1,0 +1,148 @@
+{% comment %}
+  Snippet: SS Recent Sales Notification Popup (Social Proof)
+  Brand: SweetCraft by ATF (Swaad Samvaad)
+  Features:
+  - Bottom-Left Corner Live Sales Notification
+  - Cycles through store products dynamically
+  - Customizable interval, cities, buyer names & duration via Theme Settings
+  - 100% Mobile Responsive with Dismiss functionality
+{% endcomment %}
+
+{%- liquid
+  assign enable_popup = settings.enable_sales_popup | default: true
+  if settings.enable_sales_popup == false
+    assign enable_popup = false
+  endif
+
+  assign interval = settings.popup_interval | default: 8
+  assign duration = settings.popup_duration | default: 5
+  assign verified_text = settings.popup_verified_text | default: 'Verified Buyer'
+
+  assign default_cities = 'Patna, Delhi, Mumbai, Bengaluru, Darbhanga, Kolkata, Pune, Hyderabad, Lucknow, Muzaffarpur, Ranchi, Jaipur, Noida, Gurgaon, Ahmedabad'
+  assign cities_str = settings.popup_cities | default: default_cities
+  assign cities_array = cities_str | split: ','
+
+  assign default_names = 'Anjali, Rajesh, Priya, Amit, Sneha, Vikram, Pooja, Rakesh, Sunita, Manoj, Neha, Alok, Swati, Deepak, Kavita'
+  assign names_str = settings.popup_names | default: default_names
+  assign names_array = names_str | split: ','
+-%}
+
+{%- if enable_popup -%}
+  {{ 'ss-recent-sales-popup.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'ss-recent-sales-popup.js' | asset_url }}" defer="defer"></script>
+
+  {%- capture products_json -%}
+    [
+      {%- if collections.all.products.size > 0 -%}
+        {%- for prod in collections.all.products limit: 12 -%}
+          {
+            "title": {{ prod.title | json }},
+            "url": {{ prod.url | json }},
+            "image": {% if prod.featured_image != blank %}{{ prod.featured_image | image_url: width: 200 | json }}{% else %}{{ 'ss-thekua-crafting-art.jpg' | asset_url | json }}{% endif %}
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      {%- else -%}
+        {
+          "title": "Pure Desi Ghee Gud Thekua 1 Kg",
+          "url": "/collections/all",
+          "image": {{ 'ss-hero-slide-1.jpg' | asset_url | json }}
+        },
+        {
+          "title": "Pure Desi Ghee Chini Thekua 1 Kg",
+          "url": "/collections/all",
+          "image": {{ 'ss-hero-slide-2.jpg' | asset_url | json }}
+        },
+        {
+          "title": "Pure Desi Ghee Gud Thekua 500g",
+          "url": "/collections/all",
+          "image": {{ 'ss-hero-slide-1.jpg' | asset_url | json }}
+        },
+        {
+          "title": "Pure Desi Ghee Chini Thekua 500g",
+          "url": "/collections/all",
+          "image": {{ 'ss-hero-slide-3.jpg' | asset_url | json }}
+        },
+        {
+          "title": "Traditional Mithila Festive Hamper",
+          "url": "/collections/all",
+          "image": {{ 'ss-thekua-crafting-art.jpg' | asset_url | json }}
+        }
+      {%- endif -%}
+    ]
+  {%- endcapture -%}
+
+  {%- capture cities_json -%}
+    [
+      {%- for city in cities_array -%}
+        {{ city | strip | json }}{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ]
+  {%- endcapture -%}
+
+  {%- capture names_json -%}
+    [
+      {%- for name in names_array -%}
+        {{ name | strip | json }}{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ]
+  {%- endcapture -%}
+
+  <div
+    id="ssSalesPopup"
+    class="ss-sales-popup"
+    data-interval="{{ interval }}"
+    data-duration="{{ duration }}"
+    data-products='{{ products_json | strip_newlines }}'
+    data-cities='{{ cities_json | strip_newlines }}'
+    data-names='{{ names_json | strip_newlines }}'
+    role="status"
+    aria-live="polite"
+  >
+    <!-- Dismiss Button -->
+    <button
+      type="button"
+      class="ss-sales-popup__close"
+      data-popup-close
+      aria-label="Dismiss notification"
+    >
+      ✕
+    </button>
+
+    <!-- Product Thumbnail -->
+    <a href="/collections/all" class="ss-sales-popup__media-link" data-popup-media-link aria-label="View Product">
+      <img
+        src="{{ 'ss-hero-slide-1.jpg' | asset_url }}"
+        alt="Recent purchase"
+        class="ss-sales-popup__img"
+        data-popup-img
+        width="60"
+        height="60"
+        loading="lazy"
+      >
+    </a>
+
+    <!-- Notification Info -->
+    <div class="ss-sales-popup__content">
+      <div class="ss-sales-popup__buyer-info">
+        <span data-popup-name>Someone</span> in <span class="ss-sales-popup__city" data-popup-city>Patna</span> purchased
+      </div>
+
+      <a href="/collections/all" class="ss-sales-popup__product-title" data-popup-title>
+        Pure Desi Ghee Gud Thekua 1 Kg
+      </a>
+
+      <div class="ss-sales-popup__meta">
+        <span class="ss-sales-popup__time" data-popup-time>2 minutes ago</span>
+        <span class="ss-sales-popup__badge">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+          </svg>
+          {{ verified_text }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Live Duration Progress Bar -->
+    <div class="ss-sales-popup__progress" aria-hidden="true"></div>
+  </div>
+{%- endif -%}

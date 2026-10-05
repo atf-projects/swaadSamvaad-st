@@ -1711,28 +1711,28 @@ shopify-account:not(:defined) {
 }
 
 .ss-drawer-scan-card:hover .ss-drawer-scan-icon-wrap {
-  background: rgba(255, 255, 255, 0.15);
-  color: #FFFFFF;
+  background: #FFFFFF;
+  transform: scale(1.05);
 }
 
 .ss-drawer-scan-icon-wrap {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   background: #FFFFFF;
-  color: var(--ss-color-brown-dark);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform var(--ss-transition-fast);
 }
 
 .ss-drawer-scan-icon-wrap svg {
-  width: 22px;
-  height: 22px;
-  stroke: currentColor;
-  stroke-width: 1.8;
+  width: 28px;
+  height: 28px;
+  stroke: none !important;
+  display: block;
 }
 
 .ss-drawer-scan-text-wrap {

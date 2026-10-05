@@ -2116,5 +2116,62 @@
         "default": "equal-width-buttons"
       }
     ]
+  },
+  {
+    "name": "Live Sales Popup (Social Proof)",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Display a floating live recent purchase notification toast in the bottom-left corner to boost social proof and customer conversion."
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_sales_popup",
+        "label": "Enable Live Sales Popup",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "popup_interval",
+        "min": 4,
+        "max": 30,
+        "step": 1,
+        "unit": "s",
+        "label": "Time Between Popups",
+        "default": 8,
+        "info": "Seconds to wait before showing the next purchase notification."
+      },
+      {
+        "type": "range",
+        "id": "popup_duration",
+        "min": 3,
+        "max": 15,
+        "step": 1,
+        "unit": "s",
+        "label": "Popup Display Duration",
+        "default": 5,
+        "info": "How many seconds each popup stays visible before fading out."
+      },
+      {
+        "type": "textarea",
+        "id": "popup_cities",
+        "label": "Cities List (Comma separated)",
+        "default": "Patna, Delhi, Mumbai, Bengaluru, Darbhanga, Kolkata, Pune, Hyderabad, Lucknow, Muzaffarpur, Ranchi, Jaipur, Noida, Gurgaon, Ahmedabad",
+        "info": "Random city will be picked for each simulated/live purchase notification."
+      },
+      {
+        "type": "textarea",
+        "id": "popup_names",
+        "label": "Buyer Names List (Comma separated)",
+        "default": "Anjali, Rajesh, Priya, Amit, Sneha, Vikram, Pooja, Rakesh, Sunita, Manoj, Neha, Alok, Swati, Deepak, Kavita",
+        "info": "Random customer first name shown on the notification."
+      },
+      {
+        "type": "text",
+        "id": "popup_verified_text",
+        "label": "Verified Badge Text",
+        "default": "Verified Buyer"
+      }
+    ]
   }
 ]
