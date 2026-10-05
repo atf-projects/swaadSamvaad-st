@@ -85,12 +85,28 @@
 
     // 3. Multi-Criteria Card Matching & Visibility
     const applyFilters = () => {
-      filterState.types = Array.from(searchSection.querySelectorAll('input[name="filter_type"]:checked')).map(i => i.value);
-      filterState.weights = Array.from(searchSection.querySelectorAll('input[name="filter_weight"]:checked')).map(i => i.value);
-      filterState.maxPrice = priceSlider ? parseInt(priceSlider.value, 10) : MAX_PRICE;
+      // 1. Gather Selected Collections
+      const selectedCollections = Array.from(
+        searchSection.querySelectorAll('input[name="filter_collection"]:checked')
+      ).map(i => (i.value || '').toLowerCase().trim()).filter(Boolean);
 
-      let totalActiveRules = filterState.types.length + filterState.weights.length;
-      if (filterState.maxPrice < MAX_PRICE) {
+      // 2. Gather Selected Tag Groups (grouped by data-filter-group)
+      const activeTagGroups = {};
+      searchSection.querySelectorAll('input[data-filter-group]:checked').forEach(input => {
+        const groupId = input.getAttribute('data-filter-group');
+        const tagVal = (input.value || '').toLowerCase().trim();
+        if (groupId && tagVal) {
+          if (!activeTagGroups[groupId]) activeTagGroups[groupId] = [];
+          activeTagGroups[groupId].push(tagVal);
+        }
+      });
+
+      const maxPrice = priceSlider ? parseInt(priceSlider.value, 10) : MAX_PRICE;
+
+      // Calculate total active filter rules
+      const totalCheckedTags = Object.values(activeTagGroups).reduce((acc, tags) => acc + tags.length, 0);
+      let totalActiveRules = selectedCollections.length + totalCheckedTags;
+      if (maxPrice < MAX_PRICE) {
         totalActiveRules += 1;
       }
 
@@ -106,51 +122,48 @@
       let visibleCount = 0;
 
       cards.forEach((card) => {
-        const title = (card.dataset.title || '').toLowerCase();
-        const tags = (card.dataset.tags || '').toLowerCase();
-        const type = (card.dataset.type || '').toLowerCase();
-        const rawPriceCents = parseInt(card.dataset.price || '0', 10);
+        const title = (card.dataset.title || card.getAttribute('data-title') || '').toLowerCase();
+        const tags = (card.dataset.tags || card.getAttribute('data-tags') || '').toLowerCase();
+        const type = (card.dataset.type || card.getAttribute('data-type') || '').toLowerCase();
+        const cardCollections = (card.dataset.collections || card.getAttribute('data-collections') || '').toLowerCase().split(' ').map(c => c.trim()).filter(Boolean);
+        const rawPriceCents = parseInt(card.dataset.price || card.getAttribute('data-price') || '0', 10);
         const priceRupees = rawPriceCents / 100;
 
         // A. Price Match
-        const matchesPrice = priceRupees <= filterState.maxPrice;
+        const matchesPrice = priceRupees <= maxPrice;
 
-        // B. Type / Sweetener Match
-        let matchesType = true;
-        if (filterState.types.length > 0) {
-          matchesType = filterState.types.some((selectedType) => {
-            if (selectedType === 'gud') {
-              return title.includes('gud') || title.includes('jaggery') || tags.includes('gud') || tags.includes('jaggery') || type.includes('gud');
-            }
-            if (selectedType === 'sugar' || selectedType === 'chini') {
-              return title.includes('sugar') || title.includes('chini') || title.includes('khandsari') || tags.includes('sugar') || tags.includes('chini') || type.includes('sugar');
-            }
-            if (selectedType === 'dryfruit') {
-              return title.includes('dry') || title.includes('fruit') || title.includes('kaju') || tags.includes('dry') || tags.includes('fruit');
-            }
-            if (selectedType === 'festive') {
-              return title.includes('festive') || title.includes('chhath') || title.includes('combo') || title.includes('gift') || tags.includes('festive');
-            }
-            return false;
+        // B. Collection Filter Check
+        let matchesCollection = true;
+        if (selectedCollections.length > 0) {
+          matchesCollection = selectedCollections.some(selCol => {
+            const normalizedKeyword = selCol.replace(/-/g, ' ');
+            return cardCollections.includes(selCol) || title.includes(normalizedKeyword);
           });
         }
 
-        // C. Weight / Pack Size Match
-        let matchesWeight = true;
-        if (filterState.weights.length > 0) {
-          matchesWeight = filterState.weights.some((selectedWeight) => {
-            if (selectedWeight === '500g') {
-              return title.includes('500g') || title.includes('500 g') || tags.includes('500g');
-            }
-            if (selectedWeight === '1kg') {
-              return title.includes('1kg') || title.includes('1 kg') || tags.includes('1kg');
-            }
-            return false;
+        // C. Tag Groups Filter Check (AND between different groups, OR within same group)
+        let matchesTagGroups = true;
+        for (const groupId in activeTagGroups) {
+          const selectedTagsInGroup = activeTagGroups[groupId];
+          const matchesThisGroup = selectedTagsInGroup.some(tagVal => {
+            const normalizedTag = tagVal.replace(/-/g, ' ');
+            return (
+              tags.includes(tagVal) ||
+              title.includes(tagVal) ||
+              type.includes(tagVal) ||
+              tags.includes(normalizedTag) ||
+              title.includes(normalizedTag)
+            );
           });
+
+          if (!matchesThisGroup) {
+            matchesTagGroups = false;
+            break;
+          }
         }
 
         // Overall Visibility
-        if (matchesPrice && matchesType && matchesWeight) {
+        if (matchesPrice && matchesCollection && matchesTagGroups) {
           card.style.display = '';
           visibleCount += 1;
         } else {

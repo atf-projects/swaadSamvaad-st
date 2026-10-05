@@ -204,6 +204,7 @@
               assign first_variant = prod.selected_or_first_available_variant
               assign tags_lower = prod.tags | join: ' ' | downcase
               assign type_lower = prod.type | downcase
+              assign prod_collections = prod.collections | map: 'handle' | join: ' ' | downcase
             -%}
 
             <div
@@ -213,6 +214,7 @@
               data-title="{{ title_lower }}"
               data-tags="{{ tags_lower }}"
               data-type="{{ type_lower }}"
+              data-collections="{{ prod_collections }}"
               data-price="{{ price }}"
             >
               <a href="{{ prod.url }}" class="ss-sp-card__media-wrap" aria-label="{{ prod.title | escape }}">
@@ -470,53 +472,143 @@
         </div>
       </div>
 
-      <!-- 2. Sweetener & Flavor Filter -->
-      <div class="ss-filter-group">
-        <div class="ss-filter-group__header">
-          <h4>Sweetener & Flavor</h4>
+      <!-- 2. Shop by Collection Filter Group (Admin Managed) -->
+      {%- if section.settings.show_collection_filter -%}
+        <div class="ss-filter-group">
+          <div class="ss-filter-group__header">
+            <h4>{{ section.settings.collection_filter_heading | default: 'Shop by Collection' }}</h4>
+          </div>
+          <div class="ss-filter-group__content">
+            {%- if section.settings.selected_collections != blank -%}
+              {%- for col in section.settings.selected_collections -%}
+                <label class="ss-filter-checkbox-label">
+                  <input
+                    type="checkbox"
+                    name="filter_collection"
+                    value="{{ col.handle | downcase }}"
+                    class="ss-filter-checkbox"
+                  >
+                  <span class="ss-filter-custom-check"></span>
+                  <span class="ss-filter-name">{{ col.title }}</span>
+                  {%- if col.all_products_count > 0 -%}
+                    <span class="ss-filter-count">({{ col.all_products_count }})</span>
+                  {%- endif -%}
+                </label>
+              {%- endfor -%}
+            {%- else -%}
+              {%- for col in collections -%}
+                {%- unless col.handle == 'frontpage' or col.all_products_count == 0 -%}
+                  <label class="ss-filter-checkbox-label">
+                    <input
+                      type="checkbox"
+                      name="filter_collection"
+                      value="{{ col.handle | downcase }}"
+                      class="ss-filter-checkbox"
+                    >
+                    <span class="ss-filter-custom-check"></span>
+                    <span class="ss-filter-name">{{ col.title }}</span>
+                    <span class="ss-filter-count">({{ col.all_products_count }})</span>
+                  </label>
+                {%- endunless -%}
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
         </div>
-        <div class="ss-filter-group__content">
-          <label class="ss-filter-checkbox-label">
-            <input type="checkbox" name="filter_type" value="gud" class="ss-filter-checkbox" data-filter-type="gud">
-            <span class="ss-filter-custom-check"></span>
-            <span class="ss-filter-name">Desi Gud (Jaggery) Thekua</span>
-          </label>
-          <label class="ss-filter-checkbox-label">
-            <input type="checkbox" name="filter_type" value="sugar" class="ss-filter-checkbox" data-filter-type="sugar">
-            <span class="ss-filter-custom-check"></span>
-            <span class="ss-filter-name">Traditional Chini (Sugar) Thekua</span>
-          </label>
-          <label class="ss-filter-checkbox-label">
-            <input type="checkbox" name="filter_type" value="dryfruit" class="ss-filter-checkbox" data-filter-type="dryfruit">
-            <span class="ss-filter-custom-check"></span>
-            <span class="ss-filter-name">Dry Fruits & Kaju Special</span>
-          </label>
-          <label class="ss-filter-checkbox-label">
-            <input type="checkbox" name="filter_type" value="festive" class="ss-filter-checkbox" data-filter-type="festive">
-            <span class="ss-filter-custom-check"></span>
-            <span class="ss-filter-name">Chhath & Festive Gift Packs</span>
-          </label>
-        </div>
-      </div>
+      {%- endif -%}
 
-      <!-- 3. Pack Size / Weight Filter -->
-      <div class="ss-filter-group">
-        <div class="ss-filter-group__header">
-          <h4>Pack Size / Weight</h4>
+      <!-- 3. Dynamic Tag Filter Groups (Admin Customizer Managed) -->
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'tag_filter_group' -%}
+            {%- liquid
+              assign group_title = block.settings.group_title | strip
+              assign raw_tags = block.settings.tags | split: ','
+              assign raw_labels = block.settings.tag_labels | split: ','
+            -%}
+            {%- if group_title != blank and raw_tags.size > 0 -%}
+              <div class="ss-filter-group" {{ block.shopify_attributes }}>
+                <div class="ss-filter-group__header">
+                  <h4>{{ group_title }}</h4>
+                </div>
+                <div class="ss-filter-group__content">
+                  {%- for raw_tag in raw_tags -%}
+                    {%- liquid
+                      assign tag_clean = raw_tag | strip
+                      assign tag_label = tag_clean
+                      if raw_labels[forloop.index0] != blank
+                        assign custom_lbl = raw_labels[forloop.index0] | strip
+                        if custom_lbl != blank
+                          assign tag_label = custom_lbl
+                        endif
+                      endif
+                    -%}
+                    {%- if tag_clean != blank -%}
+                      <label class="ss-filter-checkbox-label">
+                        <input
+                          type="checkbox"
+                          name="filter_tag_{{ block.id }}"
+                          data-filter-group="{{ block.id }}"
+                          value="{{ tag_clean | downcase }}"
+                          class="ss-filter-checkbox"
+                        >
+                        <span class="ss-filter-custom-check"></span>
+                        <span class="ss-filter-name">{{ tag_label }}</span>
+                      </label>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        <!-- Default Fallback Tag Filter Groups -->
+        <div class="ss-filter-group">
+          <div class="ss-filter-group__header">
+            <h4>Sweetener & Flavor</h4>
+          </div>
+          <div class="ss-filter-group__content">
+            <label class="ss-filter-checkbox-label">
+              <input type="checkbox" name="filter_tag_sweetener" data-filter-group="sweetener" value="gud" class="ss-filter-checkbox">
+              <span class="ss-filter-custom-check"></span>
+              <span class="ss-filter-name">Desi Gud (Jaggery) Thekua</span>
+            </label>
+            <label class="ss-filter-checkbox-label">
+              <input type="checkbox" name="filter_tag_sweetener" data-filter-group="sweetener" value="sugar" class="ss-filter-checkbox">
+              <span class="ss-filter-custom-check"></span>
+              <span class="ss-filter-name">Traditional Chini (Sugar) Thekua</span>
+            </label>
+            <label class="ss-filter-checkbox-label">
+              <input type="checkbox" name="filter_tag_sweetener" data-filter-group="sweetener" value="dryfruit" class="ss-filter-checkbox">
+              <span class="ss-filter-custom-check"></span>
+              <span class="ss-filter-name">Dry Fruits & Kaju Special</span>
+            </label>
+            <label class="ss-filter-checkbox-label">
+              <input type="checkbox" name="filter_tag_sweetener" data-filter-group="sweetener" value="festive" class="ss-filter-checkbox">
+              <span class="ss-filter-custom-check"></span>
+              <span class="ss-filter-name">Chhath & Festive Gift Packs</span>
+            </label>
+          </div>
         </div>
-        <div class="ss-filter-group__content">
-          <label class="ss-filter-checkbox-label">
-            <input type="checkbox" name="filter_weight" value="500g" class="ss-filter-checkbox" data-filter-weight="500g">
-            <span class="ss-filter-custom-check"></span>
-            <span class="ss-filter-name">500g Fresh Pack</span>
-          </label>
-          <label class="ss-filter-checkbox-label">
-            <input type="checkbox" name="filter_weight" value="1kg" class="ss-filter-checkbox" data-filter-weight="1kg">
-            <span class="ss-filter-custom-check"></span>
-            <span class="ss-filter-name">1 Kg Family Pack</span>
-          </label>
+
+        <div class="ss-filter-group">
+          <div class="ss-filter-group__header">
+            <h4>Pack Size / Weight</h4>
+          </div>
+          <div class="ss-filter-group__content">
+            <label class="ss-filter-checkbox-label">
+              <input type="checkbox" name="filter_tag_weight" data-filter-group="weight" value="500g" class="ss-filter-checkbox">
+              <span class="ss-filter-custom-check"></span>
+              <span class="ss-filter-name">500g Fresh Pack</span>
+            </label>
+            <label class="ss-filter-checkbox-label">
+              <input type="checkbox" name="filter_tag_weight" data-filter-group="weight" value="1kg" class="ss-filter-checkbox">
+              <span class="ss-filter-custom-check"></span>
+              <span class="ss-filter-name">1 Kg Family Pack</span>
+            </label>
+          </div>
         </div>
-      </div>
+      {%- endif -%}
     </div>
 
     <div class="ss-search-filter-drawer__footer">
@@ -542,6 +634,28 @@
       "id": "eyebrow_text",
       "label": "Eyebrow Text",
       "default": "✦ SWAAD SAMVAAD • MITHILA RASOI ✦"
+    },
+    {
+      "type": "header",
+      "content": "Collection Filter Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_filter",
+      "label": "Show 'Shop by Collection' Filter",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "collection_filter_heading",
+      "label": "Collection Filter Heading",
+      "default": "Shop by Collection"
+    },
+    {
+      "type": "collection_list",
+      "id": "selected_collections",
+      "label": "Select Collections to Display",
+      "info": "Choose specific collections to display in filter. If left empty, all store collections will be shown automatically."
     },
     {
       "type": "range",
@@ -577,9 +691,56 @@
       "default": 80
     }
   ],
+  "blocks": [
+    {
+      "type": "tag_filter_group",
+      "name": "Tag Filter Group",
+      "settings": [
+        {
+          "type": "text",
+          "id": "group_title",
+          "label": "Filter Group Name",
+          "default": "Sweetener & Flavor",
+          "info": "e.g. Sweetener & Flavor, Size, Special Edition"
+        },
+        {
+          "type": "textarea",
+          "id": "tags",
+          "label": "Product Tags (Comma-separated)",
+          "default": "gud, sugar, dryfruit, festive",
+          "info": "Enter product tags separated by commas. e.g. 500g, 1kg or gud, chini, dryfruit"
+        },
+        {
+          "type": "textarea",
+          "id": "tag_labels",
+          "label": "Custom Tag Labels (Optional, comma-separated)",
+          "default": "Desi Gud (Jaggery) Thekua, Traditional Chini (Sugar) Thekua, Dry Fruits & Kaju Special, Chhath & Festive Gift Packs",
+          "info": "User-friendly display names for each tag, in the same order."
+        }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "SS Search Page"
+      "name": "SS Search Page",
+      "blocks": [
+        {
+          "type": "tag_filter_group",
+          "settings": {
+            "group_title": "Sweetener & Flavor",
+            "tags": "gud, sugar, dryfruit, festive",
+            "tag_labels": "Desi Gud (Jaggery) Thekua, Traditional Chini (Sugar) Thekua, Dry Fruits & Kaju Special, Chhath & Festive Gift Packs"
+          }
+        },
+        {
+          "type": "tag_filter_group",
+          "settings": {
+            "group_title": "Pack Size / Weight",
+            "tags": "500g, 1kg",
+            "tag_labels": "500g Fresh Pack, 1 Kg Family Pack"
+          }
+        }
+      ]
     }
   ]
 }
