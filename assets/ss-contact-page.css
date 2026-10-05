@@ -238,7 +238,11 @@
 }
 
 .ss-contact-card__whatsapp-btn:hover svg {
+<<<<<<< HEAD
   transform: scale(1.15);
+=======
+  transform: translateX(3px);
+>>>>>>> fa2c0a37888f655a843347cf191cc9782bfb246f
 }
 
 .ss-contact-card__badge {
