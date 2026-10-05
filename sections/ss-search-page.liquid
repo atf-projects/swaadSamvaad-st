@@ -107,17 +107,6 @@
           </button>
         </div>
       </form>
-
-      <!-- Trending / Quick Search Pills -->
-      <div class="ss-search-quick-tags">
-        <span class="ss-search-quick-label">Trending Searches:</span>
-        <div class="ss-search-quick-list">
-          <a href="{{ routes.search_url }}?type=product&q=Gud+Thekua" class="ss-search-tag-pill">🍯 Gud Thekua</a>
-          <a href="{{ routes.search_url }}?type=product&q=Chini+Thekua" class="ss-search-tag-pill">✨ Chini Thekua</a>
-          <a href="{{ routes.search_url }}?type=product&q=1+Kg" class="ss-search-tag-pill">📦 1 Kg Family Pack</a>
-          <a href="{{ routes.search_url }}?type=product&q=500g" class="ss-search-tag-pill">🎁 500g Fresh Pack</a>
-        </div>
-      </div>
     </div>
 
     {%- liquid
@@ -386,10 +375,29 @@
       {%- endif -%}
 
     {%- else -%}
-      <!-- 6. Zero Results Empty State + Recommended Products -->
+      <!-- 6. Zero Results Empty State -->
       <div class="ss-search-no-results">
         <div class="ss-search-no-results__card">
-          <div class="ss-search-no-results__icon">🧺</div>
+          <div class="ss-search-no-results__icon">
+            <svg class="ss-search-empty-art" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="36" cy="36" r="34" fill="#FDF8F3" stroke="#E6D3BF" stroke-width="1.5" />
+              <circle cx="36" cy="36" r="28" fill="#F8EFE4" stroke="#D4A373" stroke-dasharray="2 3" stroke-width="1" />
+              <!-- Traditional Sweets Thali Base -->
+              <path d="M22 45C22 50 28 53.5 36 53.5C44 53.5 50 50 50 45" stroke="#8A4A28" stroke-width="2" stroke-linecap="round"/>
+              <ellipse cx="36" cy="44" rx="14" ry="4.5" fill="#E8BD8C" stroke="#8A4A28" stroke-width="1.5"/>
+              <!-- Handcrafted Thekuas -->
+              <ellipse cx="30" cy="41" rx="4.5" ry="3.5" fill="#C46835" stroke="#682510" stroke-width="1"/>
+              <ellipse cx="42" cy="41" rx="4.5" ry="3.5" fill="#B35825" stroke="#682510" stroke-width="1"/>
+              <ellipse cx="36" cy="38" rx="5.2" ry="4.2" fill="#D97736" stroke="#682510" stroke-width="1.2"/>
+              <path d="M33.5 38L38.5 38M36 35.5V40.5" stroke="#FFE3C2" stroke-width="0.8" stroke-linecap="round"/>
+              <!-- Search Magnifying Glass -->
+              <circle cx="44" cy="26" r="8.5" fill="#FFFFFF" fill-opacity="0.9" stroke="#682510" stroke-width="2"/>
+              <path d="M50.5 32.5L56.5 38.5" stroke="#682510" stroke-width="2.5" stroke-linecap="round"/>
+              <!-- Mithila Star Sparkle -->
+              <path d="M21 23L22.2 26.8L26 28L22.2 29.2L21 33L19.8 29.2L16 28L19.8 26.8L21 23Z" fill="#C49A45"/>
+              <circle cx="44" cy="26" r="4" stroke="#D4A373" stroke-width="0.8" stroke-dasharray="1 1.5"/>
+            </svg>
+          </div>
           <h2 class="ss-search-no-results__title">No matching Mithila thekuas found</h2>
           <p class="ss-search-no-results__desc">
             We couldn't find any delicacies matching "{{ search_query }}". Try checking your spelling or explore our bestselling Pure Desi Ghee collections.
@@ -402,154 +410,6 @@
             <a href="{{ routes.collections_url }}" class="ss-search-secondary-cta">
               <span>View Collections</span>
             </a>
-          </div>
-        </div>
-
-        <!-- Recommended Products Grid -->
-        <div class="ss-search-recommendations">
-          <div class="ss-search-rec-header">
-            <span class="ss-search-rec-eyebrow">HANDPICKED FOR YOU</span>
-            <h3 class="ss-search-rec-title">Our Traditional Bestsellers</h3>
-          </div>
-
-          <div class="ss-search-grid">
-            {%- for prod in collections['all'].products limit: 4 -%}
-              {%- liquid
-                assign title_lower = prod.title | downcase
-                if title_lower contains 'zenman' or title_lower contains 'test product'
-                  continue
-                endif
-                assign first_variant = prod.selected_or_first_available_variant
-                assign compare_at = prod.compare_at_price
-                assign price = prod.price
-                assign savings_amount = 0
-                assign discount_pct = 0
-                if compare_at > price
-                  assign savings_amount = compare_at | minus: price
-                  assign discount_pct = savings_amount | times: 100.0 | divided_by: compare_at | round
-                endif
-              -%}
-              <div class="ss-sp-card">
-                <a href="{{ prod.url }}" class="ss-sp-card__media-wrap" aria-label="{{ prod.title | escape }}">
-                  {%- if prod.featured_image != blank -%}
-                    <img src="{{ prod.featured_image | image_url: width: 600 }}" alt="{{ prod.title | escape }}" class="ss-sp-card__img" width="500" height="500" loading="lazy">
-                  {%- else -%}
-                    <img src="{{ 'ss-thekua-crafting-art.jpg' | asset_url }}" alt="{{ prod.title | escape }}" class="ss-sp-card__img" width="500" height="500" loading="lazy">
-                  {%- endif -%}
-                  {%- if discount_pct > 0 -%}
-                    <div class="ss-sp-card__discount-badge">{{ discount_pct }}% OFF</div>
-                  {%- endif -%}
-                  <button
-                    type="button"
-                    class="ss-sp-card__wishlist-btn"
-                    data-wishlist-id="{{ prod.id }}"
-                    aria-label="Add to Wishlist"
-                  >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                    </svg>
-                  </button>
-                </a>
-                <div class="ss-sp-card__body">
-                  <a href="{{ prod.url }}" class="ss-sp-card__title">{{ prod.title }}</a>
-                  <div class="ss-sp-card__rating-row">
-                    <span class="ss-sp-card__star">★ 4.9</span>
-                    <span class="ss-sp-card__reviews">(1.6k+)</span>
-                  </div>
-                  {%- if prod.variants.size > 1 -%}
-                    <div class="ss-sp-card__variants">
-                      {%- for variant in prod.variants -%}
-                        <button
-                          type="button"
-                          class="ss-sp-variant-chip {% if forloop.first %}is-active{% endif %}"
-                          data-variant-id="{{ variant.id }}"
-                          data-variant-price="{{ variant.price | money }}"
-                          data-variant-compare="{{ variant.compare_at_price | money }}"
-                          data-variant-available="{{ variant.available }}"
-                          data-raw-price="{{ variant.price }}"
-                        >
-                          {{ variant.title }}
-                        </button>
-                      {%- endfor -%}
-                    </div>
-                  {%- endif -%}
-                  <div class="ss-sp-card__price-row">
-                    {%- if compare_at > price -%}
-                      <span class="ss-sp-card__compare-price" data-card-compare-price>{{ compare_at | money }}</span>
-                    {%- endif -%}
-                    <span class="ss-sp-card__price" data-card-price>{{ price | money }}</span>
-                  </div>
-                  {%- if savings_amount > 0 -%}
-                    <div class="ss-sp-card__savings" data-card-savings>
-                      Save {{ savings_amount | money }}
-                    </div>
-                  {%- else -%}
-                    <div class="ss-sp-card__savings ss-sp-card__savings--empty" data-card-savings>
-                      100% Pure Desi Ghee
-                    </div>
-                  {%- endif -%}
-                  <div class="ss-sp-card__actions">
-                    <button
-                      type="button"
-                      class="ss-sp-card__add-btn"
-                      data-variant-id="{{ first_variant.id }}"
-                      data-ss-search-add-cart
-                      {% unless first_variant.available %}disabled{% endunless %}
-                    >
-                      <span class="ss-sp-btn-spinner" aria-hidden="true"></span>
-                      <svg class="ss-sp-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                        <path d="M16 10a4 4 0 0 1-8 0"></path>
-                      </svg>
-                      <span class="ss-sp-btn-label">
-                        {%- if first_variant.available -%}
-                          <span class="ss-sp-btn-text--desktop">+ ADD TO BASKET</span>
-                          <span class="ss-sp-btn-text--mobile">+ ADD</span>
-                        {%- else -%}
-                          <span class="ss-sp-btn-text--desktop">SOLD OUT</span>
-                          <span class="ss-sp-btn-text--mobile">SOLD OUT</span>
-                        {%- endif -%}
-                      </span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            {%- endfor -%}
-          </div>
-        </div>
-      </div>
-    {%- endif -%}
-
-    <!-- 7. Mithila Purity Guarantee Strip -->
-    {%- if show_purity_strip -%}
-      <div class="ss-search-purity-strip">
-        <div class="ss-sp-purity-item">
-          <div class="ss-sp-purity-icon">🧈</div>
-          <div class="ss-sp-purity-text">
-            <strong>100% Pure Desi Ghee</strong>
-            <p>Slow wood-fire simmered in small batches</p>
-          </div>
-        </div>
-        <div class="ss-sp-purity-item">
-          <div class="ss-sp-purity-icon">🪵</div>
-          <div class="ss-sp-purity-text">
-            <strong>Artisanal Wood Sancha</strong>
-            <p>Carved with sacred motifs by Mithila artisans</p>
-          </div>
-        </div>
-        <div class="ss-sp-purity-item">
-          <div class="ss-sp-purity-icon">🌿</div>
-          <div class="ss-sp-purity-text">
-            <strong>Zero Palm Oil & Chemicals</strong>
-            <p>No artificial colors, 100% wholesome recipe</p>
-          </div>
-        </div>
-        <div class="ss-sp-purity-item">
-          <div class="ss-sp-purity-icon">📦</div>
-          <div class="ss-sp-purity-text">
-            <strong>Aroma-Lock Fresh Dispatch</strong>
-            <p>Delivered fresh across India within 3-5 days</p>
           </div>
         </div>
       </div>
@@ -681,12 +541,6 @@
       "step": 4,
       "label": "Products Per Page",
       "default": 16
-    },
-    {
-      "type": "checkbox",
-      "id": "show_purity_strip",
-      "label": "Show Bottom Purity Guarantee Strip",
-      "default": true
     },
     {
       "type": "header",
