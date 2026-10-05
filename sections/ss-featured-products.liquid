@@ -54,6 +54,18 @@
     --ss-color-btn-text: {{ section.settings.btn_text_color | default: '#FFFFFF' }};
   "
 >
+  <!-- Village Kitchen Heritage Background Artwork -->
+  <div class="ss-featured-prods__village-bg" aria-hidden="true">
+    <img
+      src="{{ 'ss-village-kitchen-handpicked-bg.jpg' | asset_url }}"
+      alt=""
+      class="ss-featured-prods__village-bg-img"
+      loading="eager"
+      width="1920"
+      height="1080"
+    >
+  </div>
+
   {%- if section.settings.show_bg_art -%}
     <div class="ss-featured-prods__bg-art" aria-hidden="true">
       {%- if section.settings.bg_image != blank -%}

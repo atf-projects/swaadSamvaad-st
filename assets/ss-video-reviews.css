@@ -1,0 +1,497 @@
+/* ==========================================================================
+   SWAAD SAMVAAD - Video Reviews & UGC Reel Slider
+   Features:
+   - 9:15 Aspect Ratio Video Reel Cards with Hover Lift & Play Badge
+   - Paired Customer Review Cards (Gold Stars, Quote, Verified Buyer)
+   - Desktop Hover Navigation Arrows & Mobile Touch Scroll
+   - Traditional Mithila Background Motifs (Low Opacity)
+   - Interactive Video Modal Player
+   ========================================================================== */
+
+.ss-video-reviews {
+  --ss-vrev-bg: #FAF6F0;
+  --ss-vrev-espresso: #2D180F;
+  --ss-vrev-gold: #DE8626;
+  --ss-vrev-gold-light: #F7D070;
+  --ss-vrev-terracotta: #A84A22;
+  --ss-vrev-text-muted: #7A695E;
+  --ss-vrev-card-bg: #FFFFFF;
+  --ss-vrev-border: rgba(168, 74, 34, 0.12);
+
+  position: relative;
+  width: 100%;
+  background-color: var(--ss-vrev-bg-color, var(--ss-vrev-bg));
+  padding-top: var(--ss-vrev-pad-top, 80px);
+  padding-bottom: var(--ss-vrev-pad-bottom, 90px);
+  font-family: var(--font-body--family, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
+  color: var(--ss-vrev-espresso);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.ss-video-reviews *,
+.ss-video-reviews *::before,
+.ss-video-reviews *::after {
+  box-sizing: border-box;
+}
+
+/* Background Mithila Motifs */
+.ss-video-reviews__bg-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.ss-video-reviews__art-item {
+  position: absolute;
+  color: var(--ss-vrev-terracotta);
+  opacity: 0.08;
+  transition: opacity 0.3s ease;
+}
+
+.ss-video-reviews__art-item svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ss-video-reviews__art-item--left {
+  top: 6%;
+  left: -40px;
+  width: 320px;
+  height: 320px;
+  max-width: 38vw;
+  max-height: 38vw;
+  transform: rotate(-10deg);
+}
+
+.ss-video-reviews__art-item--right {
+  bottom: 6%;
+  right: -40px;
+  width: 340px;
+  height: 340px;
+  max-width: 40vw;
+  max-height: 40vw;
+  transform: rotate(12deg);
+}
+
+/* Container */
+.ss-video-reviews__container {
+  position: relative;
+  z-index: 2;
+  max-width: 1260px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* ==========================================================================
+   Section Header
+   ========================================================================== */
+.ss-video-reviews__header {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.ss-video-reviews__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ss-vrev-terracotta);
+}
+
+.ss-video-reviews__mithila-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--ss-vrev-gold);
+  vertical-align: middle;
+}
+
+.ss-video-reviews__heading {
+  font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+  font-size: clamp(2rem, 1.4rem + 2.2vw, 3.1rem);
+  font-weight: 800;
+  line-height: 1.18;
+  color: var(--ss-vrev-espresso);
+  margin: 0;
+  letter-spacing: -0.015em;
+}
+
+.ss-video-reviews__highlight {
+  font-style: italic;
+  color: var(--ss-vrev-terracotta);
+  font-weight: 800;
+}
+
+/* ==========================================================================
+   Carousel & Slider Track
+   ========================================================================== */
+.ss-video-reviews__carousel-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.ss-video-reviews__track {
+  display: flex;
+  gap: 22px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+  padding: 8px 4px 20px;
+}
+
+.ss-video-reviews__track::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+/* Individual Reel Card Item */
+.ss-video-reviews__item {
+  flex: 0 0 calc(25% - 16.5px);
+  min-width: 255px;
+  scroll-snap-align: start;
+}
+
+/* ==========================================================================
+   Video Reel Card (9:15 Portrait)
+   ========================================================================== */
+.ss-video-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9 / 14.8;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: none;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #1C1008;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ss-video-card:hover {
+  transform: translateY(-4px);
+  box-shadow: none;
+}
+
+.ss-video-card:focus-visible {
+  box-shadow: 0 0 0 3px var(--ss-vrev-gold);
+}
+
+.ss-video-card__media-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.ss-video-card__poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ss-video-card:hover .ss-video-card__poster {
+  transform: scale(1.05);
+}
+
+/* Bottom Gradient for Contrast */
+.ss-video-card__gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(18, 8, 4, 0.88) 0%, rgba(18, 8, 4, 0.25) 45%, rgba(0, 0, 0, 0) 75%);
+  pointer-events: none;
+}
+
+/* Play Button Overlay */
+.ss-video-card__play-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.32);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
+  z-index: 3;
+}
+
+.ss-video-card__play-badge svg {
+  width: 20px;
+  height: 20px;
+  margin-left: 2px;
+}
+
+.ss-video-card:hover .ss-video-card__play-badge {
+  transform: translate(-50%, -50%) scale(1.15);
+  background: var(--ss-vrev-gold);
+  border-color: #FFFFFF;
+}
+
+/* Bottom Caption */
+.ss-video-card__caption {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  z-index: 3;
+}
+
+.ss-video-card__caption span {
+  display: inline-block;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.3;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+/* ==========================================================================
+   Navigation Arrow Buttons
+   ========================================================================== */
+.ss-video-reviews__nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1px solid var(--ss-vrev-border);
+  box-shadow: 0 8px 24px rgba(45, 24, 15, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ss-vrev-espresso);
+  cursor: pointer;
+  z-index: 5;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, opacity 0.25s ease;
+}
+
+.ss-video-reviews__nav-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.ss-video-reviews__nav-btn--prev {
+  left: -18px;
+}
+
+.ss-video-reviews__nav-btn--next {
+  right: -18px;
+}
+
+.ss-video-reviews__nav-btn:hover {
+  background: var(--ss-vrev-espresso);
+  color: #FFFFFF;
+  transform: translateY(-50%) scale(1.08);
+  box-shadow: 0 12px 28px rgba(45, 24, 15, 0.25);
+}
+
+.ss-video-reviews__nav-btn:disabled,
+.ss-video-reviews__nav-btn[aria-disabled="true"] {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+/* Desktop: Appear on hover only if slider has overflow */
+@media (min-width: 992px) {
+  .ss-video-reviews__nav-btn {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .ss-video-reviews__carousel-wrapper.has-overflow:hover .ss-video-reviews__nav-btn:not(:disabled) {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* ==========================================================================
+   Interactive Video Modal Player
+   ========================================================================== */
+.ss-video-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.ss-video-modal.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ss-video-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(14, 7, 3, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.ss-video-modal__dialog {
+  position: relative;
+  z-index: 2;
+  width: 90%;
+  max-width: 420px;
+  max-height: 85vh;
+  aspect-ratio: 9 / 16;
+  background: #000000;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transform: scale(0.92);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ss-video-modal.is-active .ss-video-modal__dialog {
+  transform: scale(1);
+}
+
+.ss-video-modal__close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(6px);
+  border: none;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.ss-video-modal__close-btn:hover {
+  background: rgba(255, 255, 255, 0.45);
+  transform: scale(1.1);
+}
+
+.ss-video-modal__close-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.ss-video-modal__media-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ss-video-modal__media-container video,
+.ss-video-modal__media-container iframe {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+@media (max-width: 991px) {
+  .ss-video-reviews {
+    padding-top: 60px;
+    padding-bottom: 70px;
+  }
+
+  .ss-video-reviews__container {
+    padding: 0 20px;
+  }
+
+  .ss-video-reviews__header {
+    margin-bottom: 32px;
+  }
+
+  .ss-video-reviews__item {
+    flex: 0 0 calc(38% - 15px);
+    min-width: 230px;
+  }
+
+  .ss-video-reviews__nav-btn {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .ss-video-reviews__nav-btn--prev {
+    left: 4px;
+  }
+
+  .ss-video-reviews__nav-btn--next {
+    right: 4px;
+  }
+}
+
+@media (max-width: 640px) {
+  .ss-video-reviews {
+    padding-top: 48px;
+    padding-bottom: 56px;
+  }
+
+  .ss-video-reviews__container {
+    padding: 0 14px;
+  }
+
+  .ss-video-reviews__heading {
+    font-size: 1.85rem;
+  }
+
+  .ss-video-reviews__item {
+    flex: 0 0 calc(75% - 10px);
+    min-width: 215px;
+  }
+
+  .ss-video-reviews__track {
+    gap: 14px;
+    padding-bottom: 14px;
+  }
+
+  .ss-video-card {
+    border-radius: 16px;
+  }
+
+  .ss-review-card {
+    padding: 14px 14px 12px;
+    border-radius: 14px;
+  }
+}

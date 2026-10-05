@@ -1,0 +1,426 @@
+/* ==========================================================================
+   SWAAD SAMVAAD - Heritage FAQ Section
+   Features:
+   - Modern Accessible Accordion with Smooth CSS Transition
+   - Warm Mithila Aesthetic with Golden Trim & Subtle Card Lift
+   - Interactive Expand/Collapse with Plus-Minus / Chevron Rotation
+   - Bottom Reassuring Help & WhatsApp Support Strip
+   - 100% Custom CSS & Fully Responsive
+   ========================================================================== */
+
+.ss-faq {
+  --ss-faq-bg: #FAF6F0;
+  --ss-faq-card-bg: #FFFFFF;
+  --ss-faq-border: rgba(168, 74, 34, 0.12);
+  --ss-faq-border-active: rgba(222, 134, 38, 0.5);
+  --ss-faq-espresso: #2D180F;
+  --ss-faq-terracotta: #A84A22;
+  --ss-faq-gold: #DE8626;
+  --ss-faq-text-body: #4A3B31;
+  --ss-faq-text-muted: #7E6D62;
+
+  position: relative;
+  width: 100%;
+  background-color: var(--ss-faq-bg-color, var(--ss-faq-bg));
+  padding-top: var(--ss-faq-pad-top, 80px);
+  padding-bottom: var(--ss-faq-pad-bottom, 90px);
+  font-family: var(--font-body--family, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
+  color: var(--ss-faq-espresso);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.ss-faq *,
+.ss-faq *::before,
+.ss-faq *::after {
+  box-sizing: border-box;
+}
+
+/* Background Mithila Aripan Watermark Motifs */
+.ss-faq__bg-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.ss-faq__art-item {
+  position: absolute;
+  color: var(--ss-faq-terracotta);
+  opacity: 0.08;
+  transition: opacity 0.3s ease;
+}
+
+.ss-faq__art-item svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ss-faq__art-item--top-right {
+  top: -40px;
+  right: -40px;
+  width: 320px;
+  height: 320px;
+  max-width: 38vw;
+  max-height: 38vw;
+  transform: rotate(15deg);
+}
+
+.ss-faq__art-item--bottom-left {
+  bottom: -40px;
+  left: -40px;
+  width: 340px;
+  height: 340px;
+  max-width: 40vw;
+  max-height: 40vw;
+  transform: rotate(-10deg);
+}
+
+.ss-faq__container {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 2;
+}
+
+/* ==========================================================================
+   Section Header
+   ========================================================================== */
+.ss-faq__header {
+  text-align: center;
+  margin-bottom: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.ss-faq__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ss-faq-terracotta);
+}
+
+.ss-mithila-icon--eyebrow {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.ss-faq__heading {
+  font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+  font-size: clamp(2rem, 1.4rem + 2vw, 2.9rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--ss-faq-espresso);
+  margin: 0;
+  letter-spacing: -0.015em;
+}
+
+.ss-faq__subheading {
+  font-size: 1rem;
+  color: var(--ss-faq-text-muted);
+  max-width: 620px;
+  margin: 4px auto 0;
+  line-height: 1.55;
+}
+
+/* ==========================================================================
+   Accordion List
+   ========================================================================== */
+.ss-faq__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ss-faq__item {
+  background: var(--ss-faq-card-bg);
+  border: 1.5px solid var(--ss-faq-border);
+  border-radius: 18px;
+  box-shadow: 0 4px 16px rgba(45, 24, 15, 0.035);
+  overflow: hidden;
+  transition: border-color 0.28s ease, box-shadow 0.28s ease, transform 0.28s ease;
+}
+
+.ss-faq__item:hover {
+  border-color: rgba(222, 134, 38, 0.35);
+  box-shadow: 0 8px 24px rgba(45, 24, 15, 0.06);
+}
+
+.ss-faq__item[open] {
+  border-color: var(--ss-faq-border-active);
+  box-shadow: 0 10px 28px rgba(45, 24, 15, 0.075);
+}
+
+/* Question / Summary Header */
+.ss-faq__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 22px 26px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.ss-faq__summary::-webkit-details-marker {
+  display: none;
+}
+
+.ss-faq__question-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ss-faq__num {
+  font-size: 0.84rem;
+  font-weight: 800;
+  color: var(--ss-faq-terracotta);
+  background: rgba(168, 74, 34, 0.08);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ss-faq__question {
+  font-size: clamp(1.02rem, 0.95rem + 0.35vw, 1.15rem);
+  font-weight: 700;
+  color: var(--ss-faq-espresso);
+  line-height: 1.35;
+}
+
+/* Accordion Toggle Icon (+/-) */
+.ss-faq__icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(168, 74, 34, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ss-faq-terracotta);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease, color 0.25s ease;
+}
+
+.ss-faq__item[open] .ss-faq__icon {
+  transform: rotate(45deg);
+  background: var(--ss-faq-gold);
+  color: #FFFFFF;
+}
+
+.ss-faq__icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Answer Body */
+.ss-faq__answer {
+  padding: 0 26px 24px 68px;
+  color: var(--ss-faq-text-body);
+  font-size: 0.96rem;
+  line-height: 1.68;
+  border-top: 1px dashed rgba(168, 74, 34, 0.1);
+  margin-top: 2px;
+  padding-top: 16px;
+  animation: ssFaqFadeIn 0.3s ease-out;
+}
+
+@keyframes ssFaqFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ss-faq__answer p {
+  margin: 0;
+}
+
+.ss-faq__answer p + p {
+  margin-top: 10px;
+}
+
+/* ==========================================================================
+   Bottom Support Banner
+   ========================================================================== */
+.ss-faq__support-card {
+  margin-top: 42px;
+  background: linear-gradient(135deg, #FFFFFF 0%, #FAF3EB 100%);
+  border: 1.5px solid rgba(222, 134, 38, 0.25);
+  border-radius: 20px;
+  padding: 24px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  box-shadow: 0 6px 20px rgba(45, 24, 15, 0.04);
+}
+
+.ss-faq__support-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ss-faq__support-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(222, 134, 38, 0.12);
+  color: var(--ss-faq-terracotta);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ss-faq__support-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.ss-faq__support-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ss-faq-espresso);
+  margin: 0 0 2px;
+}
+
+.ss-faq__support-text {
+  font-size: 0.86rem;
+  color: var(--ss-faq-text-muted);
+  margin: 0;
+}
+
+/* Eyebrow with Mithila Sacred Aripan Motif */
+.ss-faq__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ss-faq-terracotta);
+}
+
+.ss-faq__mithila-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--ss-faq-gold);
+  vertical-align: middle;
+}
+
+.ss-faq__support-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: #25D366;
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 13px 26px;
+  border-radius: 999px;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.ss-faq__support-btn:hover {
+  background: #20BA5A;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 22px rgba(37, 211, 102, 0.45);
+}
+
+.ss-faq__whatsapp-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  display: block;
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+@media (max-width: 768px) {
+  .ss-faq {
+    padding-top: 60px;
+    padding-bottom: 70px;
+  }
+
+  .ss-faq__container {
+    padding: 0 18px;
+  }
+
+  .ss-faq__header {
+    margin-bottom: 36px;
+  }
+
+  .ss-faq__summary {
+    padding: 18px 20px;
+    gap: 12px;
+  }
+
+  .ss-faq__question-wrap {
+    gap: 10px;
+  }
+
+  .ss-faq__num {
+    width: 24px;
+    height: 24px;
+    font-size: 0.76rem;
+  }
+
+  .ss-faq__answer {
+    padding: 0 20px 20px 54px;
+    font-size: 0.91rem;
+  }
+
+  .ss-faq__support-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 22px 20px;
+    gap: 18px;
+  }
+
+  .ss-faq__support-info {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ss-faq__answer {
+    padding: 0 16px 18px 16px;
+  }
+
+  .ss-faq__summary {
+    padding: 16px;
+  }
+}

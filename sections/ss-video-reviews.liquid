@@ -1,0 +1,403 @@
+{% comment %}
+  Section: SS Video Reviews & UGC Reel Slider
+  Brand: Swaad Samvaad (Authentic Mithila Handcrafted Thekua)
+  Features:
+  - Eyebrow & Serif Heading "Loved by Little Critics Too"
+  - 9:15 Portrait Video Reel Cards with Paired Customer Review Below
+  - Native Video Support (Shopify Video Picker / MP4 / Embed) + Interactive Video Modal Player
+  - Carousel with Dynamic Hover Arrows (Desktop) & Touch Swiping (Tablet/Mobile)
+  - Subtle Traditional Mithila Heritage Background Art
+  - 100% Theme Editor Customization
+{% endcomment %}
+
+{{ 'ss-video-reviews.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'ss-video-reviews.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign section_id = section.id
+  assign eyebrow = section.settings.eyebrow_text | default: 'REAL HOMES, REAL CRUNCH'
+  assign heading_prefix = section.settings.heading_prefix | default: 'Loved by'
+  assign heading_highlight = section.settings.heading_highlight | default: 'Little Critics'
+  assign heading_suffix = section.settings.heading_suffix | default: 'Too'
+  assign bg_color = section.settings.bg_color | default: '#FAF6F0'
+  assign show_bg_art = section.settings.show_bg_art
+  assign bg_art_opacity = section.settings.bg_art_opacity | default: 6
+-%}
+
+<div
+  id="ss-video-reviews-{{ section_id }}"
+  class="ss-video-reviews"
+  style="
+    --ss-vrev-pad-top: {{ section.settings.padding_top | default: 80 }}px;
+    --ss-vrev-pad-bottom: {{ section.settings.padding_bottom | default: 90 }}px;
+    --ss-vrev-bg-color: {{ bg_color }};
+  "
+>
+  <!-- Traditional Mithila Peacock & Aripan Background Watermark Art -->
+  <div class="ss-video-reviews__bg-art" aria-hidden="true" style="opacity: {{ bg_art_opacity | divided_by: 100.0 }};">
+    <!-- Left: Madhubani Mayur (Peacock) Mandala -->
+    <div class="ss-video-reviews__art-item ss-video-reviews__art-item--left">
+      <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="120" cy="120" r="110" stroke="currentColor" stroke-width="1.8" stroke-dasharray="4 4"/>
+        <circle cx="120" cy="120" r="95" stroke="currentColor" stroke-width="1.2"/>
+        <!-- Peacock Tail Feathers / Creepers -->
+        <path d="M120 40 C145 65 155 95 140 135 C115 130 95 105 120 40 Z" fill="currentColor" fill-opacity="0.18" stroke="currentColor" stroke-width="1.4"/>
+        <circle cx="128" cy="75" r="4.5" fill="currentColor"/>
+        <path d="M60 90 C85 100 105 120 100 150 C75 140 60 120 60 90 Z" fill="currentColor" fill-opacity="0.14" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="82" cy="115" r="3.5" fill="currentColor"/>
+        <path d="M180 90 C155 100 135 120 140 150 C165 140 180 120 180 90 Z" fill="currentColor" fill-opacity="0.14" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="158" cy="115" r="3.5" fill="currentColor"/>
+        <!-- Peacock Body & Graceful Neck -->
+        <path d="M120 185 C95 185 85 160 95 135 C105 115 125 110 130 90 C132 80 145 80 142 95 C138 120 145 150 120 185 Z" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="134" cy="90" r="2.5" fill="currentColor"/>
+        <path d="M136 82 L144 72 M138 84 L148 78 M140 86 L152 86" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        <circle cx="120" cy="120" r="8" fill="currentColor"/>
+      </svg>
+    </div>
+
+    <!-- Right: Mithila Sacred Lotus Mandala (Aripan) -->
+    <div class="ss-video-reviews__art-item ss-video-reviews__art-item--right">
+      <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="120" cy="120" r="110" stroke="currentColor" stroke-width="1.8" stroke-dasharray="5 4"/>
+        <circle cx="120" cy="120" r="92" stroke="currentColor" stroke-width="1.2"/>
+        <circle cx="120" cy="120" r="74" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3"/>
+        <circle cx="120" cy="120" r="38" stroke="currentColor" stroke-width="1.5" fill="currentColor" fill-opacity="0.08"/>
+        <!-- Lotus Petals -->
+        <g fill="currentColor" fill-opacity="0.18" stroke="currentColor" stroke-width="1.3">
+          <path d="M120 20 C135 55 140 65 120 90 C100 65 105 55 120 20 Z"/>
+          <path d="M120 220 C135 185 140 175 120 150 C100 175 105 185 120 220 Z"/>
+          <path d="M20 120 C55 135 65 140 90 120 C65 100 55 105 20 120 Z"/>
+          <path d="M220 120 C185 135 175 140 150 120 C175 100 185 105 220 120 Z"/>
+          <path d="M49 49 C78 72 85 80 82 108 C54 105 46 98 49 49 Z"/>
+          <path d="M191 49 C162 72 155 80 158 108 C186 105 194 98 191 49 Z"/>
+          <path d="M49 191 C78 168 85 160 82 132 C54 135 46 142 49 191 Z"/>
+          <path d="M191 191 C162 168 155 160 158 132 C186 135 194 142 191 191 Z"/>
+        </g>
+        <circle cx="120" cy="120" r="14" fill="currentColor"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="ss-video-reviews__container">
+    <!-- Section Header -->
+    <div class="ss-video-reviews__header">
+      {%- if eyebrow != blank -%}
+        <div class="ss-video-reviews__eyebrow">
+          <svg class="ss-video-reviews__mithila-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 22C12 22 10 19 10 15C10 11.5 12.5 9 15 9C17 9 18 10.5 18 12C18 15 15.5 18 12 22Z" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M16 9C17 6.5 19 4 22 5C20.5 7.5 18.5 8.5 16 9Z" fill="currentColor"/>
+            <circle cx="14" cy="12" r="1.2" fill="currentColor"/>
+            <path d="M11 22C14 26 21 26 25 21C26 17 25 12 22 8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="2 2"/>
+            <circle cx="22" cy="8" r="1.5" fill="currentColor"/>
+            <circle cx="25" cy="14" r="1.5" fill="currentColor"/>
+            <circle cx="24" cy="20" r="1.5" fill="currentColor"/>
+            <path d="M9 22L12 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span>{{ eyebrow }}</span>
+          <svg class="ss-video-reviews__mithila-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M20 22C20 22 22 19 22 15C22 11.5 19.5 9 17 9C15 9 14 10.5 14 12C14 15 16.5 18 20 22Z" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M16 9C15 6.5 13 4 10 5C11.5 7.5 13.5 8.5 16 9Z" fill="currentColor"/>
+            <circle cx="18" cy="12" r="1.2" fill="currentColor"/>
+            <path d="M21 22C18 26 11 26 7 21C6 17 7 12 10 8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="2 2"/>
+            <circle cx="10" cy="8" r="1.5" fill="currentColor"/>
+            <circle cx="7" cy="14" r="1.5" fill="currentColor"/>
+            <circle cx="8" cy="20" r="1.5" fill="currentColor"/>
+            <path d="M23 22L20 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      {%- endif -%}
+
+      <h2 class="ss-video-reviews__heading">
+        {{ heading_prefix }} <em class="ss-video-reviews__highlight">{{ heading_highlight }}</em> {{ heading_suffix }}
+      </h2>
+    </div>
+
+    <!-- Carousel Slider Track Wrapper -->
+    <div class="ss-video-reviews__carousel-wrapper" data-ss-video-slider>
+      <!-- Left Navigation Arrow -->
+      <button
+        type="button"
+        class="ss-video-reviews__nav-btn ss-video-reviews__nav-btn--prev"
+        data-nav-direction="prev"
+        aria-label="Previous Reviews"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+
+      <!-- Slider Track -->
+      <div class="ss-video-reviews__track" data-slider-track>
+        {%- if section.blocks.size > 0 -%}
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign poster = block.settings.poster_image
+              assign video_source = block.settings.video_url
+              assign video_shopify = block.settings.video_file
+              assign caption = block.settings.caption
+            -%}
+            <div class="ss-video-reviews__item" {{ block.shopify_attributes }}>
+              <!-- 9:15 Portrait Video Reel Card -->
+              <div
+                class="ss-video-card"
+                data-video-modal-trigger
+                data-video-type="{% if video_shopify != blank %}shopify{% elsif video_source != blank %}url{% else %}none{% endif %}"
+                {% if video_shopify != blank %}
+                  data-video-src="{{ video_shopify.sources[1].url | default: video_shopify.sources[0].url }}"
+                {% elsif video_source != blank %}
+                  data-video-src="{{ video_source }}"
+                {% endif %}
+                role="button"
+                tabindex="0"
+                aria-label="Play video: {{ caption | default: 'Customer review video' }}"
+              >
+                <!-- Reel Poster / Video Thumbnail -->
+                <div class="ss-video-card__media-wrap">
+                  {%- if poster != blank -%}
+                    <img
+                      src="{{ poster | image_url: width: 600 }}"
+                      alt="{{ caption | default: 'Swaad Samvaad Thekua Review' | escape }}"
+                      class="ss-video-card__poster"
+                      loading="lazy"
+                      width="600"
+                      height="900"
+                    >
+                  {%- elsif video_shopify != blank and video_shopify.preview_image != blank -%}
+                    <img
+                      src="{{ video_shopify.preview_image | image_url: width: 600 }}"
+                      alt="{{ caption | default: 'Swaad Samvaad Thekua Review' | escape }}"
+                      class="ss-video-card__poster"
+                      loading="lazy"
+                      width="600"
+                      height="900"
+                    >
+                  {%- elsif video_shopify != blank -%}
+                    {{
+                      video_shopify
+                      | video_tag:
+                        autoplay: false,
+                        loop: false,
+                        muted: true,
+                        controls: false,
+                        playsinline: true,
+                        preload: 'metadata',
+                        class: 'ss-video-card__poster ss-video-card__poster--video'
+                    }}
+                  {%- elsif video_source != blank -%}
+                    <video
+                      src="{{ video_source }}"
+                      class="ss-video-card__poster ss-video-card__poster--video"
+                      preload="metadata"
+                      muted
+                      playsinline
+                    ></video>
+                  {%- else -%}
+                    {%- assign fallback_img = 'ss-reel-' | append: forloop.index | append: '.png' -%}
+                    <img
+                      src="{{ fallback_img | asset_url }}"
+                      alt="{{ caption | default: 'Swaad Samvaad Thekua Review' | escape }}"
+                      class="ss-video-card__poster"
+                      loading="lazy"
+                      width="600"
+                      height="900"
+                    >
+                  {%- endif -%}
+
+                  <!-- Gradient Bottom Dark Overlay -->
+                  <div class="ss-video-card__gradient"></div>
+
+                  <!-- Play Button Badge -->
+                  <div class="ss-video-card__play-badge" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="6 4 20 12 6 20 6 4"></polygon>
+                    </svg>
+                  </div>
+
+                  <!-- Bottom Caption Tag -->
+                  {%- if caption != blank -%}
+                    <div class="ss-video-card__caption">
+                      <span>{{ caption }}</span>
+                    </div>
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+
+      <!-- Right Navigation Arrow -->
+      <button
+        type="button"
+        class="ss-video-reviews__nav-btn ss-video-reviews__nav-btn--next"
+        data-nav-direction="next"
+        aria-label="Next Reviews"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Interactive High-End Video Modal Player -->
+  <div class="ss-video-modal" data-ss-video-modal aria-hidden="true" role="dialog" aria-label="Customer Video Player">
+    <div class="ss-video-modal__backdrop" data-modal-close></div>
+    <div class="ss-video-modal__dialog">
+      <button type="button" class="ss-video-modal__close-btn" data-modal-close aria-label="Close video player">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <div class="ss-video-modal__media-container" data-modal-media-container>
+        <!-- Video element or iframe gets dynamically injected here -->
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "SS Video Reviews & Reels",
+  "tag": "section",
+  "class": "section-ss-video-reviews",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Eyebrow Text",
+      "default": "REAL HOMES, REAL CRUNCH"
+    },
+    {
+      "type": "text",
+      "id": "heading_prefix",
+      "label": "Heading Prefix",
+      "default": "Loved by"
+    },
+    {
+      "type": "text",
+      "id": "heading_highlight",
+      "label": "Heading Highlight",
+      "default": "Little Critics"
+    },
+    {
+      "type": "text",
+      "id": "heading_suffix",
+      "label": "Heading Suffix",
+      "default": "Too"
+    },
+    {
+      "type": "header",
+      "content": "Styling & Traditional Accents"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#FAF6F0"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bg_art",
+      "label": "Show Mithila Sun & Aripan Motif Line Art",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "bg_art_opacity",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "%",
+      "label": "Background Art Opacity",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 90
+    }
+  ],
+  "blocks": [
+    {
+      "type": "video_card",
+      "name": "Video Reel Item",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video_file",
+          "label": "Shopify Hosted MP4 Video"
+        },
+        {
+          "type": "text",
+          "id": "video_url",
+          "label": "External Video URL / Embed (Optional)"
+        },
+        {
+          "type": "image_picker",
+          "id": "poster_image",
+          "label": "Custom Cover Image (Optional)",
+          "info": "Leave empty to automatically use the video's own first frame / thumbnail."
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Reel Bottom Caption Tag",
+          "default": "Littlest fan, biggest crunch"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SS Video Reviews & Reels",
+      "blocks": [
+        {
+          "type": "video_card",
+          "settings": {
+            "caption": "Littlest fan, biggest crunch"
+          }
+        },
+        {
+          "type": "video_card",
+          "settings": {
+            "caption": "First bite reaction"
+          }
+        },
+        {
+          "type": "video_card",
+          "settings": {
+            "caption": "The ghee-rich close-up"
+          }
+        },
+        {
+          "type": "video_card",
+          "settings": {
+            "caption": "Fresh batch, rose petals"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

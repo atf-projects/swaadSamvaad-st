@@ -1,15 +1,16 @@
 {% comment %}
   Section contract.
-  Swaad Samvaad premium hero banner section.
+  Swaad Samvaad - Full-Width Luxury Hero Banner Slider.
   Features:
-  - 2-Column Luxury Hero (Text Card Left + Decorative Framed Media Right) or Full Background Media.
-  - Multi-slide support (Merchant can add multiple slides of image / video / custom background color).
-  - Customizable text colors, card background, typography (Shopify Global fonts).
-  - Floating FSSAI removed for ultra-clean luxury look (or toggled).
-  - Full mobile/tablet responsiveness.
+  - Full-width background slider supporting images and videos.
+  - Left-aligned dark vignette/gradient shadow overlay for crystal-clear text readability.
+  - Rich Mithila traditional branding, Hindi subheadings, dual CTAs, and trust badges.
+  - Interactive auto-slide, touch swipe, prev/next arrows, and dot indicators.
+  - 100% responsive across mobile, tablet, and desktop.
 {% endcomment %}
 
 {{ 'ss-hero-banner.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'ss-hero-banner.js' | asset_url }}" defer="defer"></script>
 
 {%- liquid
   assign s = section.settings
@@ -26,291 +27,214 @@
 
 <section
   id="ss-hero-{{ sid }}"
-  class="ss-hero ss-hero--{{ s.layout_mode }} ss-hero--{{ s.banner_style }}"
+  class="ss-hero ss-hero--full-slider"
   style="
-    --ss-hero-bg: {{ s.custom_bg_color | default: 'transparent' }};
-    --ss-hero-pad-top: {{ s.padding_top | default: 24 }}px;
-    --ss-hero-pad-bottom: {{ s.padding_bottom | default: 48 }}px;
+    --ss-hero-min-height: {{ s.min_height | default: 640 }}px;
+    --ss-hero-min-height-mobile: {{ s.min_height_mobile | default: 580 }}px;
+    --ss-hero-overlay-color: {{ s.overlay_color | default: '#1B0E07' }};
+    --ss-hero-overlay-opacity: {{ s.overlay_opacity | default: 88 }}%;
+    --ss-hero-pad-top: {{ s.padding_top | default: 0 }}px;
+    --ss-hero-pad-bottom: {{ s.padding_bottom | default: 0 }}px;
   "
   aria-label="{{ s.heading | default: shop.name | escape }}"
+  data-ss-hero-section
 >
-  <div class="ss-hero__container">
-    {%- if s.layout_mode == 'split' -%}
-      {%- comment -%} ================= 2-COLUMN LUXURY SPLIT (MATCHES EXACT ATTACHED IMAGE) ================= {%- endcomment -%}
-      <div class="ss-hero__split-grid">
-        {%- comment -%} Left Column: Text & CTAs {%- endcomment -%}
-        <div class="ss-hero__col-text" style="--ss-text-card-bg: {{ s.card_bg | default: 'transparent' }};">
-          {%- if s.show_content -%}
-            <div class="ss-hero__content-box">
-              {%- if s.eyebrow != blank -%}
-                <div class="ss-hero__eyebrow" style="color: {{ s.eyebrow_color | default: '#B4552B' }};">
-                  <span class="ss-hero__eyebrow-line" style="background-color: {{ s.eyebrow_color | default: '#B4552B' }};"></span>
-                  <span>{{ s.eyebrow | escape }}</span>
-                </div>
-              {%- endif -%}
-
-              {%- if s.subheading != blank -%}
-                <div class="ss-hero__subheading" style="color: {{ s.subheading_color | default: '#8C583E' }};">
-                  {{ s.subheading | escape }}
-                </div>
-              {%- endif -%}
-
-              {%- if s.heading != blank or s.heading_accent != blank or s.heading_end != blank -%}
-                <h1 class="ss-hero__heading" style="color: {{ s.heading_color | default: '#2B1A10' }};">
-                  {%- if s.heading != blank -%}{{ s.heading | escape }} {% endif -%}
-                  {%- if s.heading_accent != blank -%}<em class="ss-hero__heading-accent" style="color: {{ s.heading_accent_color | default: '#B4552B' }};">{{ s.heading_accent | escape }}</em> {% endif -%}
-                  {%- if s.heading_end != blank -%}{{ s.heading_end | escape }}{%- endif -%}
-                </h1>
-              {%- endif -%}
-
-              {%- if s.description != blank -%}
-                <div class="ss-hero__desc" style="color: {{ s.desc_color | default: '#5C4A3E' }};">
-                  {{ s.description }}
-                </div>
-              {%- endif -%}
-
-              {%- if s.button_1_label != blank or s.button_2_label != blank -%}
-                <div class="ss-hero__actions">
-                  {%- if s.button_1_label != blank -%}
-                    <a href="{{ s.button_1_link | default: routes.all_products_collection_url }}" class="ss-hero__btn ss-hero__btn--primary" style="background: {{ s.btn1_bg | default: '#B4552B' }}; color: {{ s.btn1_text | default: '#FFFFFF' }};">
-                      <span>{{ s.button_1_label | escape }}</span>
-                      <svg class="ss-hero__btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                    </a>
-                  {%- endif -%}
-                  {%- if s.button_2_label != blank -%}
-                    <a href="{{ s.button_2_link | default: routes.all_products_collection_url }}" class="ss-hero__btn ss-hero__btn--secondary" style="border-color: {{ s.btn2_border | default: '#B4552B' }}; color: {{ s.btn2_text | default: '#B4552B' }}; background: {{ s.btn2_bg | default: 'transparent' }};">
-                      <span>{{ s.button_2_label | escape }}</span>
-                      <svg class="ss-hero__btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                    </a>
-                  {%- endif -%}
-                </div>
-              {%- endif -%}
-
-              {%- comment -%} Trust Badges Pill List {%- endcomment -%}
-              {%- if section.blocks.size > 0 -%}
-                <div class="ss-hero__pill-badges">
-                  {%- for block in section.blocks -%}
-                    {%- if block.type == 'badge' and block.settings.text != blank -%}
-                      <div class="ss-hero__pill" {{ block.shopify_attributes }}>
-                        {%- case block.settings.icon -%}
-                          {%- when 'fssai' -%}
-                            <img src="{{ 'fssai-logo.png' | asset_url }}" alt="" class="ss-hero__pill-fssai" width="36" height="16" loading="lazy">
-                          {%- when 'leaf' -%}
-                            <svg class="ss-hero__pill-icon ss-hero__pill-icon--green" viewBox="0 0 24 24"><path fill="currentColor" d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z"/></svg>
-                          {%- when 'shield' -%}
-                            <svg class="ss-hero__pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-                          {%- when 'no' -%}
-                            <svg class="ss-hero__pill-icon ss-hero__pill-icon--red" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>
-                        {%- endcase -%}
-                        <span>{{ block.settings.text | escape }}</span>
-                      </div>
-                    {%- endif -%}
-                  {%- endfor -%}
-                </div>
-              {%- endif -%}
-            </div>
-          {%- endif -%}
-        </div>
-
-        {%- comment -%} Right Column: Framed Visual Showcase (With Petals / Gold Border) {%- endcomment -%}
-        <div class="ss-hero__col-visual">
-          <div class="ss-hero__visual-frame">
-            <div class="ss-hero__media-slider" data-ss-hero-slider>
-              {%- assign media_slide_count = 0 -%}
-              {%- for block in section.blocks -%}
-                {%- if block.type == 'slide' -%}
-                  {%- assign media_slide_count = media_slide_count | plus: 1 -%}
-                  <div class="ss-hero__slide {% if media_slide_count == 1 %}ss-hero__slide--active{% endif %}" {{ block.shopify_attributes }}>
-                    {%- if block.settings.slide_media_type == 'video' and block.settings.slide_video != blank -%}
-                      {{
-                        block.settings.slide_video
-                        | video_tag:
-                          image_size: '1200x',
-                          autoplay: true,
-                          loop: true,
-                          muted: true,
-                          playsinline: true,
-                          controls: false,
-                          class: 'ss-hero__slide-img'
-                      }}
-                    {%- elsif block.settings.slide_image != blank -%}
-                      {{
-                        block.settings.slide_image
-                        | image_url: width: 1600
-                        | image_tag:
-                          widths: '600, 900, 1200, 1600',
-                          sizes: '(max-width: 768px) 100vw, 50vw',
-                          class: 'ss-hero__slide-img',
-                          loading: img_loading,
-                          fetchpriority: img_priority,
-                          alt: block.settings.slide_image.alt | default: 'Handcrafted Mithila Thekua'
-                      }}
-                    {%- else -%}
-                      <div class="ss-hero__slide-placeholder" style="background: {{ block.settings.slide_bg_color | default: 'radial-gradient(circle, #F7EAD9 0%, #EBD5BE 100%)' }};">
-                        <div class="ss-hero__thekua-art"></div>
-                      </div>
-                    {%- endif -%}
-                  </div>
-                {%- endif -%}
-              {%- endfor -%}
-
-              {%- if media_slide_count == 0 -%}
-                {%- comment -%} Fallback if no slide blocks added {%- endcomment -%}
-                <div class="ss-hero__slide ss-hero__slide--active">
-                  {%- if s.desktop_image != blank -%}
-                    {{
-                      s.desktop_image
-                      | image_url: width: 1600
-                      | image_tag:
-                        widths: '600, 900, 1200, 1600',
-                        sizes: '(max-width: 768px) 100vw, 50vw',
-                        class: 'ss-hero__slide-img',
-                        loading: img_loading,
-                        fetchpriority: img_priority,
-                        alt: 'Handcrafted Mithila Thekua'
-                    }}
-                  {%- else -%}
-                    <div class="ss-hero__slide-placeholder">
-                      <div class="ss-hero__thekua-art"></div>
-                    </div>
-                  {%- endif -%}
-                </div>
-              {%- endif -%}
-            </div>
-
-            {%- comment -%} Floating Rating Card {%- endcomment -%}
-            {%- if s.show_rating_card -%}
-              <div class="ss-hero__rating-badge" style="background: {{ s.rating_card_bg | default: 'rgba(255, 255, 255, 0.95)' }};">
-                <div class="ss-hero__rating-row">
-                  <div class="ss-hero__stars">★★★★★</div>
-                  <div class="ss-hero__rating-num" style="color: {{ s.heading_color | default: '#2B1A10' }};">{{ s.rating_value | default: '4.9 / 5' }}</div>
-                </div>
-                <div class="ss-hero__rating-label" style="color: {{ s.desc_color | default: '#7C6C60' }};">{{ s.rating_text | default: '2,300+ families across 14 countries' }}</div>
-              </div>
-            {%- endif -%}
-
-            {%- comment -%} Slider Navigation Dots (if multiple slides) {%- endcomment -%}
-            {%- if media_slide_count > 1 -%}
-              <div class="ss-hero__slider-dots">
-                {%- for i in (1..media_slide_count) -%}
-                  <button type="button" class="ss-hero__dot {% if forloop.first %}ss-hero__dot--active{% endif %}" data-slide-index="{{ forloop.index0 }}" aria-label="Go to slide {{ forloop.index }}"></button>
-                {%- endfor -%}
-              </div>
+  <div class="ss-hero__slider-wrapper" data-ss-hero-slider-wrap>
+    
+    {%- comment -%} Full-Width Background Media Slider {%- endcomment -%}
+    <div class="ss-hero__bg-slider" data-ss-hero-slider>
+      {%- assign media_slide_count = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'slide' -%}
+          {%- assign media_slide_count = media_slide_count | plus: 1 -%}
+          <div class="ss-hero__bg-slide {% if media_slide_count == 1 %}ss-hero__bg-slide--active{% endif %}" data-slide-item {{ block.shopify_attributes }}>
+            {%- if block.settings.slide_media_type == 'video' and block.settings.slide_video != blank -%}
+              {{
+                block.settings.slide_video
+                | video_tag:
+                  image_size: '1920x',
+                  autoplay: true,
+                  loop: true,
+                  muted: true,
+                  playsinline: true,
+                  controls: false,
+                  class: 'ss-hero__bg-media'
+              }}
+            {%- elsif block.settings.slide_image != blank -%}
+              {{
+                block.settings.slide_image
+                | image_url: width: 2560
+                | image_tag:
+                  widths: '750, 1100, 1600, 2000, 2560',
+                  sizes: '100vw',
+                  class: 'ss-hero__bg-media',
+                  loading: img_loading,
+                  fetchpriority: img_priority,
+                  alt: block.settings.slide_image.alt | default: 'Handcrafted Mithila Thekua'
+              }}
+            {%- else -%}
+              {%- assign default_img_index = media_slide_count | minus: 1 | modulo: 3 | plus: 1 -%}
+              {%- assign default_slide_asset = 'ss-hero-slide-' | append: default_img_index | append: '.jpg' -%}
+              <img
+                src="{{ default_slide_asset | asset_url }}"
+                alt="Authentic Mithila Handcrafted Thekua"
+                class="ss-hero__bg-media"
+                loading="{{ img_loading }}"
+                width="2000"
+                height="1200"
+              >
             {%- endif -%}
           </div>
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- if media_slide_count == 0 -%}
+        {%- comment -%} Fallback 3 Slides with Attached Authentic Imagery {%- endcomment -%}
+        {%- assign media_slide_count = 3 -%}
+        <div class="ss-hero__bg-slide ss-hero__bg-slide--active" data-slide-item>
+          <img
+            src="{{ 'ss-hero-slide-1.jpg' | asset_url }}"
+            alt="Authentic Mithila Desi Ghee Thekua"
+            class="ss-hero__bg-media"
+            loading="eager"
+            width="2000"
+            height="1200"
+          >
         </div>
+        <div class="ss-hero__bg-slide" data-slide-item>
+          <img
+            src="{{ 'ss-hero-slide-2.jpg' | asset_url }}"
+            alt="Festive Carved Peacock & Leaf Thekua Sancha"
+            class="ss-hero__bg-media"
+            loading="lazy"
+            width="2000"
+            height="1200"
+          >
+        </div>
+        <div class="ss-hero__bg-slide" data-slide-item>
+          <img
+            src="{{ 'ss-hero-slide-3.jpg' | asset_url }}"
+            alt="Chhath Ghat Sunrise Thekua Prasad"
+            class="ss-hero__bg-media"
+            loading="lazy"
+            width="2000"
+            height="1200"
+          >
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Gradient Shadow Overlay (Deep Roast Left -> Transparent Right) {%- endcomment -%}
+    <div class="ss-hero__gradient-overlay" aria-hidden="true"></div>
+
+    {%- comment -%} Foreground Left-Aligned Content Box {%- endcomment -%}
+    <div class="ss-hero__content-container">
+      <div class="ss-hero__content-box">
+        {%- if s.eyebrow != blank -%}
+          <div class="ss-hero__eyebrow" style="color: {{ s.eyebrow_color | default: '#F5C58A' }};">
+            <svg class="ss-hero__mithila-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" stroke-dasharray="2 2"/>
+              <circle cx="12" cy="12" r="5" fill="currentColor" fill-opacity="0.2"/>
+              <path d="M12 2V6M12 18V22M2 12H6M18 12H22" stroke-linecap="round"/>
+            </svg>
+            <span>{{ s.eyebrow | escape }}</span>
+          </div>
+        {%- endif -%}
+
+        {%- if s.subheading != blank -%}
+          <div class="ss-hero__subheading" style="color: {{ s.subheading_color | default: '#F2D7B6' }};">
+            {{ s.subheading | escape }}
+          </div>
+        {%- endif -%}
+
+        {%- if s.heading != blank or s.heading_accent != blank or s.heading_end != blank -%}
+          <h1 class="ss-hero__heading" style="color: {{ s.heading_color | default: '#FFFFFF' }};">
+            {%- if s.heading != blank -%}{{ s.heading | escape }} {% endif -%}
+            {%- if s.heading_accent != blank -%}<em class="ss-hero__heading-accent" style="color: {{ s.heading_accent_color | default: '#F5C58A' }};">{{ s.heading_accent | escape }}</em> {% endif -%}
+            {%- if s.heading_end != blank -%}{{ s.heading_end | escape }}{%- endif -%}
+          </h1>
+        {%- endif -%}
+
+        {%- if s.description != blank -%}
+          <div class="ss-hero__desc" style="color: {{ s.desc_color | default: '#EDE0D4' }};">
+            {{ s.description }}
+          </div>
+        {%- endif -%}
+
+        {%- if s.button_1_label != blank or s.button_2_label != blank -%}
+          <div class="ss-hero__actions">
+            {%- if s.button_1_label != blank -%}
+              <a href="{{ s.button_1_link | default: routes.all_products_collection_url }}" class="ss-hero__btn ss-hero__btn--primary" style="background: {{ s.btn1_bg | default: '#B4552B' }}; color: {{ s.btn1_text | default: '#FFFFFF' }};">
+                <span>{{ s.button_1_label | escape }}</span>
+                <svg class="ss-hero__btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            {%- endif -%}
+            {%- if s.button_2_label != blank -%}
+              <a href="{{ s.button_2_link | default: routes.all_products_collection_url }}" class="ss-hero__btn ss-hero__btn--secondary" style="border-color: {{ s.btn2_border | default: 'rgba(245, 197, 138, 0.8)' }}; color: {{ s.btn2_text | default: '#F5C58A' }}; background: {{ s.btn2_bg | default: 'rgba(27, 14, 7, 0.35)' }};">
+                <span>{{ s.button_2_label | escape }}</span>
+                <svg class="ss-hero__btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Trust Badges Pill List {%- endcomment -%}
+        {%- if section.blocks.size > 0 -%}
+          <div class="ss-hero__pill-badges">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'badge' and block.settings.text != blank -%}
+                <div class="ss-hero__pill" {{ block.shopify_attributes }}>
+                  {%- case block.settings.icon -%}
+                    {%- when 'fssai' -%}
+                      <img src="{{ 'fssai-logo.png' | asset_url }}" alt="" class="ss-hero__pill-fssai" width="36" height="16" loading="lazy">
+                    {%- when 'leaf' -%}
+                      <svg class="ss-hero__pill-icon ss-hero__pill-icon--green" viewBox="0 0 24 24"><path fill="currentColor" d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z"/></svg>
+                    {%- when 'shield' -%}
+                      <svg class="ss-hero__pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                    {%- when 'no' -%}
+                      <svg class="ss-hero__pill-icon ss-hero__pill-icon--red" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>
+                  {%- endcase -%}
+                  <span>{{ block.settings.text | escape }}</span>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Floating Rating Capsule {%- endcomment -%}
+        {%- if s.show_rating_card -%}
+          <div class="ss-hero__rating-badge">
+            <div class="ss-hero__rating-row">
+              <div class="ss-hero__stars">★★★★★</div>
+              <div class="ss-hero__rating-num">{{ s.rating_value | default: '4.9 / 5' }}</div>
+            </div>
+            <div class="ss-hero__rating-label">{{ s.rating_text | default: '2,300+ families across 14 countries' }}</div>
+          </div>
+        {%- endif -%}
       </div>
+    </div>
 
-    {%- else -%}
-      {%- comment -%} ================= FULL BLEED BANNER MODE ================= {%- endcomment -%}
-      <div class="ss-hero__full-frame">
-        {%- if s.show_content == false and s.banner_link != blank -%}
-          <a href="{{ s.banner_link }}" class="ss-hero__full-link" aria-label="{{ s.heading | default: shop.name | escape }}"></a>
-        {%- endif -%}
+    {%- comment -%} Slider Prev / Next Controls {%- endcomment -%}
+    {%- if media_slide_count > 1 -%}
+      <button type="button" class="ss-hero__nav-btn ss-hero__nav-btn--prev" data-slide-nav="prev" aria-label="Previous slide">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <button type="button" class="ss-hero__nav-btn ss-hero__nav-btn--next" data-slide-nav="next" aria-label="Next slide">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
 
-        <div class="ss-hero__full-media">
-          {%- if s.desktop_video != blank -%}
-            {{
-              s.desktop_video
-              | video_tag:
-                image_size: '1920x',
-                autoplay: true,
-                loop: true,
-                muted: true,
-                playsinline: true,
-                controls: false,
-                class: 'ss-hero__full-img'
-            }}
-          {%- elsif s.desktop_image != blank -%}
-            {{
-              s.desktop_image
-              | image_url: width: 3200
-              | image_tag:
-                widths: '750, 1100, 1600, 2200, 3200',
-                sizes: '100vw',
-                class: 'ss-hero__full-img',
-                loading: img_loading,
-                fetchpriority: img_priority,
-                alt: s.heading | default: shop.name
-            }}
-          {%- else -%}
-            <div class="ss-hero__full-placeholder"></div>
-          {%- endif -%}
-        </div>
-
-        {%- if s.show_content -%}
-          <div class="ss-hero__full-content-wrap ss-hero__full-content-wrap--{{ s.content_position | default: 'left' }}">
-            <div class="ss-hero__full-content-card ss-hero__full-content-card--{{ s.content_style | default: 'glass' }}">
-              {%- if s.eyebrow != blank -%}
-                <div class="ss-hero__eyebrow" style="color: {{ s.eyebrow_color | default: '#B4552B' }};">
-                  <span class="ss-hero__eyebrow-line" style="background-color: {{ s.eyebrow_color | default: '#B4552B' }};"></span>
-                  <span>{{ s.eyebrow | escape }}</span>
-                </div>
-              {%- endif -%}
-
-              {%- if s.subheading != blank -%}
-                <div class="ss-hero__subheading" style="color: {{ s.subheading_color | default: '#8C583E' }};">
-                  {{ s.subheading | escape }}
-                </div>
-              {%- endif -%}
-
-              {%- if s.heading != blank or s.heading_accent != blank or s.heading_end != blank -%}
-                <h1 class="ss-hero__heading" style="color: {{ s.heading_color | default: '#2B1A10' }};">
-                  {%- if s.heading != blank -%}{{ s.heading | escape }} {% endif -%}
-                  {%- if s.heading_accent != blank -%}<em class="ss-hero__heading-accent" style="color: {{ s.heading_accent_color | default: '#B4552B' }};">{{ s.heading_accent | escape }}</em> {% endif -%}
-                  {%- if s.heading_end != blank -%}{{ s.heading_end | escape }}{%- endif -%}
-                </h1>
-              {%- endif -%}
-
-              {%- if s.description != blank -%}
-                <div class="ss-hero__desc" style="color: {{ s.desc_color | default: '#5C4A3E' }};">
-                  {{ s.description }}
-                </div>
-              {%- endif -%}
-
-              {%- if s.button_1_label != blank or s.button_2_label != blank -%}
-                <div class="ss-hero__actions">
-                  {%- if s.button_1_label != blank -%}
-                    <a href="{{ s.button_1_link | default: routes.all_products_collection_url }}" class="ss-hero__btn ss-hero__btn--primary" style="background: {{ s.btn1_bg | default: '#B4552B' }}; color: {{ s.btn1_text | default: '#FFFFFF' }};">
-                      <span>{{ s.button_1_label | escape }}</span>
-                      <svg class="ss-hero__btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                    </a>
-                  {%- endif -%}
-                  {%- if s.button_2_label != blank -%}
-                    <a href="{{ s.button_2_link | default: routes.all_products_collection_url }}" class="ss-hero__btn ss-hero__btn--secondary" style="border-color: {{ s.btn2_border | default: '#B4552B' }}; color: {{ s.btn2_text | default: '#B4552B' }}; background: {{ s.btn2_bg | default: 'transparent' }};">
-                      <span>{{ s.button_2_label | escape }}</span>
-                      <svg class="ss-hero__btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                    </a>
-                  {%- endif -%}
-                </div>
-              {%- endif -%}
-
-              {%- if section.blocks.size > 0 -%}
-                <div class="ss-hero__pill-badges">
-                  {%- for block in section.blocks -%}
-                    {%- if block.type == 'badge' and block.settings.text != blank -%}
-                      <div class="ss-hero__pill" {{ block.shopify_attributes }}>
-                        {%- case block.settings.icon -%}
-                          {%- when 'fssai' -%}
-                            <img src="{{ 'fssai-logo.png' | asset_url }}" alt="" class="ss-hero__pill-fssai" width="36" height="16" loading="lazy">
-                          {%- when 'leaf' -%}
-                            <svg class="ss-hero__pill-icon ss-hero__pill-icon--green" viewBox="0 0 24 24"><path fill="currentColor" d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z"/></svg>
-                          {%- when 'shield' -%}
-                            <svg class="ss-hero__pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-                          {%- when 'no' -%}
-                            <svg class="ss-hero__pill-icon ss-hero__pill-icon--red" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>
-                        {%- endcase -%}
-                        <span>{{ block.settings.text | escape }}</span>
-                      </div>
-                    {%- endif -%}
-                  {%- endfor -%}
-                </div>
-              {%- endif -%}
-            </div>
-          </div>
-        {%- endif -%}
+      {%- comment -%} Slider Navigation Dots {%- endcomment -%}
+      <div class="ss-hero__slider-dots">
+        {%- for i in (1..media_slide_count) -%}
+          <button type="button" class="ss-hero__dot {% if forloop.first %}ss-hero__dot--active{% endif %}" data-slide-index="{{ forloop.index0 }}" aria-label="Go to slide {{ forloop.index }}"></button>
+        {%- endfor -%}
       </div>
     {%- endif -%}
+
   </div>
 </section>
 
@@ -322,54 +246,67 @@
   "settings": [
     {
       "type": "header",
-      "content": "Layout Structure"
+      "content": "Banner Dimensions & Overlay"
     },
     {
-      "type": "select",
-      "id": "layout_mode",
-      "label": "Layout Mode",
-      "options": [
-        { "value": "split", "label": "2-Column Luxury Showcase (Recommended)" },
-        { "value": "full", "label": "Full Bleed Background Banner" }
-      ],
-      "default": "split"
+      "type": "range",
+      "id": "min_height",
+      "label": "Desktop Banner Min Height",
+      "min": 450,
+      "max": 850,
+      "step": 10,
+      "unit": "px",
+      "default": 640
+    },
+    {
+      "type": "range",
+      "id": "min_height_mobile",
+      "label": "Mobile Banner Min Height",
+      "min": 420,
+      "max": 750,
+      "step": 10,
+      "unit": "px",
+      "default": 560
     },
     {
       "type": "color",
-      "id": "custom_bg_color",
-      "label": "Section Background Color",
-      "default": "transparent"
+      "id": "overlay_color",
+      "label": "Left Shadow / Vignette Color",
+      "default": "#1B0E07"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Left Shadow Intensity (%)",
+      "min": 50,
+      "max": 98,
+      "step": 2,
+      "unit": "%",
+      "default": 88
     },
     {
       "type": "range",
       "id": "padding_top",
       "label": "Top Spacing",
       "min": 0,
-      "max": 80,
+      "max": 60,
       "step": 4,
       "unit": "px",
-      "default": 32
+      "default": 0
     },
     {
       "type": "range",
       "id": "padding_bottom",
       "label": "Bottom Spacing",
       "min": 0,
-      "max": 100,
+      "max": 60,
       "step": 4,
       "unit": "px",
-      "default": 48
+      "default": 0
     },
     {
       "type": "header",
       "content": "Content & Typography"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_content",
-      "label": "Show Text Content",
-      "info": "Turn off to hide text and show only clean banner / showcase.",
-      "default": true
     },
     {
       "type": "text",
@@ -381,7 +318,7 @@
       "type": "color",
       "id": "eyebrow_color",
       "label": "Eyebrow Color",
-      "default": "#B4552B"
+      "default": "#F5C58A"
     },
     {
       "type": "text",
@@ -393,7 +330,7 @@
       "type": "color",
       "id": "subheading_color",
       "label": "Subheading Color",
-      "default": "#8C583E"
+      "default": "#F2D7B6"
     },
     {
       "type": "text",
@@ -417,13 +354,13 @@
       "type": "color",
       "id": "heading_color",
       "label": "Heading Text Color",
-      "default": "#2B1A10"
+      "default": "#FFFFFF"
     },
     {
       "type": "color",
       "id": "heading_accent_color",
       "label": "Heading Accent Color",
-      "default": "#B4552B"
+      "default": "#F5C58A"
     },
     {
       "type": "richtext",
@@ -435,7 +372,7 @@
       "type": "color",
       "id": "desc_color",
       "label": "Description Color",
-      "default": "#5C4A3E"
+      "default": "#EDE0D4"
     },
     {
       "type": "header",
@@ -479,19 +416,19 @@
       "type": "color",
       "id": "btn2_border",
       "label": "Button 2 Border",
-      "default": "#B4552B"
+      "default": "rgba(245, 197, 138, 0.8)"
     },
     {
       "type": "color",
       "id": "btn2_text",
       "label": "Button 2 Text",
-      "default": "#B4552B"
+      "default": "#F5C58A"
     },
     {
       "type": "color",
       "id": "btn2_bg",
       "label": "Button 2 Background",
-      "default": "rgba(255,255,255,0)"
+      "default": "rgba(27, 14, 7, 0.35)"
     },
     {
       "type": "header",
@@ -514,52 +451,6 @@
       "id": "rating_text",
       "label": "Rating Note",
       "default": "2,300+ families across 14 countries"
-    },
-    {
-      "type": "color",
-      "id": "rating_card_bg",
-      "label": "Rating Card Background",
-      "default": "rgba(255, 255, 255, 0.95)"
-    },
-    {
-      "type": "header",
-      "content": "Full Bleed Mode Media (Optional)"
-    },
-    {
-      "type": "select",
-      "id": "content_position",
-      "label": "Content Position (Full Bleed Mode)",
-      "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Center" },
-        { "value": "right", "label": "Right" }
-      ],
-      "default": "left"
-    },
-    {
-      "type": "select",
-      "id": "content_style",
-      "label": "Card Style (Full Bleed Mode)",
-      "options": [
-        { "value": "glass", "label": "Frosted Glass Card" },
-        { "value": "plain", "label": "Text directly over image" }
-      ],
-      "default": "glass"
-    },
-    {
-      "type": "image_picker",
-      "id": "desktop_image",
-      "label": "Default Showcase Image"
-    },
-    {
-      "type": "video",
-      "id": "desktop_video",
-      "label": "Default Showcase Video"
-    },
-    {
-      "type": "url",
-      "id": "banner_link",
-      "label": "Banner Click Link (When text hidden)"
     }
   ],
   "blocks": [
@@ -573,8 +464,7 @@
           "label": "Slide Media Type",
           "options": [
             { "value": "image", "label": "Image" },
-            { "value": "video", "label": "Video" },
-            { "value": "color", "label": "Background Color" }
+            { "value": "video", "label": "Video" }
           ],
           "default": "image"
         },
@@ -587,12 +477,6 @@
           "type": "video",
           "id": "slide_video",
           "label": "Slide Video"
-        },
-        {
-          "type": "color_background",
-          "id": "slide_bg_color",
-          "label": "Slide Background Gradient/Color",
-          "default": "radial-gradient(circle, #F7EAD9 0%, #EBD5BE 100%)"
         }
       ]
     },
@@ -625,6 +509,8 @@
     {
       "name": "Swaad Hero Banner",
       "blocks": [
+        { "type": "slide" },
+        { "type": "slide" },
         { "type": "slide" },
         { "type": "badge", "settings": { "icon": "fssai", "text": "FSSAI Lic. 23322003000077" } },
         { "type": "badge", "settings": { "icon": "leaf", "text": "100% Vegetarian" } },

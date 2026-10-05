@@ -1,0 +1,478 @@
+/* ==========================================================================
+   SWAAD SAMVAAD - Trust & Quality Section (FSSAI & Heritage Standards)
+   Features:
+   - Cream / Sandalwood Canvas with Mithila Heritage Touches
+   - Centered Header with Serif Typography
+   - Left Featured FSSAI Quality Card with License & Traceability
+   - Right 2x2 Grid of 4 Elevated Trust Feature Cards
+   - 100% Custom CSS, Mobile Responsive & Micro-interactions
+   ========================================================================== */
+
+.ss-trust-sec {
+  --ss-trust-bg: #FAF5EE;
+  --ss-trust-card-bg: #FFFFFF;
+  --ss-trust-espresso: #2D180F;
+  --ss-trust-terracotta: #A84A22;
+  --ss-trust-gold: #DE8626;
+  --ss-trust-text-body: #635348;
+  --ss-trust-text-muted: #8E7D72;
+  --ss-trust-icon-bg: #F5EFE6;
+  --ss-trust-border-subtle: rgba(168, 74, 34, 0.1);
+  --ss-trust-shadow-card: 0 10px 30px rgba(66, 35, 18, 0.05), 0 2px 6px rgba(0, 0, 0, 0.025);
+  --ss-trust-shadow-hover: 0 16px 38px rgba(66, 35, 18, 0.09), 0 4px 10px rgba(0, 0, 0, 0.04);
+
+  position: relative;
+  width: 100%;
+  background-color: var(--ss-trust-bg-color, var(--ss-trust-bg));
+  padding-top: var(--ss-trust-pad-top, 80px);
+  padding-bottom: var(--ss-trust-pad-bottom, 90px);
+  font-family: var(--font-body--family, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
+  color: var(--ss-trust-espresso);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.ss-trust-sec *,
+.ss-trust-sec *::before,
+.ss-trust-sec *::after {
+  box-sizing: border-box;
+}
+
+/* Background Image Layer */
+.ss-trust-sec__bg-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  transition: opacity 0.3s ease;
+}
+
+.ss-trust-sec__bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Mithila Cultural Vector Background Art (Watermark) */
+.ss-trust-sec__bg-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.ss-trust-sec__art-item {
+  position: absolute;
+  color: var(--ss-trust-terracotta);
+  opacity: 0.08;
+  transition: opacity 0.3s ease;
+}
+
+.ss-trust-sec__art-item svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ss-trust-sec__art-item--top-left {
+  top: -40px;
+  left: -40px;
+  width: 320px;
+  height: 320px;
+  max-width: 38vw;
+  max-height: 38vw;
+  transform: rotate(-12deg);
+}
+
+.ss-trust-sec__art-item--bottom-right {
+  bottom: -40px;
+  right: -40px;
+  width: 340px;
+  height: 340px;
+  max-width: 40vw;
+  max-height: 40vw;
+  transform: rotate(15deg);
+}
+
+/* Container */
+.ss-trust-sec__container {
+  position: relative;
+  z-index: 2;
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* ==========================================================================
+   Section Header (Eyebrow + Heading)
+   ========================================================================== */
+.ss-trust-sec__header {
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Eyebrow */
+.ss-trust-sec__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ss-trust-terracotta);
+}
+
+.ss-trust-sec__mithila-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--ss-trust-gold);
+  vertical-align: middle;
+}
+
+.ss-trust-sec__eyebrow-line {
+  display: inline-block;
+  width: 24px;
+  height: 1.5px;
+  background-color: var(--ss-trust-terracotta);
+  opacity: 0.5;
+}
+
+/* Main Heading */
+.ss-trust-sec__heading {
+  font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+  font-size: clamp(2rem, 1.4rem + 2vw, 2.9rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--ss-trust-espresso);
+  margin: 0;
+  letter-spacing: -0.015em;
+}
+
+/* ==========================================================================
+   Layout: Left Featured Card + Right 2x2 Grid
+   ========================================================================== */
+.ss-trust-sec__layout {
+  display: grid;
+  grid-template-columns: 1.14fr 1fr;
+  gap: 24px;
+  align-items: stretch;
+}
+
+/* ==========================================================================
+   Left Column: Featured FSSAI Quality Card
+   ========================================================================== */
+.ss-trust-sec__fssai-card {
+  position: relative;
+  background: var(--ss-trust-card-bg);
+  border-radius: 24px;
+  border: 1px solid var(--ss-trust-border-subtle);
+  box-shadow: var(--ss-trust-shadow-card);
+  padding: 34px 32px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.ss-trust-sec__fssai-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--ss-trust-shadow-hover);
+  border-color: rgba(168, 74, 34, 0.22);
+}
+
+/* Subtle Aripan Corner Motif */
+.ss-trust-sec__card-motif {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ss-trust-sec__fssai-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+/* FSSAI Logo Area */
+.ss-trust-sec__fssai-logo-box {
+  flex-shrink: 0;
+  width: 140px;
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 14px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.ss-trust-sec__fssai-vector-wrap {
+  width: 100%;
+}
+
+.ss-trust-sec__fssai-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.ss-trust-sec__fssai-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* FSSAI Body */
+.ss-trust-sec__fssai-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.ss-trust-sec__fssai-title {
+  font-family: var(--font-heading--family, 'Playfair Display', Georgia, serif);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--ss-trust-espresso);
+  margin: 0 0 4px;
+  line-height: 1.28;
+}
+
+.ss-trust-sec__fssai-lic-tag {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--ss-trust-terracotta);
+  letter-spacing: 0.02em;
+  margin-bottom: 10px;
+}
+
+.ss-trust-sec__fssai-text {
+  font-size: 0.91rem;
+  line-height: 1.62;
+  color: var(--ss-trust-text-body);
+  margin: 0;
+}
+
+/* Divider & Footer */
+.ss-trust-sec__fssai-divider {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 1px;
+  border-top: 1px dashed rgba(168, 74, 34, 0.2);
+  margin: 22px 0 12px;
+}
+
+.ss-trust-sec__fssai-footer {
+  position: relative;
+  z-index: 2;
+  font-size: 0.76rem;
+  color: var(--ss-trust-text-muted);
+  line-height: 1.45;
+}
+
+/* ==========================================================================
+   Right Column: 2x2 Grid of 4 Trust Feature Cards
+   ========================================================================== */
+.ss-trust-sec__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.ss-trust-sec__card {
+  background: var(--ss-trust-card-bg);
+  border-radius: 20px;
+  border: 1px solid var(--ss-trust-border-subtle);
+  box-shadow: var(--ss-trust-shadow-card);
+  padding: 22px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.ss-trust-sec__card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--ss-trust-shadow-hover);
+  border-color: rgba(168, 74, 34, 0.25);
+}
+
+/* Icon Squircle Wrap */
+.ss-trust-sec__icon-wrap {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--ss-trust-icon-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  transition: transform 0.25s ease;
+}
+
+.ss-trust-sec__card:hover .ss-trust-sec__icon-wrap {
+  transform: scale(1.08);
+}
+
+.ss-trust-sec__icon-wrap svg {
+  width: 26px;
+  height: 26px;
+  display: block;
+}
+
+/* Card Body */
+.ss-trust-sec__card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.ss-trust-sec__card-title {
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: var(--ss-trust-espresso);
+  line-height: 1.25;
+  margin-bottom: 4px;
+}
+
+.ss-trust-sec__card-sub {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--ss-trust-text-muted);
+  line-height: 1.38;
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+@media (max-width: 991px) {
+  .ss-trust-sec {
+    padding-top: 64px;
+    padding-bottom: 74px;
+  }
+
+  .ss-trust-sec__container {
+    padding: 0 24px;
+  }
+
+  .ss-trust-sec__header {
+    margin-bottom: 36px;
+  }
+
+  .ss-trust-sec__layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .ss-trust-sec__fssai-card {
+    padding: 28px 24px 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .ss-trust-sec {
+    padding-top: 50px;
+    padding-bottom: 60px;
+  }
+
+  .ss-trust-sec__container {
+    padding: 0 16px;
+  }
+
+  .ss-trust-sec__header {
+    margin-bottom: 28px;
+    gap: 8px;
+  }
+
+  .ss-trust-sec__eyebrow {
+    font-size: 0.75rem;
+  }
+
+  .ss-trust-sec__heading {
+    font-size: 1.85rem;
+  }
+
+  .ss-trust-sec__fssai-card {
+    padding: 22px 18px 16px;
+    border-radius: 18px;
+  }
+
+  .ss-trust-sec__fssai-inner {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .ss-trust-sec__fssai-logo-box {
+    width: 120px;
+  }
+
+  .ss-trust-sec__fssai-title {
+    font-size: 1.15rem;
+  }
+
+  .ss-trust-sec__fssai-lic-tag {
+    font-size: 0.82rem;
+  }
+
+  .ss-trust-sec__fssai-text {
+    font-size: 0.86rem;
+  }
+
+  .ss-trust-sec__fssai-footer {
+    font-size: 0.72rem;
+  }
+
+  .ss-trust-sec__grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .ss-trust-sec__card {
+    padding: 16px 14px;
+    border-radius: 16px;
+    gap: 12px;
+  }
+
+  .ss-trust-sec__icon-wrap {
+    width: 38px;
+    height: 38px;
+  }
+
+  .ss-trust-sec__icon-wrap svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .ss-trust-sec__card-title {
+    font-size: 0.88rem;
+  }
+
+  .ss-trust-sec__card-sub {
+    font-size: 0.74rem;
+  }
+}

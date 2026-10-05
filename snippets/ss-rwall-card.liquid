@@ -1,0 +1,53 @@
+{%- liquid
+  assign rating = block.settings.rating | default: 5
+  assign quote = block.settings.quote
+  assign author_initials = block.settings.author_initials
+  assign author_name = block.settings.author_name
+  assign author_location = block.settings.author_location
+  assign verified_buyer = block.settings.verified_buyer
+
+  if author_initials == blank and author_name != blank
+    assign name_parts = author_name | split: ' '
+    if name_parts.size > 1
+      assign p1 = name_parts[0] | slice: 0, 1
+      assign p2 = name_parts[1] | slice: 0, 1
+      assign author_initials = p1 | append: p2 | upcase
+    else
+      assign author_initials = author_name | slice: 0, 2 | upcase
+    endif
+  endif
+-%}
+
+<div class="ss-rwall-card" {{ block.shopify_attributes }}>
+  <!-- 5 Gold Rating Stars -->
+  <div class="ss-rwall-card__stars" aria-label="{{ rating }} out of 5 stars">
+    {%- for i in (1..5) -%}
+      {%- if i <= rating -%}
+        <span class="ss-rwall-card__star ss-rwall-card__star--filled">★</span>
+      {%- else -%}
+        <span class="ss-rwall-card__star ss-rwall-card__star--empty">☆</span>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  <!-- Review Quote (Italicized) -->
+  <p class="ss-rwall-card__quote">
+    “{{ quote }}”
+  </p>
+
+  <!-- Author Row with Initials Circle & Verified Tag -->
+  <div class="ss-rwall-card__author-wrap">
+    <div class="ss-rwall-card__avatar" aria-hidden="true">
+      {{ author_initials | default: 'SS' }}
+    </div>
+    <div class="ss-rwall-card__author-info">
+      <strong class="ss-rwall-card__name">{{ author_name }}</strong>
+      <span class="ss-rwall-card__loc">
+        {%- if verified_buyer -%}
+          Verified Buyer ·&nbsp;
+        {%- endif -%}
+        {{ author_location }}
+      </span>
+    </div>
+  </div>
+</div>

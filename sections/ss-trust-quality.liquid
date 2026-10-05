@@ -1,0 +1,516 @@
+{% comment %}
+  Section: SS Trust & Quality (FSSAI Certified & Standards)
+  Brand: Swaad Samvaad (Authentic Mithila Handcrafted Thekua)
+  Features:
+  - Header: Spaced Eyebrow & Serif Title "Certified. Sealed. Sworn by taste."
+  - Left Featured Card: FSSAI License, High-Trust Description & Legal / GSTIN Footer
+  - Right 2x2 Grid: 4 Premium Trust Cards (100% Veg, No Preservatives, Family Recipe, Hygienically Packed)
+  - Subtle Traditional Mithila Touch: Sandalwood tones, warm gold/terracotta accents & Aripan geometry
+  - 100% Responsive for Desktop, Tablet & Mobile
+{% endcomment %}
+
+{{ 'ss-trust-quality.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_id = section.id
+  assign eyebrow = section.settings.eyebrow_text | default: 'TRUST & QUALITY'
+  assign heading = section.settings.heading | default: 'Certified. Sealed. Sworn by taste.'
+  assign bg_color = section.settings.bg_color | default: '#FAF5EE'
+  assign bg_image = section.settings.bg_image
+  assign bg_image_opacity = section.settings.bg_image_opacity | default: 20
+  assign bg_image_blur = section.settings.bg_image_blur | default: 0
+  assign fssai_title = section.settings.fssai_title | default: 'FSSAI Certified Quality'
+  assign fssai_lic = section.settings.fssai_license | default: 'License No. 233220030000077'
+  assign fssai_desc = section.settings.fssai_desc | default: 'Every batch is manufactured, quality-checked and hygienically packed under our FSSAI license — traceable from our kitchen to your cookie jar.'
+  assign fssai_footer = section.settings.fssai_company_info | default: 'A heritage brand of Yumee International, New Delhi · GSTIN 07AMZPJ4823B1ZX'
+-%}
+
+<div
+  id="ss-trust-quality-{{ section_id }}"
+  class="ss-trust-sec"
+  style="
+    --ss-trust-pad-top: {{ section.settings.padding_top | default: 80 }}px;
+    --ss-trust-pad-bottom: {{ section.settings.padding_bottom | default: 90 }}px;
+    --ss-trust-bg-color: {{ bg_color }};
+  "
+>
+  {%- if bg_image != blank -%}
+    <!-- Merchant Configurable Background Image with Controlled Opacity -->
+    <div
+      class="ss-trust-sec__bg-layer"
+      style="
+        opacity: {{ bg_image_opacity | divided_by: 100.0 }};
+        {%- if bg_image_blur > 0 -%}
+          filter: blur({{ bg_image_blur }}px);
+        {%- endif -%}
+      "
+      aria-hidden="true"
+    >
+      {{ bg_image | image_url: width: 2400 | image_tag: class: 'ss-trust-sec__bg-img', loading: 'lazy', alt: 'Section Background' }}
+    </div>
+  {%- endif -%}
+
+  <!-- Mithila Heritage Traditional Background Art Elements -->
+  <div class="ss-trust-sec__bg-art" aria-hidden="true">
+    <div class="ss-trust-sec__art-item ss-trust-sec__art-item--top-left">
+      <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="90" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4"/>
+        <circle cx="100" cy="100" r="76" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="100" cy="100" r="62" stroke="currentColor" stroke-width="1" stroke-dasharray="2 3"/>
+        <circle cx="100" cy="100" r="30" stroke="currentColor" stroke-width="1.5" fill="currentColor" fill-opacity="0.08"/>
+        <!-- Madhubani Kalash / Sun Petals -->
+        <path d="M100 10 C108 40 120 40 100 70 C80 40 92 40 100 10 Z" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.2"/>
+        <path d="M100 190 C108 160 120 160 100 130 C80 160 92 160 100 190 Z" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.2"/>
+        <path d="M10 100 C40 108 40 120 70 100 C40 80 40 92 10 100 Z" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.2"/>
+        <path d="M190 100 C160 108 160 120 130 100 C160 80 160 92 190 100 Z" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.2"/>
+        <path d="M36 36 C60 55 68 47 79 79 C47 68 55 60 36 36 Z" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <path d="M164 36 C140 55 132 47 121 79 C153 68 145 60 164 36 Z" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <path d="M36 164 C60 145 68 153 79 121 C47 132 55 140 36 164 Z" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <path d="M164 164 C140 145 132 153 121 121 C153 132 145 140 164 164 Z" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="1"/>
+        <circle cx="100" cy="100" r="10" fill="currentColor"/>
+      </svg>
+    </div>
+    <div class="ss-trust-sec__art-item ss-trust-sec__art-item--bottom-right">
+      <svg viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="110" cy="110" r="100" stroke="currentColor" stroke-width="2" stroke-dasharray="5 4"/>
+        <circle cx="110" cy="110" r="82" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="110" cy="110" r="48" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <!-- Traditional Thekua Sancha Carving Rays -->
+        <g stroke="currentColor" stroke-width="1.2">
+          <line x1="110" y1="10" x2="110" y2="35"/>
+          <line x1="110" y1="185" x2="110" y2="210"/>
+          <line x1="10" y1="110" x2="35" y2="110"/>
+          <line x1="185" y1="110" x2="210" y2="110"/>
+          <line x1="39" y1="39" x2="57" y2="57"/>
+          <line x1="163" y1="163" x2="181" y2="181"/>
+          <line x1="39" y1="181" x2="57" y2="163"/>
+          <line x1="163" y1="57" x2="181" y2="39"/>
+        </g>
+        <path d="M110 55 C130 85 135 85 165 110 C135 135 130 135 110 165 C90 135 85 135 55 110 C85 85 90 85 110 55 Z" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="110" cy="110" r="16" fill="currentColor" fill-opacity="0.25"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="ss-trust-sec__container">
+    <!-- Section Header -->
+    <div class="ss-trust-sec__header">
+      {%- if eyebrow != blank -%}
+        <div class="ss-trust-sec__eyebrow">
+          <span class="ss-trust-sec__eyebrow-line ss-trust-sec__eyebrow-line--left" aria-hidden="true"></span>
+          <svg class="ss-trust-sec__mithila-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M16 3C17 5 18 6.5 21 7C18.5 8 17.5 9.5 16 12C14.5 9.5 13.5 8 11 7C14 6.5 15 5 16 3Z" fill="currentColor"/>
+            <path d="M10 13H22C23 13 24 14 24 15V16C24 20.5 20.5 24 16 24C11.5 24 8 20.5 8 16V15C8 14 9 13 10 13Z" stroke="currentColor" stroke-width="1.4" fill="currentColor" fill-opacity="0.15"/>
+            <path d="M12 24V28H20V24" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <circle cx="16" cy="18" r="2.5" fill="currentColor"/>
+            <path d="M16 11V14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <circle cx="7" cy="16" r="1.5" fill="currentColor"/>
+            <circle cx="25" cy="16" r="1.5" fill="currentColor"/>
+          </svg>
+          <span class="ss-trust-sec__eyebrow-text">{{ eyebrow }}</span>
+          <svg class="ss-trust-sec__mithila-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M16 3C17 5 18 6.5 21 7C18.5 8 17.5 9.5 16 12C14.5 9.5 13.5 8 11 7C14 6.5 15 5 16 3Z" fill="currentColor"/>
+            <path d="M10 13H22C23 13 24 14 24 15V16C24 20.5 20.5 24 16 24C11.5 24 8 20.5 8 16V15C8 14 9 13 10 13Z" stroke="currentColor" stroke-width="1.4" fill="currentColor" fill-opacity="0.15"/>
+            <path d="M12 24V28H20V24" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <circle cx="16" cy="18" r="2.5" fill="currentColor"/>
+            <path d="M16 11V14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <circle cx="7" cy="16" r="1.5" fill="currentColor"/>
+            <circle cx="25" cy="16" r="1.5" fill="currentColor"/>
+          </svg>
+          <span class="ss-trust-sec__eyebrow-line ss-trust-sec__eyebrow-line--right" aria-hidden="true"></span>
+        </div>
+      {%- endif -%}
+
+      {%- if heading != blank -%}
+        <h2 class="ss-trust-sec__heading">
+          {{ heading }}
+        </h2>
+      {%- endif -%}
+    </div>
+
+    <!-- Main Content Layout: Left Large FSSAI Card + Right 2x2 Grid -->
+    <div class="ss-trust-sec__layout">
+      <!-- Left Column: Featured FSSAI Quality Card -->
+      <div class="ss-trust-sec__fssai-card">
+        <!-- Subtle Traditional Mithila Aripan Corner Motif Accent -->
+        <div class="ss-trust-sec__card-motif" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="0" r="32" stroke="#DE8626" stroke-width="0.8" stroke-dasharray="2 2" opacity="0.2"/>
+            <circle cx="40" cy="0" r="22" stroke="#B4552B" stroke-width="0.8" opacity="0.15"/>
+            <circle cx="40" cy="0" r="12" fill="#DE8626" opacity="0.05"/>
+          </svg>
+        </div>
+
+        <div class="ss-trust-sec__fssai-inner">
+          <!-- FSSAI Logo Area -->
+          <div class="ss-trust-sec__fssai-logo-box">
+            {%- if section.settings.fssai_logo != blank -%}
+              {{ section.settings.fssai_logo | image_url: width: 220 | image_tag: class: 'ss-trust-sec__fssai-img', alt: 'FSSAI Certified Logo', loading: 'lazy' }}
+            {%- else -%}
+              <!-- Crisp Official FSSAI Vector Representation -->
+              <div class="ss-trust-sec__fssai-vector-wrap">
+                <svg class="ss-trust-sec__fssai-svg" viewBox="0 0 160 85" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="fssai logo">
+                  <!-- fssai wordmark -->
+                  <text x="14" y="58" font-family="'Times New Roman', Georgia, serif" font-weight="bold" font-size="46" font-style="italic" fill="#0A3B8C" letter-spacing="-1">fssai</text>
+                  <!-- orange swoosh on top of f -->
+                  <path d="M12 28 C 18 12, 36 12, 40 28 C 34 22, 22 22, 12 28 Z" fill="#E85D04"/>
+                  <!-- green leaf above i -->
+                  <path d="M136 22 C 142 12, 154 14, 156 26 C 148 27, 139 25, 136 22 Z" fill="#2D6A4F"/>
+                  <path d="M139 24 Q 146 18 152 23" stroke="#52B788" stroke-width="0.8" fill="none"/>
+                  <!-- orange underline stripe -->
+                  <rect x="14" y="66" width="138" height="4.5" rx="2" fill="#F48C06"/>
+                  <!-- license micro text under stripe -->
+                  <text x="42" y="78" font-family="Arial, sans-serif" font-size="6.5" font-weight="600" fill="#6B7280" letter-spacing="0.4">License No: {{ section.settings.fssai_license_num_only | default: '233220030000077' }}</text>
+                </svg>
+              </div>
+            {%- endif -%}
+          </div>
+
+          <!-- FSSAI Details & Description -->
+          <div class="ss-trust-sec__fssai-body">
+            <h3 class="ss-trust-sec__fssai-title">{{ fssai_title }}</h3>
+            {%- if fssai_lic != blank -%}
+              <div class="ss-trust-sec__fssai-lic-tag">{{ fssai_lic }}</div>
+            {%- endif -%}
+            {%- if fssai_desc != blank -%}
+              <p class="ss-trust-sec__fssai-text">{{ fssai_desc }}</p>
+            {%- endif -%}
+          </div>
+        </div>
+
+        <!-- Card Bottom Legal / GSTIN Line -->
+        {%- if fssai_footer != blank -%}
+          <div class="ss-trust-sec__fssai-divider"></div>
+          <div class="ss-trust-sec__fssai-footer">
+            {{ fssai_footer }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <!-- Right Column: 2x2 Grid of 4 Trust Feature Cards -->
+      <div class="ss-trust-sec__grid">
+        {%- if section.blocks.size > 0 -%}
+          {%- for block in section.blocks -%}
+            <div class="ss-trust-sec__card" {{ block.shopify_attributes }}>
+              <div class="ss-trust-sec__icon-wrap">
+                {%- case block.settings.icon -%}
+                  {%- when 'leaf' -%}
+                    <!-- 100% Vegetarian Leaf Icon -->
+                    <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M7 21C7 21 8.5 15.5 13.5 13C18.5 10.5 22.5 7 22.5 7C22.5 7 22 13 18.5 17.5C15 22 9.5 22 7 21Z" fill="#388E3C" stroke="#2E7D32" stroke-width="1.2"/>
+                      <path d="M7 21C11.5 18 16 14.5 19 10" stroke="#E8F5E9" stroke-width="1.2" stroke-linecap="round"/>
+                      <circle cx="7" cy="21" r="1.5" fill="#2E7D32"/>
+                    </svg>
+                  {%- when 'preservative' -%}
+                    <!-- No Added Preservatives Flask/Tube Icon -->
+                    <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M11 5H17M12 5V10L7 20C6.2 21.6 7.3 23.5 9.1 23.5H18.9C20.7 23.5 21.8 21.6 21 20L16 10V5" stroke="#4B5563" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M8.5 17H19.5" stroke="#4CAF50" stroke-width="1.5" stroke-linecap="round"/>
+                      <circle cx="12" cy="19.5" r="1.2" fill="#4CAF50"/>
+                      <circle cx="16" cy="18.5" r="0.8" fill="#4CAF50"/>
+                      <path d="M5 23L23 5" stroke="#D32F2F" stroke-width="1.5" stroke-linecap="round" opacity="0.75"/>
+                    </svg>
+                  {%- when 'recipe' -%}
+                    <!-- Authentic Recipe Parchment / Scroll Icon -->
+                    <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="7" y="6" width="14" height="16" rx="2" fill="#F4E6D2" stroke="#9A6136" stroke-width="1.5"/>
+                      <path d="M10 10H18M10 14H18M10 18H15" stroke="#78350F" stroke-width="1.2" stroke-linecap="round"/>
+                      <path d="M5 8C5 6.9 5.9 6 7 6H8V22H7C5.9 22 5 21.1 5 20V8Z" fill="#DEB887" stroke="#9A6136" stroke-width="1.2"/>
+                      <path d="M23 8C23 6.9 22.1 6 21 6H20V22H21C22.1 22 23 21.1 23 20V8Z" fill="#DEB887" stroke="#9A6136" stroke-width="1.2"/>
+                    </svg>
+                  {%- when 'package' -%}
+                    <!-- Hygienically Packed Sealed Box Icon -->
+                    <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 9.5L14 4.5L23 9.5L14 14.5L5 9.5Z" fill="#DDB892" stroke="#7F4F24" stroke-width="1.3" stroke-linejoin="round"/>
+                      <path d="M5 9.5V18.5L14 23.5V14.5L5 9.5Z" fill="#B08968" stroke="#7F4F24" stroke-width="1.3" stroke-linejoin="round"/>
+                      <path d="M23 9.5V18.5L14 23.5V14.5L23 9.5Z" fill="#7F4F24" stroke="#7F4F24" stroke-width="1.3" stroke-linejoin="round"/>
+                      <path d="M11 7.8L17 11.2M14 14.5V23.5" stroke="#EDE0D4" stroke-width="1" stroke-linecap="round"/>
+                    </svg>
+                  {%- when 'shield' -%}
+                    <!-- Quality Shield Icon -->
+                    <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M14 4L6 7.5V14C6 19 9.5 23.2 14 24.5C18.5 23.2 22 19 22 14V7.5L14 4Z" fill="#FEF3C7" stroke="#D97706" stroke-width="1.4"/>
+                      <path d="M10.5 14L13 16.5L17.5 11.5" stroke="#D97706" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  {%- else -%}
+                    <!-- Custom SVG override or Fallback Sparkle -->
+                    {%- if block.settings.custom_svg != blank -%}
+                      {{ block.settings.custom_svg }}
+                    {%- else -%}
+                      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="14" cy="14" r="10" fill="#FAF0CA" stroke="#EE964B" stroke-width="1.4"/>
+                        <path d="M14 7V21M7 14H21" stroke="#F95738" stroke-width="1.2" stroke-linecap="round"/>
+                      </svg>
+                    {%- endif -%}
+                {%- endcase -%}
+              </div>
+              <div class="ss-trust-sec__card-body">
+                <div class="ss-trust-sec__card-title">{{ block.settings.title }}</div>
+                <div class="ss-trust-sec__card-sub">{{ block.settings.subtitle }}</div>
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          <!-- Default 4 Cards if no blocks added -->
+          <div class="ss-trust-sec__card">
+            <div class="ss-trust-sec__icon-wrap">
+              <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 21C7 21 8.5 15.5 13.5 13C18.5 10.5 22.5 7 22.5 7C22.5 7 22 13 18.5 17.5C15 22 9.5 22 7 21Z" fill="#388E3C" stroke="#2E7D32" stroke-width="1.2"/>
+                <path d="M7 21C11.5 18 16 14.5 19 10" stroke="#E8F5E9" stroke-width="1.2" stroke-linecap="round"/>
+                <circle cx="7" cy="21" r="1.5" fill="#2E7D32"/>
+              </svg>
+            </div>
+            <div class="ss-trust-sec__card-body">
+              <div class="ss-trust-sec__card-title">100% Vegetarian</div>
+              <div class="ss-trust-sec__card-sub">pure veg kitchen & ingredients</div>
+            </div>
+          </div>
+
+          <div class="ss-trust-sec__card">
+            <div class="ss-trust-sec__icon-wrap">
+              <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11 5H17M12 5V10L7 20C6.2 21.6 7.3 23.5 9.1 23.5H18.9C20.7 23.5 21.8 21.6 21 20L16 10V5" stroke="#4B5563" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8.5 17H19.5" stroke="#4CAF50" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="12" cy="19.5" r="1.2" fill="#4CAF50"/>
+                <circle cx="16" cy="18.5" r="0.8" fill="#4CAF50"/>
+                <path d="M5 23L23 5" stroke="#D32F2F" stroke-width="1.5" stroke-linecap="round" opacity="0.75"/>
+              </svg>
+            </div>
+            <div class="ss-trust-sec__card-body">
+              <div class="ss-trust-sec__card-title">No Added Preservatives</div>
+              <div class="ss-trust-sec__card-sub">nothing you can't pronounce</div>
+            </div>
+          </div>
+
+          <div class="ss-trust-sec__card">
+            <div class="ss-trust-sec__icon-wrap">
+              <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="7" y="6" width="14" height="16" rx="2" fill="#F4E6D2" stroke="#9A6136" stroke-width="1.5"/>
+                <path d="M10 10H18M10 14H18M10 18H15" stroke="#78350F" stroke-width="1.2" stroke-linecap="round"/>
+                <path d="M5 8C5 6.9 5.9 6 7 6H8V22H7C5.9 22 5 21.1 5 20V8Z" fill="#DEB887" stroke="#9A6136" stroke-width="1.2"/>
+                <path d="M23 8C23 6.9 22.1 6 21 6H20V22H21C22.1 22 23 21.1 23 20V8Z" fill="#DEB887" stroke="#9A6136" stroke-width="1.2"/>
+              </svg>
+            </div>
+            <div class="ss-trust-sec__card-body">
+              <div class="ss-trust-sec__card-title">Authentic Family Recipe</div>
+              <div class="ss-trust-sec__card-sub">passed down, not reformulated</div>
+            </div>
+          </div>
+
+          <div class="ss-trust-sec__card">
+            <div class="ss-trust-sec__icon-wrap">
+              <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 9.5L14 4.5L23 9.5L14 14.5L5 9.5Z" fill="#DDB892" stroke="#7F4F24" stroke-width="1.3" stroke-linejoin="round"/>
+                <path d="M5 9.5V18.5L14 23.5V14.5L5 9.5Z" fill="#B08968" stroke="#7F4F24" stroke-width="1.3" stroke-linejoin="round"/>
+                <path d="M23 9.5V18.5L14 23.5V14.5L23 9.5Z" fill="#7F4F24" stroke="#7F4F24" stroke-width="1.3" stroke-linejoin="round"/>
+                <path d="M11 7.8L17 11.2M14 14.5V23.5" stroke="#EDE0D4" stroke-width="1" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="ss-trust-sec__card-body">
+              <div class="ss-trust-sec__card-title">Hygienically Packed</div>
+              <div class="ss-trust-sec__card-sub">food-grade, airtight festive boxes</div>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "SS Trust & Quality",
+  "tag": "section",
+  "class": "section-ss-trust-quality",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header Settings"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Eyebrow Text",
+      "default": "TRUST & QUALITY"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Main Heading",
+      "default": "Certified. Sealed. Sworn by taste."
+    },
+    {
+      "type": "header",
+      "content": "Featured FSSAI Quality Card"
+    },
+    {
+      "type": "image_picker",
+      "id": "fssai_logo",
+      "label": "FSSAI Logo Image (Optional override)"
+    },
+    {
+      "type": "text",
+      "id": "fssai_license_num_only",
+      "label": "FSSAI License Number (Under Logo)",
+      "default": "233220030000077"
+    },
+    {
+      "type": "text",
+      "id": "fssai_title",
+      "label": "FSSAI Card Title",
+      "default": "FSSAI Certified Quality"
+    },
+    {
+      "type": "text",
+      "id": "fssai_license",
+      "label": "FSSAI License Display Line",
+      "default": "License No. 233220030000077"
+    },
+    {
+      "type": "textarea",
+      "id": "fssai_desc",
+      "label": "FSSAI Description",
+      "default": "Every batch is manufactured, quality-checked and hygienically packed under our FSSAI license — traceable from our kitchen to your cookie jar."
+    },
+    {
+      "type": "text",
+      "id": "fssai_company_info",
+      "label": "Company & GST Footer Note",
+      "default": "A heritage brand of Yumee International, New Delhi · GSTIN 07AMZPJ4823B1ZX"
+    },
+    {
+      "type": "header",
+      "content": "Styling, Background & Spacing"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section Background Color",
+      "default": "#FAF5EE"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image (Optional Texture / Photo)"
+    },
+    {
+      "type": "range",
+      "id": "bg_image_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "%",
+      "label": "Background Image Opacity",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "bg_image_blur",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Background Image Blur",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 90
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trust_card",
+      "name": "Trust Feature Card",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Card Icon",
+          "options": [
+            { "value": "leaf", "label": "Vegetarian Leaf" },
+            { "value": "preservative", "label": "No Preservatives Flask" },
+            { "value": "recipe", "label": "Authentic Recipe Scroll" },
+            { "value": "package", "label": "Sealed Package Box" },
+            { "value": "shield", "label": "Quality Shield" },
+            { "value": "custom", "label": "Custom SVG" }
+          ],
+          "default": "leaf"
+        },
+        {
+          "type": "textarea",
+          "id": "custom_svg",
+          "label": "Custom SVG Code (if icon is 'Custom SVG')"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Feature Title",
+          "default": "Feature Title"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Feature Subtitle",
+          "default": "Feature description detail"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SS Trust & Quality",
+      "blocks": [
+        {
+          "type": "trust_card",
+          "settings": {
+            "icon": "leaf",
+            "title": "100% Vegetarian",
+            "subtitle": "pure veg kitchen & ingredients"
+          }
+        },
+        {
+          "type": "trust_card",
+          "settings": {
+            "icon": "preservative",
+            "title": "No Added Preservatives",
+            "subtitle": "nothing you can't pronounce"
+          }
+        },
+        {
+          "type": "trust_card",
+          "settings": {
+            "icon": "recipe",
+            "title": "Authentic Family Recipe",
+            "subtitle": "passed down, not reformulated"
+          }
+        },
+        {
+          "type": "trust_card",
+          "settings": {
+            "icon": "package",
+            "title": "Hygienically Packed",
+            "subtitle": "food-grade, airtight festive boxes"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
