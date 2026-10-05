@@ -66,14 +66,15 @@
 .ss-announcement-bar {
   background-color: var(--ss-color-brown-dark);
   color: #F0E6D8;
-  height: 38px;
+  min-height: 40px;
+  height: auto;
   overflow: hidden;
   position: relative;
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 16px;
+  padding: 6px 16px;
   width: 100%;
 }
 
@@ -81,7 +82,7 @@
   position: relative;
   width: 100%;
   max-width: 960px;
-  height: 100%;
+  min-height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -89,34 +90,35 @@
 
 .ss-announcement-slide {
   position: absolute;
-  top: 0;
+  top: 50%;
   left: 0;
   width: 100%;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(14px);
+  transform: translateY(-50%) translateY(14px);
   transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   text-align: center;
   font-size: 13px;
+  line-height: 1.4;
   font-weight: 500;
   letter-spacing: 0.3px;
+  padding: 2px 0;
 }
 
 .ss-announcement-slide.is-active {
   opacity: 1;
   visibility: visible;
-  transform: translateY(0);
+  transform: translateY(-50%) translateY(0);
 }
 
 .ss-announcement-slide.is-exiting {
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-14px);
+  transform: translateY(-50%) translateY(-14px);
 }
 
 .ss-announcement-link {
@@ -1833,8 +1835,15 @@ shopify-account:not(:defined) {
 @media (max-width: 576px) {
   .ss-announcement-bar {
     font-size: 11.5px;
-    padding: 0 10px;
-    height: 34px;
+    padding: 8px 12px;
+    min-height: 42px;
+    height: auto;
+  }
+
+  .ss-announcement-slide {
+    font-size: 11.5px;
+    line-height: 1.45;
+    padding: 2px 4px;
   }
 
   .ss-main-header {

@@ -119,6 +119,10 @@
       {%- if collection.products.size > 0 -%}
         {%- for prod in collection.products -%}
           {%- liquid
+            assign title_lower = prod.title | downcase
+            if title_lower contains 'zenman' or title_lower contains 'test product' or title_lower contains 'demo'
+              continue
+            endif
             assign compare_at = prod.compare_at_price
             assign price = prod.price
             assign savings_amount = 0
@@ -128,7 +132,6 @@
               assign discount_pct = savings_amount | times: 100.0 | divided_by: compare_at | round
             endif
             assign first_variant = prod.selected_or_first_available_variant
-            assign title_lower = prod.title | downcase
             assign tags_lower = prod.tags | join: ' ' | downcase
             assign type_lower = prod.type | downcase
           -%}

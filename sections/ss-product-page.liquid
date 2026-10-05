@@ -29,7 +29,6 @@
   endif
 
   assign featured_img = product.featured_image | default: current_variant.image
-  assign related_collection = collection | default: product.collections.first | default: collections.all
 -%}
 
 <section
@@ -582,117 +581,173 @@
 
     {%- comment -%} 6. Related Delicacies Recommendations (Exact Match to Collection Card Layout) {%- endcomment -%}
     {%- if section.settings.show_related_products -%}
+      {%- liquid
+        assign rel_limit = section.settings.related_products_count | default: 3
+
+        # 1. First priority: Merchant chosen collection in theme settings
+        assign rel_col = section.settings.related_collection
+        
+        # 2. Second priority: Current page collection context (if accessed from collection)
+        if rel_col == blank and collection != blank and collection.products_count > 1
+          assign rel_col = collection
+        endif
+
+        # 3. Third priority: The product's own primary collection (skip generic 'frontpage' or 'all' if possible)
+        if rel_col == blank and product.collections.size > 0
+          for c in product.collections
+            assign ch = c.handle | downcase
+            unless ch == 'frontpage' or ch == 'all'
+              assign rel_col = c
+              break
+            endunless
+          endfor
+          if rel_col == blank
+            assign rel_col = product.collections.first
+          endif
+        endif
+
+        # 4. Fallback: All products collection
+        if rel_col == blank
+          assign rel_col = collections.all
+        endif
+      -%}
+
       <div class="ss-prod-related-section">
         <div class="ss-prod-related-header">
-          <span class="ss-prod-related-eyebrow">✦ MORE SACRED DELICACIES ✦</span>
-          <h2 class="ss-prod-related-title">You May Also Relish</h2>
+          <span class="ss-prod-related-eyebrow">{{ section.settings.related_eyebrow | default: '✦ MORE SACRED DELICACIES ✦' }}</span>
+          <h2 class="ss-prod-related-title">{{ section.settings.related_title | default: 'You May Also Relish' }}</h2>
         </div>
 
         <div class="ss-prod-related-grid">
-          {%- assign rel_count = 0 -%}
-          {%- if related_collection != blank and related_collection.products.size > 1 -%}
-            {%- for rel_prod in related_collection.products -%}
-              {%- if rel_prod.id != product.id and rel_count < 3 -%}
-                {%- assign rel_count = rel_count | plus: 1 -%}
-                {%- liquid
-                  assign r_var = rel_prod.selected_or_first_available_variant
-                  assign r_comp = r_var.compare_at_price
-                  assign r_price = r_var.price
-                  assign r_save = 0
-                  assign r_pct = 0
-                  if r_comp > r_price
-                    assign r_save = r_comp | minus: r_price
-                    assign r_pct = r_save | times: 100.0 | divided_by: r_comp | round
-                  endif
-                -%}
-                <div class="ss-prod-rec-card">
-                  <a href="{{ rel_prod.url }}" class="ss-prod-rec-card__media-wrap" aria-label="{{ rel_prod.title | escape }}">
-                    {%- if rel_prod.featured_image != blank -%}
-                      <img
-                        src="{{ rel_prod.featured_image | image_url: width: 600 }}"
-                        alt="{{ rel_prod.title | escape }}"
-                        class="ss-prod-rec-card__img"
-                        width="500"
-                        height="500"
-                        loading="lazy"
-                      >
-                    {%- else -%}
-                      <img
-                        src="{{ 'ss-thekua-crafting-art.jpg' | asset_url }}"
-                        alt="{{ rel_prod.title | escape }}"
-                        class="ss-prod-rec-card__img"
-                        width="500"
-                        height="500"
-                        loading="lazy"
-                      >
-                    {%- endif -%}
+          {%- assign rel_rendered = 0 -%}
 
-                    {%- if r_pct > 0 -%}
-                      <div class="ss-prod-rec-card__discount-badge">{{ r_pct }}% OFF</div>
-                    {%- endif -%}
+          {%- if rel_col != blank and rel_col.products.size > 0 -%}
+            {%- for rel_prod in rel_col.products -%}
+              {%- liquid
+                # Exclude current product
+                if rel_prod.id == product.id
+                  continue
+                endif
 
-                    <button
-                      type="button"
-                      class="ss-prod-rec-card__wishlist-btn"
-                      data-wishlist-id="{{ rel_prod.id }}"
-                      aria-label="Add to Wishlist"
-                      title="Save for later"
+                # Exclude test items, blog duplicates, or dummy non-thekua test products
+                assign t_low = rel_prod.title | downcase
+                assign h_low = rel_prod.handle | downcase
+                if t_low contains 'zenman' or h_low contains 'zenman' or t_low contains 'test' or t_low contains 'demo' or t_low contains 'sample' or t_low contains 'blog' or t_low contains 'article'
+                  continue
+                endif
+
+                # Exclude 0 price or draft/unavailable products
+                if rel_prod.price == 0 or rel_prod.available == false and rel_prod.variants.size == 0
+                  continue
+                endif
+
+                if rel_rendered >= rel_limit
+                  break
+                endif
+
+                assign rel_rendered = rel_rendered | plus: 1
+                assign r_var = rel_prod.selected_or_first_available_variant
+                assign r_comp = r_var.compare_at_price
+                assign r_price = r_var.price
+                assign r_save = 0
+                assign r_pct = 0
+                if r_comp > r_price
+                  assign r_save = r_comp | minus: r_price
+                  assign r_pct = r_save | times: 100.0 | divided_by: r_comp | round
+                endif
+              -%}
+              <div class="ss-prod-rec-card">
+                <a href="{{ rel_prod.url }}" class="ss-prod-rec-card__media-wrap" aria-label="{{ rel_prod.title | escape }}">
+                  {%- if rel_prod.featured_image != blank -%}
+                    <img
+                      src="{{ rel_prod.featured_image | image_url: width: 600 }}"
+                      alt="{{ rel_prod.title | escape }}"
+                      class="ss-prod-rec-card__img"
+                      width="500"
+                      height="500"
+                      loading="lazy"
                     >
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                      </svg>
-                    </button>
+                  {%- else -%}
+                    <img
+                      src="{{ 'ss-thekua-crafting-art.jpg' | asset_url }}"
+                      alt="{{ rel_prod.title | escape }}"
+                      class="ss-prod-rec-card__img"
+                      width="500"
+                      height="500"
+                      loading="lazy"
+                    >
+                  {%- endif -%}
+
+                  {%- if r_pct > 0 -%}
+                    <div class="ss-prod-rec-card__discount-badge">{{ r_pct }}% OFF</div>
+                  {%- endif -%}
+
+                  <button
+                    type="button"
+                    class="ss-prod-rec-card__wishlist-btn"
+                    data-wishlist-id="{{ rel_prod.id }}"
+                    aria-label="Add to Wishlist"
+                    title="Save for later"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                  </button>
+                </a>
+
+                <div class="ss-prod-rec-card__body">
+                  <a href="{{ rel_prod.url }}" class="ss-prod-rec-card__title" title="{{ rel_prod.title | escape }}">
+                    {{ rel_prod.title }}
                   </a>
 
-                  <div class="ss-prod-rec-card__body">
-                    <a href="{{ rel_prod.url }}" class="ss-prod-rec-card__title" title="{{ rel_prod.title | escape }}">
-                      {{ rel_prod.title }}
-                    </a>
+                  <div class="ss-prod-rec-card__rating-row">
+                    <span class="ss-prod-rec-card__star">★ 4.9</span>
+                    <span class="ss-prod-rec-card__reviews">(1.6k+ reviews)</span>
+                  </div>
 
-                    <div class="ss-prod-rec-card__rating-row">
-                      <span class="ss-prod-rec-card__star">★ 4.9</span>
-                      <span class="ss-prod-rec-card__reviews">(1.6k+ reviews)</span>
-                    </div>
-
-                    <div class="ss-prod-rec-card__price-row">
-                      {%- if r_comp > r_price -%}
-                        <span class="ss-prod-rec-card__compare-price">{{ r_comp | money }}</span>
-                      {%- endif -%}
-                      <span class="ss-prod-rec-card__price">{{ r_price | money }}</span>
-                    </div>
-
-                    {%- if r_save > 0 -%}
-                      <div class="ss-prod-rec-card__savings">Save {{ r_save | money }}</div>
+                  <div class="ss-prod-rec-card__price-row">
+                    {%- if r_comp > r_price -%}
+                      <span class="ss-prod-rec-card__compare-price">{{ r_comp | money }}</span>
                     {%- endif -%}
+                    <span class="ss-prod-rec-card__price">{{ r_price | money }}</span>
+                  </div>
 
-                    <div class="ss-prod-rec-card__actions">
-                      <button
-                        type="button"
-                        class="ss-prod-rec-card__add-btn"
-                        data-variant-id="{{ r_var.id | default: 1 }}"
-                        data-ss-rec-add-cart
-                        aria-label="Add {{ rel_prod.title | escape }} to basket"
-                      >
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                          <line x1="3" y1="6" x2="21" y2="6"></line>
-                          <path d="M16 10a4 4 0 0 1-8 0"></path>
-                        </svg>
-                        <span>+ ADD TO BASKET</span>
-                      </button>
-                      <a href="{{ rel_prod.url }}" class="ss-prod-rec-card__view-btn">
-                        View Details
-                      </a>
-                    </div>
+                  {%- if r_save > 0 -%}
+                    <div class="ss-prod-rec-card__savings">Save {{ r_save | money }}</div>
+                  {%- endif -%}
+
+                  <div class="ss-prod-rec-card__actions">
+                    <button
+                      type="button"
+                      class="ss-prod-rec-card__add-btn"
+                      data-variant-id="{{ r_var.id | default: 1 }}"
+                      data-ss-rec-add-cart
+                      aria-label="Add {{ rel_prod.title | escape }} to basket"
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                      </svg>
+                      <span>+ ADD TO BASKET</span>
+                    </button>
+                    <a href="{{ rel_prod.url }}" class="ss-prod-rec-card__view-btn">
+                      View Details
+                    </a>
                   </div>
                 </div>
-              {%- endif -%}
+              </div>
             {%- endfor -%}
           {%- endif -%}
 
-          {%- if rel_count < 3 -%}
-            {%- comment -%} Fallback cards if store has fewer products {%- endcomment -%}
-            {%- if rel_count < 1 -%}
+          {%- comment -%}
+            If no products were rendered from live catalog (e.g. newly initialized dev store or single product in catalog),
+            render curated Mithila Thekua recommendations that are different from the current product.
+          {%- endcomment -%}
+          {%- if rel_rendered == 0 -%}
+            {%- assign cur_title_low = product.title | downcase -%}
+            
+            {%- unless cur_title_low contains 'gud' and cur_title_low contains '1 kg' -%}
               <div class="ss-prod-rec-card">
                 <a href="/products/pure-desi-ghee-gud-thekua" class="ss-prod-rec-card__media-wrap">
                   <img src="{{ 'ss-thekua-crafting-art.jpg' | asset_url }}" alt="Pure Desi Ghee Gud Thekua 1 Kg" class="ss-prod-rec-card__img" width="500" height="500" loading="lazy">
@@ -718,9 +773,9 @@
                   </div>
                 </div>
               </div>
-            {%- endif -%}
+            {%- endunless -%}
 
-            {%- if rel_count < 2 -%}
+            {%- unless cur_title_low contains 'sugar' and cur_title_low contains '1 kg' -%}
               <div class="ss-prod-rec-card">
                 <a href="/products/pure-desi-ghee-sugar-thekua" class="ss-prod-rec-card__media-wrap">
                   <img src="{{ 'ss-hero-slide-2.jpg' | asset_url }}" alt="Pure Desi Ghee Sugar Thekua 1 Kg" class="ss-prod-rec-card__img" width="500" height="500" loading="lazy">
@@ -746,9 +801,9 @@
                   </div>
                 </div>
               </div>
-            {%- endif -%}
+            {%- endunless -%}
 
-            {%- if rel_count < 3 -%}
+            {%- unless cur_title_low contains '500g' -%}
               <div class="ss-prod-rec-card">
                 <a href="/products/pure-desi-ghee-sugar-thekua-500g" class="ss-prod-rec-card__media-wrap">
                   <img src="{{ 'ss-hero-slide-3.jpg' | asset_url }}" alt="Pure Desi Ghee Sugar Thekua 500g" class="ss-prod-rec-card__img" width="500" height="500" loading="lazy">
@@ -774,7 +829,7 @@
                   </div>
                 </div>
               </div>
-            {%- endif -%}
+            {%- endunless -%}
           {%- endif -%}
         </div>
       </div>
@@ -800,10 +855,10 @@
         <div class="ss-review-form-group">
           <label class="ss-review-form-label">Overall Rating *</label>
           <div class="ss-review-star-selector" data-ss-star-selector>
-            <button type="button" class="ss-star-rate-btn" data-star-value="1" aria-label="1 Star">★</button>
-            <button type="button" class="ss-star-rate-btn" data-star-value="2" aria-label="2 Stars">★</button>
-            <button type="button" class="ss-star-rate-btn" data-star-value="3" aria-label="3 Stars">★</button>
-            <button type="button" class="ss-star-rate-btn" data-star-value="4" aria-label="4 Stars">★</button>
+            <button type="button" class="ss-star-rate-btn is-active" data-star-value="1" aria-label="1 Star">★</button>
+            <button type="button" class="ss-star-rate-btn is-active" data-star-value="2" aria-label="2 Stars">★</button>
+            <button type="button" class="ss-star-rate-btn is-active" data-star-value="3" aria-label="3 Stars">★</button>
+            <button type="button" class="ss-star-rate-btn is-active" data-star-value="4" aria-label="4 Stars">★</button>
             <button type="button" class="ss-star-rate-btn is-active" data-star-value="5" aria-label="5 Stars">★</button>
           </div>
           <input type="hidden" name="rating" id="ss-review-rating-val" value="5" data-ss-rating-input>
@@ -892,10 +947,41 @@
       "default": "✦ SWAAD SAMVAAD MITHILA SPECIAL ✦"
     },
     {
+      "type": "header",
+      "content": "Related Delicacies"
+    },
+    {
       "type": "checkbox",
       "id": "show_related_products",
-      "label": "Show Related Products Section",
+      "label": "Show Related Section",
       "default": true
+    },
+    {
+      "type": "collection",
+      "id": "related_collection",
+      "label": "Custom Collection",
+      "info": "Leave blank to auto-detect this product's collection"
+    },
+    {
+      "type": "range",
+      "id": "related_products_count",
+      "label": "Products to Show",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "text",
+      "id": "related_eyebrow",
+      "label": "Related Eyebrow Text",
+      "default": "✦ MORE SACRED DELICACIES ✦"
+    },
+    {
+      "type": "text",
+      "id": "related_title",
+      "label": "Related Section Title",
+      "default": "You May Also Relish"
     },
     {
       "type": "header",

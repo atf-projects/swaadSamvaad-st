@@ -68,48 +68,7 @@
       </div>
     </div>
 
-    {%- comment -%} 2. Category / Tag Filter Chips {%- endcomment -%}
-    {%- if show_category_filter -%}
-      <div class="ss-blog-page__filter-wrap">
-        <div class="ss-blog-page__filter-scroll" data-ss-blog-filters>
-          <a
-            href="{{ blog.url }}"
-            class="ss-blog-filter-chip {% if current_tags == blank %}is-active{% endif %}"
-            data-tag="all"
-          >
-            <span>All Stories</span>
-          </a>
 
-          {%- if section.settings.filter_menu != blank and linklists[section.settings.filter_menu].links.size > 0 -%}
-            {%- for link in linklists[section.settings.filter_menu].links -%}
-              <a
-                href="{{ link.url }}"
-                class="ss-blog-filter-chip {% if link.active %}is-active{% endif %}"
-              >
-                <span>{{ link.title }}</span>
-              </a>
-            {%- endfor -%}
-          {%- elsif blog.all_tags.size > 0 -%}
-            {%- for tag in blog.all_tags -%}
-              <a
-                href="{{ blog.url }}/tagged/{{ tag | handle }}"
-                class="ss-blog-filter-chip {% if current_tags contains tag %}is-active{% endif %}"
-                data-tag="{{ tag | handle }}"
-              >
-                <span>{{ tag | capitalize }}</span>
-              </a>
-            {%- endfor -%}
-          {%- else -%}
-            {%- comment -%} Fallback curated topic tags {%- endcomment -%}
-            <button type="button" class="ss-blog-filter-chip is-active" data-tag="all">All Stories</button>
-            <button type="button" class="ss-blog-filter-chip" data-tag="heritage">Mithila Heritage</button>
-            <button type="button" class="ss-blog-filter-chip" data-tag="chhath">Chhath Mahaparv</button>
-            <button type="button" class="ss-blog-filter-chip" data-tag="desi-ghee">Desi Ghee Secrets</button>
-            <button type="button" class="ss-blog-filter-chip" data-tag="recipes">Authentic Recipes</button>
-          {%- endif -%}
-        </div>
-      </div>
-    {%- endif -%}
 
     {%- if blog.articles.size > 0 -%}
       
@@ -552,7 +511,7 @@
         </div>
 
         <div class="ss-blog-products-showcase__footer">
-          <a href="/#products" class="ss-blog-products-showcase__explore-btn">
+          <a href="{{ section.settings.explore_button_link | default: routes.all_products_collection_url }}" class="ss-blog-products-showcase__explore-btn">
             <span>Explore All Authentic Thekuas</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
@@ -602,18 +561,6 @@
       "default": true
     },
     {
-      "type": "checkbox",
-      "id": "show_category_filter",
-      "label": "Show Topic Filter Chips",
-      "default": true
-    },
-    {
-      "type": "link_list",
-      "id": "filter_menu",
-      "label": "Custom Category Menu (Optional)",
-      "info": "Select a menu created under Navigation, or leave empty to auto-load Article Tags"
-    },
-    {
       "type": "header",
       "content": "Product Drive Section (Bottom)"
     },
@@ -622,6 +569,11 @@
       "id": "show_featured_products",
       "label": "Show Featured Products Showcase",
       "default": true
+    },
+    {
+      "type": "url",
+      "id": "explore_button_link",
+      "label": "Explore All Button Link"
     },
     {
       "type": "collection",

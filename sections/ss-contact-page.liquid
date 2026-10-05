@@ -1,0 +1,399 @@
+{% comment %}
+  Section: Swaad Samvaad - Luxury Traditional Mithila Contact Page (sections/ss-contact-page.liquid)
+  Features:
+  - Heritage Breadcrumbs & Auspicious Motifs.
+  - 3 Quick Contact Info Cards (WhatsApp/Call, Darbhanga Rasoi HQ, Email Support).
+  - 2-Column Contact Showcase (Smart Contact Form + FAQ & Mithila Hospitality Pledge).
+  - Category / Subject Quick Select Chips.
+  - Native Shopify Contact Form Integration with success/error alerts.
+  - Interactive FAQ Accordions with smooth animated toggles.
+  - 100% Custom CSS & Responsive (Desktop, Tablet, Mobile).
+{% endcomment %}
+
+{{ 'ss-contact-page.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'ss-contact-page.js' | asset_url }}" defer="defer"></script>
+
+<section
+  id="ss-contact-page-{{ section.id }}"
+  class="ss-contact-page"
+  data-ss-contact-page
+  style="
+    --ss-contact-pad-top: {{ section.settings.padding_top | default: 24 }}px;
+    --ss-contact-pad-bottom: {{ section.settings.padding_bottom | default: 72 }}px;
+  "
+>
+  <div class="ss-contact-container">
+
+    {%- comment -%} 1. Breadcrumbs {%- endcomment -%}
+    <nav class="ss-contact-breadcrumbs" aria-label="Breadcrumbs">
+      <a href="{{ routes.root_url }}">Home</a>
+      <span class="ss-contact-breadcrumbs__sep">❖</span>
+      <span class="ss-contact-breadcrumbs__current">Contact Us</span>
+    </nav>
+
+    {%- comment -%} 2. Hero Header {%- endcomment -%}
+    <div class="ss-contact-hero">
+      <div class="ss-contact-eyebrow">
+        <span class="ss-contact-eyebrow-line"></span>
+        <span>{{ section.settings.eyebrow_text | default: '✦ SWAAD SAMVAAD • MITHILA RASOI ✦' }}</span>
+        <span class="ss-contact-eyebrow-line"></span>
+      </div>
+
+      <h1 class="ss-contact-title">
+        {{ section.settings.heading | default: 'Get in Touch with Our Master Rasoiya' }}
+      </h1>
+
+      <p class="ss-contact-subtitle">
+        {{ section.settings.subheading | default: 'Have a query about our pure desi ghee delicacies, bulk festive gifting for Chhath Puja or weddings, or order status? We are here to serve you with authentic Mithila hospitality.' }}
+      </p>
+    </div>
+
+    {%- comment -%} 3. Quick Info Cards Strip {%- endcomment -%}
+    <div class="ss-contact-cards-grid">
+      <!-- Card 1: Phone & WhatsApp -->
+      <div class="ss-contact-card">
+        <div class="ss-contact-card__icon-wrap">
+          <span>💬</span>
+        </div>
+        <div class="ss-contact-card__content">
+          <h3>Call & WhatsApp Helpdesk</h3>
+          <p>Instant support for orders, delivery tracking, and custom requests.</p>
+          <div class="ss-contact-card__links">
+            <a href="tel:+919876543210" class="ss-contact-link ss-contact-link--phone">
+              <strong>+91 98765 43210</strong>
+            </a>
+            <a
+              href="https://wa.me/919876543210?text=Namaste!%20I%20have%20an%20inquiry%20regarding%20Swaad%20Samvaad%20Thekua."
+              target="_blank"
+              rel="noopener"
+              class="ss-contact-card__whatsapp-btn"
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+              </svg>
+              <span>Chat on WhatsApp</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Email & Bulk Orders -->
+      <div class="ss-contact-card">
+        <div class="ss-contact-card__icon-wrap">
+          <span>✉️</span>
+        </div>
+        <div class="ss-contact-card__content">
+          <h3>Email & Gifting Desk</h3>
+          <p>For corporate gifting, distributor inquiries, and general feedback.</p>
+          <div class="ss-contact-card__links">
+            <a href="mailto:namaste@swaadsamvaad.com" class="ss-contact-link">
+              <strong>namaste@swaadsamvaad.com</strong>
+            </a>
+            <span class="ss-contact-card__badge">Avg. response within 2 hours</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Darbhanga Heritage Rasoi -->
+      <div class="ss-contact-card">
+        <div class="ss-contact-card__icon-wrap">
+          <span>🪔</span>
+        </div>
+        <div class="ss-contact-card__content">
+          <h3>Heritage Mithila Rasoi</h3>
+          <p>Village Rampur, Near Raj Compound, Darbhanga, Bihar - 846004</p>
+          <div class="ss-contact-card__links">
+            <span class="ss-contact-card__timings">
+              <strong>Mon - Sat:</strong> 9:00 AM – 8:00 PM IST
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} 4. Main 2-Column Showcase (Form + FAQ & Pledge) {%- endcomment -%}
+    <div class="ss-contact-main-grid">
+
+      {%- comment -%} Left Column: Form {%- endcomment -%}
+      <div class="ss-contact-form-wrap">
+        <div class="ss-contact-form-header">
+          <span class="ss-contact-form-eyebrow">✦ WRITE TO US ✦</span>
+          <h2 class="ss-contact-form-title">Send Us a Message</h2>
+          <p class="ss-contact-form-desc">Fill out the details below and our team will get back to you promptly.</p>
+        </div>
+
+        {%- form 'contact', id: 'ss-main-contact-form', class: 'ss-contact-form' -%}
+          {%- if form.posted_successfully? -%}
+            <div class="ss-contact-alert ss-contact-alert--success" role="alert">
+              <span class="ss-contact-alert__icon">✓</span>
+              <div>
+                <strong>Dhanyawaad! Message Sent Successfully.</strong>
+                <p>Our Mithila team has received your note and will reach out within a few hours.</p>
+              </div>
+            </div>
+          {%- elsif form.errors -%}
+            <div class="ss-contact-alert ss-contact-alert--error" role="alert">
+              <span class="ss-contact-alert__icon">⚠</span>
+              <div>
+                <strong>Please check the highlighted fields:</strong>
+                <p>{{ form.errors | default_errors }}</p>
+              </div>
+            </div>
+          {%- endif -%}
+
+          <!-- Inquiry Category Quick Chips -->
+          <div class="ss-contact-field-group">
+            <label class="ss-contact-label">Reason for Inquiry:</label>
+            <div class="ss-contact-subject-chips" data-ss-subject-chips>
+              <button type="button" class="ss-contact-chip is-active" data-subject="Order Status & Delivery Tracking">
+                📦 Order Tracking
+              </button>
+              <button type="button" class="ss-contact-chip" data-subject="Bulk & Festive Gifting Inquiry">
+                🎁 Festive / Bulk Gifting
+              </button>
+              <button type="button" class="ss-contact-chip" data-subject="Special Recipe / Ingredient Question">
+                🧈 Recipe & Taste
+              </button>
+              <button type="button" class="ss-contact-chip" data-subject="General Support / Other">
+                ✨ General Support
+              </button>
+            </div>
+            <input type="hidden" name="contact[inquiry_type]" id="ss-contact-subject-input" value="Order Status & Delivery Tracking">
+          </div>
+
+          <!-- Name & Phone Row -->
+          <div class="ss-contact-fields-row">
+            <div class="ss-contact-field-group">
+              <label class="ss-contact-label" for="ss-contact-name">Your Full Name *</label>
+              <input
+                type="text"
+                id="ss-contact-name"
+                name="contact[name]"
+                class="ss-contact-input"
+                placeholder="e.g. Priyanshu Jha"
+                value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+                required
+              >
+            </div>
+
+            <div class="ss-contact-field-group">
+              <label class="ss-contact-label" for="ss-contact-phone">Phone Number / WhatsApp *</label>
+              <input
+                type="tel"
+                id="ss-contact-phone"
+                name="contact[phone]"
+                class="ss-contact-input"
+                placeholder="e.g. +91 98765 43210"
+                value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+                required
+              >
+            </div>
+          </div>
+
+          <!-- Email & Order ID Row -->
+          <div class="ss-contact-fields-row">
+            <div class="ss-contact-field-group">
+              <label class="ss-contact-label" for="ss-contact-email">Email Address *</label>
+              <input
+                type="email"
+                id="ss-contact-email"
+                name="contact[email]"
+                class="ss-contact-input"
+                placeholder="e.g. yourname@example.com"
+                value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                required
+              >
+            </div>
+
+            <div class="ss-contact-field-group">
+              <label class="ss-contact-label" for="ss-contact-order-id">Order Number (Optional)</label>
+              <input
+                type="text"
+                id="ss-contact-order-id"
+                name="contact[order_number]"
+                class="ss-contact-input"
+                placeholder="e.g. #SS-1048"
+              >
+            </div>
+          </div>
+
+          <!-- Message Textarea -->
+          <div class="ss-contact-field-group">
+            <label class="ss-contact-label" for="ss-contact-message">Your Message / Requirements *</label>
+            <textarea
+              id="ss-contact-message"
+              name="contact[body]"
+              class="ss-contact-textarea"
+              rows="5"
+              placeholder="Please share your questions, custom gift pack quantities, or delivery requirements here..."
+              required
+            >{{ form.body }}</textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="ss-contact-submit-btn">
+            <span>Send Message to Rasoi ✦</span>
+          </button>
+        {%- endform -%}
+      </div>
+
+      {%- comment -%} Right Column: Mithila Hospitality & FAQs {%- endcomment -%}
+      <div class="ss-contact-side-wrap">
+
+        <!-- Mithila Hospitality Pledge Card -->
+        <div class="ss-contact-pledge-card">
+          <div class="ss-contact-pledge-header">
+            <span class="ss-contact-pledge-icon">🪔</span>
+            <div>
+              <h3>Swaad Samvaad Seva Pledge</h3>
+              <p>Sacred Taste • Supreme Freshness • Divine Purity</p>
+            </div>
+          </div>
+          <ul class="ss-contact-pledge-list">
+            <li>
+              <strong>🧈 100% Pure Cow Desi Ghee:</strong> Slow-simmered in small batches with zero palm oil or chemical preservatives.
+            </li>
+            <li>
+              <strong>📦 Express Pan-India Air Dispatch:</strong> Packed in food-grade aroma-lock boxes and delivered across 28,000+ PIN codes.
+            </li>
+            <li>
+              <strong>🌿 Artisanal Wood Sancha Carving:</strong> Hand-pressed with sacred Surya and Lotus motifs by rural Mithila women artisans.
+            </li>
+          </ul>
+        </div>
+
+        <!-- FAQ Accordions -->
+        <div class="ss-contact-faq-wrap">
+          <h3 class="ss-contact-faq-heading">Frequently Asked Questions</h3>
+
+          <div class="ss-contact-faqs" data-ss-contact-faqs>
+            <details class="ss-contact-faq-item" open>
+              <summary class="ss-contact-faq-summary">
+                <strong>How fast is order dispatch and delivery?</strong>
+                <span class="ss-contact-faq-icon"></span>
+              </summary>
+              <div class="ss-contact-faq-content">
+                <p>Every order is prepared fresh on the day of baking in our Darbhanga rasoi and dispatched within 24 hours. Most metro cities receive delivery within 3-4 business days via express air courier.</p>
+              </div>
+            </details>
+
+            <details class="ss-contact-faq-item">
+              <summary class="ss-contact-faq-summary">
+                <strong>Do you handle bulk festive & wedding orders?</strong>
+                <span class="ss-contact-faq-icon"></span>
+              </summary>
+              <div class="ss-contact-faq-content">
+                <p>Yes! We curate specialized gift hampers with personalized greeting tags and decorative Mithila art packaging for Chhath Puja, Diwali, corporate gifting, and weddings. Reach us via WhatsApp or phone for custom quotes.</p>
+              </div>
+            </details>
+
+            <details class="ss-contact-faq-item">
+              <summary class="ss-contact-faq-summary">
+                <strong>What is the shelf life of the Thekua?</strong>
+                <span class="ss-contact-faq-icon"></span>
+              </summary>
+              <div class="ss-contact-faq-content">
+                <p>Our Desi Ghee Thekua stays crispy and fresh for up to <strong>60 days</strong> at room temperature in an airtight steel or glass jar. No refrigeration is needed.</p>
+              </div>
+            </details>
+
+            <details class="ss-contact-faq-item">
+              <summary class="ss-contact-faq-summary">
+                <strong>Can I track my shipment in real-time?</strong>
+                <span class="ss-contact-faq-icon"></span>
+              </summary>
+              <div class="ss-contact-faq-content">
+                <p>Yes, as soon as your batch leaves our kitchen, you receive live WhatsApp & SMS tracking links with courier details (BlueDart/Delhivery).</p>
+              </div>
+            </details>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    {%- comment -%} 5. Mithila Purity Bottom Strip {%- endcomment -%}
+    <div class="ss-contact-purity-strip">
+      <div class="ss-contact-purity-item">
+        <div class="ss-contact-purity-icon">🧈</div>
+        <div class="ss-contact-purity-text">
+          <strong>100% Cow Ghee Only</strong>
+          <p>Zero palm oil, authentic aroma</p>
+        </div>
+      </div>
+      <div class="ss-contact-purity-item">
+        <div class="ss-contact-purity-icon">🪵</div>
+        <div class="ss-contact-purity-text">
+          <strong>Wood-Carved Sancha</strong>
+          <p>Hand-pressed sacred motifs</p>
+        </div>
+      </div>
+      <div class="ss-contact-purity-item">
+        <div class="ss-contact-purity-icon">💬</div>
+        <div class="ss-contact-purity-text">
+          <strong>24/7 WhatsApp Help</strong>
+          <p>Prompt assistance anytime</p>
+        </div>
+      </div>
+      <div class="ss-contact-purity-item">
+        <div class="ss-contact-purity-icon">📦</div>
+        <div class="ss-contact-purity-text">
+          <strong>Aroma-Lock Transit</strong>
+          <p>Zero breakage guarantee</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Swaad Contact Page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Eyebrow Text",
+      "default": "✦ SWAAD SAMVAAD • MITHILA RASOI ✦"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Main Heading",
+      "default": "Get in Touch with Our Master Rasoiya"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading Description",
+      "default": "Have a query about our pure desi ghee delicacies, bulk festive gifting for Chhath Puja or weddings, or order status? We are here to serve you with authentic Mithila hospitality."
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top Spacing",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom Spacing",
+      "min": 20,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 75
+    }
+  ]
+}
+{% endschema %}

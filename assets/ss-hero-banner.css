@@ -354,8 +354,8 @@
 
 .ss-hero__stars {
   color: #FBBF24;
-  font-size: 13px;
-  letter-spacing: 2px;
+  font-size: 16px;
+  line-height: 1;
 }
 
 .ss-hero__rating-num {
@@ -520,7 +520,7 @@
     max-width: 100%;
     gap: 13px;
     background: rgb(20 10 5 / 13%);
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(14px);
     border: 1px solid rgba(245, 197, 138, 0.28);
     border-radius: 20px;

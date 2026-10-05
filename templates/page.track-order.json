@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "main": {
+      "type": "ss-track-order",
+      "settings": {
+        "eyebrow_text": "✦ SWAAD SAMVAAD DISPATCH & LOGISTICS ✦",
+        "heading": "Track Your Sacred Mithila Parcel",
+        "subheading": "Enter your Order ID (e.g. #SS-9821) along with your registered Phone / Email or AWB Number to check the live batch crafting and express courier status.",
+        "padding_top": 25,
+        "padding_bottom": 75
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

@@ -1,0 +1,412 @@
+{% comment %}
+  Section: Swaad Samvaad - Luxury Traditional Mithila Collections List Page (sections/ss-collections-list.liquid)
+  Features:
+  - Heritage Mithila Header with Breadcrumbs & Auspicious Motifs.
+  - Luxury Responsive Collection Cards Grid (Desktop 3/2 cols, Tablet 2 cols, Mobile 1 col).
+  - High-resolution imagery with subtle zoom hover, product count badge, and clean descriptions.
+  - Swaad Samvaad Purity & Freshness Assurance Strip.
+  - 100% Custom Scoped CSS & Fully Responsive.
+{% endcomment %}
+
+{{ 'ss-collections-list.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign eyebrow_text = section.settings.eyebrow_text | default: '✦ SWAAD SAMVAAD • MITHILA RASOI ✦'
+  assign heading = section.settings.heading | default: 'Our Curated Mithila Collections'
+  assign subheading = section.settings.subheading | default: 'Explore our time-honored delicacies — slow-cooked with 100% pure cow desi ghee, organic jaggery, and traditional carved Sheesham wood sanchas.'
+  assign show_purity_strip = section.settings.show_purity_strip
+-%}
+
+<section
+  id="ss-collections-list-{{ section.id }}"
+  class="ss-col-list-section"
+  data-ss-collections-list
+  style="
+    --ss-cl-pad-top: {{ section.settings.padding_top | default: 36 }}px;
+    --ss-cl-pad-bottom: {{ section.settings.padding_bottom | default: 80 }}px;
+  "
+>
+  <div class="ss-col-list-container">
+
+    <!-- 1. Breadcrumbs -->
+    <nav class="ss-col-list-breadcrumbs" aria-label="Breadcrumbs">
+      <a href="{{ routes.root_url }}">Home</a>
+      <span class="ss-col-list-breadcrumbs__sep">❖</span>
+      <span class="ss-col-list-breadcrumbs__current">All Collections</span>
+    </nav>
+
+    <!-- 2. Header Hero -->
+    <div class="ss-col-list-header">
+      <div class="ss-col-list-eyebrow">
+        <span class="ss-col-list-eyebrow-line"></span>
+        <span>{{ eyebrow_text }}</span>
+        <span class="ss-col-list-eyebrow-line"></span>
+      </div>
+
+      <h1 class="ss-col-list-title">{{ heading }}</h1>
+      <p class="ss-col-list-desc">{{ subheading }}</p>
+
+      <div class="ss-col-list-divider" aria-hidden="true">
+        <span>❖</span>
+        <div class="ss-col-list-divider-bar"></div>
+        <span>🪔</span>
+        <div class="ss-col-list-divider-bar"></div>
+        <span>❖</span>
+      </div>
+    </div>
+
+    <!-- 3. Collections Grid -->
+    <div class="ss-col-list-grid">
+      {%- assign valid_collections_count = 0 -%}
+      
+      {%- if section.settings.collection_list != blank and section.settings.collection_list.count > 0 -%}
+        {%- for col in section.settings.collection_list -%}
+          {%- assign valid_collections_count = valid_collections_count | plus: 1 -%}
+          {%- assign col_img = col.featured_image | default: col.image -%}
+          
+          <div class="ss-cl-card">
+            <a href="{{ col.url }}" class="ss-cl-card__media-wrap" aria-label="{{ col.title | escape }}">
+              {%- if col_img != blank -%}
+                <img
+                  src="{{ col_img | image_url: width: 800 }}"
+                  alt="{{ col.title | escape }}"
+                  class="ss-cl-card__img"
+                  width="700"
+                  height="500"
+                  loading="lazy"
+                >
+              {%- else -%}
+                <img
+                  src="{{ 'ss-thekua-crafting-art.jpg' | asset_url }}"
+                  alt="{{ col.title | escape }}"
+                  class="ss-cl-card__img"
+                  width="700"
+                  height="500"
+                  loading="lazy"
+                >
+              {%- endif -%}
+
+              <span class="ss-cl-card__count-badge">
+                {{ col.all_products_count | default: 0 }} Delicacies
+              </span>
+            </a>
+
+            <div class="ss-cl-card__body">
+              <h2 class="ss-cl-card__title">
+                <a href="{{ col.url }}">{{ col.title }}</a>
+              </h2>
+
+              <p class="ss-cl-card__desc">
+                {%- if col.description != blank -%}
+                  {{ col.description | strip_html | truncate: 120 }}
+                {%- else -%}
+                  Handcrafted in pure cow desi ghee with traditional Mithila wooden sancha molds.
+                {%- endif -%}
+              </p>
+
+              <a href="{{ col.url }}" class="ss-cl-card__btn">
+                <span>Explore Collection</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- elsif section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          {%- assign col = block.settings.collection -%}
+          {%- if col != blank -%}
+            {%- assign valid_collections_count = valid_collections_count | plus: 1 -%}
+            {%- assign custom_img = block.settings.image | default: col.featured_image | default: col.image -%}
+            {%- assign custom_title = block.settings.title | default: col.title -%}
+            {%- assign custom_desc = block.settings.description | default: col.description -%}
+            
+            <div class="ss-cl-card" {{ block.shopify_attributes }}>
+              <a href="{{ col.url }}" class="ss-cl-card__media-wrap" aria-label="{{ custom_title | escape }}">
+                {%- if custom_img != blank -%}
+                  <img
+                    src="{{ custom_img | image_url: width: 800 }}"
+                    alt="{{ custom_title | escape }}"
+                    class="ss-cl-card__img"
+                    width="700"
+                    height="500"
+                    loading="lazy"
+                  >
+                {%- else -%}
+                  <img
+                    src="{{ 'ss-thekua-crafting-art.jpg' | asset_url }}"
+                    alt="{{ custom_title | escape }}"
+                    class="ss-cl-card__img"
+                    width="700"
+                    height="500"
+                    loading="lazy"
+                  >
+                {%- endif -%}
+
+                <span class="ss-cl-card__count-badge">
+                  {{ col.all_products_count | default: 0 }} Delicacies
+                </span>
+              </a>
+
+              <div class="ss-cl-card__body">
+                <h2 class="ss-cl-card__title">
+                  <a href="{{ col.url }}">{{ custom_title }}</a>
+                </h2>
+
+                <p class="ss-cl-card__desc">
+                  {%- if custom_desc != blank -%}
+                    {{ custom_desc | strip_html | truncate: 120 }}
+                  {%- else -%}
+                    Handcrafted in pure cow desi ghee with traditional Mithila wooden sancha molds.
+                  {%- endif -%}
+                </p>
+
+                <a href="{{ col.url }}" class="ss-cl-card__btn">
+                  <span>Explore Collection</span>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- paginate collections by 50 -%}
+          {%- for col in collections -%}
+            {%- if col.title != blank -%}
+              {%- assign valid_collections_count = valid_collections_count | plus: 1 -%}
+              {%- assign col_img = col.featured_image | default: col.image -%}
+              
+              <div class="ss-cl-card">
+                <a href="{{ col.url }}" class="ss-cl-card__media-wrap" aria-label="{{ col.title | escape }}">
+                  {%- if col_img != blank -%}
+                    <img
+                      src="{{ col_img | image_url: width: 800 }}"
+                      alt="{{ col.title | escape }}"
+                      class="ss-cl-card__img"
+                      width="700"
+                      height="500"
+                      loading="lazy"
+                    >
+                  {%- else -%}
+                    <img
+                      src="{{ 'ss-thekua-crafting-art.jpg' | asset_url }}"
+                      alt="{{ col.title | escape }}"
+                      class="ss-cl-card__img"
+                      width="700"
+                      height="500"
+                      loading="lazy"
+                    >
+                  {%- endif -%}
+
+                  <span class="ss-cl-card__count-badge">
+                    {{ col.all_products_count | default: 0 }} Delicacies
+                  </span>
+                </a>
+
+                <div class="ss-cl-card__body">
+                  <h2 class="ss-cl-card__title">
+                    <a href="{{ col.url }}">{{ col.title }}</a>
+                  </h2>
+
+                  <p class="ss-cl-card__desc">
+                    {%- if col.description != blank -%}
+                      {{ col.description | strip_html | truncate: 120 }}
+                    {%- else -%}
+                      Handcrafted in pure cow desi ghee with traditional Mithila wooden sancha molds.
+                    {%- endif -%}
+                  </p>
+
+                  <a href="{{ col.url }}" class="ss-cl-card__btn">
+                    <span>Explore Collection</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </a>
+                </div>
+              </div>
+
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endpaginate -%}
+      {%- endif -%}
+
+      {%- if valid_collections_count == 0 -%}
+        <!-- Demo Collections Fallback -->
+        <div class="ss-cl-card">
+          <a href="{{ routes.all_products_collection_url }}" class="ss-cl-card__media-wrap">
+            <img src="{{ 'ss-thekua-crafting-art.jpg' | asset_url }}" alt="Gud Thekua Collection" class="ss-cl-card__img" width="700" height="500" loading="lazy">
+            <span class="ss-cl-card__count-badge">3 Delicacies</span>
+          </a>
+          <div class="ss-cl-card__body">
+            <h2 class="ss-cl-card__title">
+              <a href="{{ routes.all_products_collection_url }}">Gud Thekua Collection</a>
+            </h2>
+            <p class="ss-cl-card__desc">Molded with organic sugarcane jaggery (Gur), shuddh desi ghee, and cardamom seeds.</p>
+            <a href="{{ routes.all_products_collection_url }}" class="ss-cl-card__btn">
+              <span>Explore Collection</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="ss-cl-card">
+          <a href="{{ routes.all_products_collection_url }}" class="ss-cl-card__media-wrap">
+            <img src="{{ 'ss-hero-slide-2.jpg' | asset_url }}" alt="Sugar Thekua Collection" class="ss-cl-card__img" width="700" height="500" loading="lazy">
+            <span class="ss-cl-card__count-badge">2 Delicacies</span>
+          </a>
+          <div class="ss-cl-card__body">
+            <h2 class="ss-cl-card__title">
+              <a href="{{ routes.all_products_collection_url }}">Sugar Thekua Collection</a>
+            </h2>
+            <p class="ss-cl-card__desc">Crispy golden crust made with unrefined sugar, freshly kneaded whole wheat atta, and pure ghee.</p>
+            <a href="{{ routes.all_products_collection_url }}" class="ss-cl-card__btn">
+              <span>Explore Collection</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="ss-cl-card">
+          <a href="{{ routes.all_products_collection_url }}" class="ss-cl-card__media-wrap">
+            <img src="{{ 'ss-hero-slide-3.jpg' | asset_url }}" alt="Festive & Combo Boxes" class="ss-cl-card__img" width="700" height="500" loading="lazy">
+            <span class="ss-cl-card__count-badge">Festive Special</span>
+          </a>
+          <div class="ss-cl-card__body">
+            <h2 class="ss-cl-card__title">
+              <a href="{{ routes.all_products_collection_url }}">Festive & Royal Gift Boxes</a>
+            </h2>
+            <p class="ss-cl-card__desc">Curated festive combinations packed in royal airtight gift boxes for auspicious occasions.</p>
+            <a href="{{ routes.all_products_collection_url }}" class="ss-cl-card__btn">
+              <span>Explore Collection</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <!-- 4. Purity & Trust Assurance Strip -->
+    {%- if show_purity_strip -%}
+      <div class="ss-col-list-trust-strip">
+        <div class="ss-cl-trust-item">
+          <span class="ss-cl-trust-icon">🧈</span>
+          <div class="ss-cl-trust-info">
+            <strong>100% Shuddh Desi Ghee</strong>
+            <span>Slow-simmered in small batches without palm oil</span>
+          </div>
+        </div>
+
+        <div class="ss-cl-trust-item">
+          <span class="ss-cl-trust-icon">🪵</span>
+          <div class="ss-cl-trust-info">
+            <strong>Artisanal Wooden Sancha</strong>
+            <span>Hand-pressed with sacred traditional motifs</span>
+          </div>
+        </div>
+
+        <div class="ss-cl-trust-item">
+          <span class="ss-cl-trust-icon">📦</span>
+          <div class="ss-cl-trust-info">
+            <strong>Airtight Fresh Pan-India Dispatch</strong>
+            <span>Freshly crafted upon order confirmation</span>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SS Collections List",
+  "tag": "section",
+  "class": "ss-collections-list-wrapper",
+  "settings": [
+    {
+      "type": "collection_list",
+      "id": "collection_list",
+      "label": "Select Collections",
+      "info": "Leave empty to show all store collections"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Eyebrow Text",
+      "default": "✦ SWAAD SAMVAAD • MITHILA RASOI ✦"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Main Heading",
+      "default": "Our Curated Mithila Collections"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading Description",
+      "default": "Explore our time-honored delicacies — slow-cooked with 100% pure cow desi ghee, organic jaggery, and traditional carved Sheesham wood sanchas."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_purity_strip",
+      "label": "Show Bottom Purity Guarantee Strip",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 20,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 20,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_item",
+      "name": "Featured Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Select Collection"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Custom Title Override (Optional)"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Custom Description Override (Optional)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom Image Override (Optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SS Collections List"
+    }
+  ]
+}
+{% endschema %}

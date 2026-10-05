@@ -1,0 +1,302 @@
+/* ==========================================================================
+   Swaad Samvaad - Luxury Minimalist 404 Error Page Styles
+   File: assets/ss-404.css
+   100% Custom CSS - Scoped, Responsive & High Performance
+   ========================================================================== */
+
+:root {
+  --ss-404-maroon: #2B1A10;
+  --ss-404-deep-red: #8B2616;
+  --ss-404-terracotta: #B4552B;
+  --ss-404-gold: #C69C6D;
+  --ss-404-cream: #FAF6F0;
+  --ss-404-ivory: #FFFDF9;
+  --ss-404-border: #E8DFD3;
+  --ss-404-border-light: #F0E8DD;
+  --ss-404-text: #2B1A10;
+  --ss-404-text-muted: #6B5B52;
+  --ss-404-font-heading: 'Cinzel', 'Playfair Display', Georgia, serif;
+  --ss-404-font-body: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  --ss-404-radius-md: 14px;
+  --ss-404-radius-lg: 22px;
+  --ss-404-shadow-md: 0 12px 40px rgba(43, 26, 16, 0.08);
+  --ss-404-transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ss-404-section {
+  position: relative;
+  background-color: var(--ss-404-ivory);
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(198, 156, 109, 0.06) 0%, transparent 45%),
+    radial-gradient(circle at 90% 80%, rgba(180, 85, 43, 0.05) 0%, transparent 45%);
+  color: var(--ss-404-text);
+  font-family: var(--ss-404-font-body);
+  padding-top: var(--ss-404-pad-top, 48px);
+  padding-bottom: var(--ss-404-pad-bottom, 88px);
+  min-height: 75vh;
+  display: flex;
+  align-items: center;
+}
+
+.ss-404-container {
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* 1. Breadcrumbs */
+.ss-404-breadcrumbs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: var(--ss-404-text-muted);
+  margin-bottom: 28px;
+}
+
+.ss-404-breadcrumbs a {
+  color: var(--ss-404-text-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.ss-404-breadcrumbs a:hover {
+  color: var(--ss-404-deep-red);
+}
+
+.ss-404-breadcrumbs__sep {
+  color: var(--ss-404-gold);
+  font-size: 0.75rem;
+}
+
+.ss-404-breadcrumbs__current {
+  color: var(--ss-404-deep-red);
+  font-weight: 600;
+}
+
+/* 2. Main Luxury 404 Card */
+.ss-404-card {
+  background: #FFFFFF;
+  border: 1.5px solid var(--ss-404-border);
+  border-radius: var(--ss-404-radius-lg);
+  padding: 64px 48px;
+  text-align: center;
+  box-shadow: var(--ss-404-shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle Top Accent Bar */
+.ss-404-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--ss-404-gold), var(--ss-404-terracotta), var(--ss-404-gold));
+}
+
+/* 404 Metallic Number */
+.ss-404-glamour-badge {
+  display: inline-block;
+  margin-bottom: 6px;
+}
+
+.ss-404-number {
+  font-family: var(--ss-404-font-heading);
+  font-size: clamp(5rem, 12vw, 8rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--ss-404-terracotta) 0%, var(--ss-404-deep-red) 50%, var(--ss-404-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.ss-404-title {
+  font-family: var(--ss-404-font-heading);
+  font-size: clamp(1.85rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--ss-404-maroon);
+  margin: 0 0 16px 0;
+  line-height: 1.25;
+}
+
+.ss-404-desc {
+  max-width: 580px;
+  margin: 0 auto 36px auto;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--ss-404-text-muted);
+}
+
+/* 3. Refined Search Bar */
+.ss-404-search-form {
+  max-width: 520px;
+  margin: 0 auto 36px auto;
+}
+
+.ss-404-search-wrap {
+  display: flex;
+  align-items: center;
+  background: var(--ss-404-cream);
+  border: 1.5px solid var(--ss-404-border);
+  border-radius: 50px;
+  padding: 5px 6px 5px 18px;
+  transition: var(--ss-404-transition);
+}
+
+.ss-404-search-wrap:focus-within {
+  background: #FFF;
+  border-color: var(--ss-404-gold);
+  box-shadow: 0 4px 18px rgba(198, 156, 109, 0.18);
+}
+
+.ss-404-search-icon {
+  color: var(--ss-404-gold);
+  flex-shrink: 0;
+  margin-right: 10px;
+}
+
+.ss-404-search-input {
+  flex-grow: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--ss-404-font-body);
+  font-size: 0.92rem;
+  color: var(--ss-404-text);
+}
+
+.ss-404-search-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: var(--ss-404-maroon);
+  color: #FFF;
+  border: none;
+  border-radius: 50px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--ss-404-transition);
+}
+
+.ss-404-search-btn:hover {
+  background: var(--ss-404-terracotta);
+}
+
+/* 4. Action CTA Buttons */
+.ss-404-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.ss-404-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 30px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: var(--ss-404-transition);
+}
+
+.ss-404-btn--primary {
+  background: var(--ss-404-terracotta);
+  color: #FFFFFF;
+  box-shadow: 0 4px 16px rgba(180, 85, 43, 0.25);
+}
+
+.ss-404-btn--primary:hover {
+  background: var(--ss-404-deep-red);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 38, 22, 0.32);
+}
+
+.ss-404-btn--secondary {
+  background: var(--ss-404-cream);
+  color: var(--ss-404-maroon);
+  border: 1.5px solid var(--ss-404-border);
+}
+
+.ss-404-btn--secondary:hover {
+  background: #FFF;
+  border-color: var(--ss-404-gold);
+  color: var(--ss-404-deep-red);
+  transform: translateY(-2px);
+}
+
+.ss-404-btn-sep {
+  color: var(--ss-404-gold);
+  font-size: 0.8rem;
+}
+
+/* ==========================================================================
+   Responsive Styles
+   ========================================================================== */
+@media (max-width: 768px) {
+  .ss-404-container {
+    padding: 0 16px;
+  }
+
+  .ss-404-card {
+    padding: 40px 22px;
+    border-radius: var(--ss-404-radius-md);
+  }
+
+  .ss-404-number {
+    font-size: 4.5rem;
+  }
+
+  .ss-404-title {
+    font-size: 1.65rem;
+  }
+
+  .ss-404-desc {
+    font-size: 0.95rem;
+    margin-bottom: 26px;
+  }
+
+  .ss-404-search-wrap {
+    flex-direction: column;
+    padding: 8px;
+    border-radius: var(--ss-404-radius-md);
+    gap: 8px;
+  }
+
+  .ss-404-search-icon {
+    display: none;
+  }
+
+  .ss-404-search-input {
+    width: 100%;
+    padding: 6px 10px;
+    text-align: center;
+  }
+
+  .ss-404-search-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .ss-404-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .ss-404-btn {
+    width: 100%;
+  }
+}

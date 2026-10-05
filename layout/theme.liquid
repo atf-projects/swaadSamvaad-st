@@ -166,7 +166,20 @@
         data-product-transition="{{ settings.transition_to_main_product }}"
         data-template="{{ template }}"
       >
-        {{ content_for_layout }}
+        {%- if request.page_type == 'policy' -%}
+          <div class="ss-policy-page-wrapper">
+            <div class="ss-policy-container">
+              <nav class="ss-policy-breadcrumbs" aria-label="Breadcrumbs">
+                <a href="{{ routes.root_url }}">Home</a>
+                <span class="ss-policy-breadcrumbs__sep">❖</span>
+                <span class="ss-policy-breadcrumbs__current">{{ page_title }}</span>
+              </nav>
+              {{ content_for_layout }}
+            </div>
+          </div>
+        {%- else -%}
+          {{ content_for_layout }}
+        {%- endif -%}
       </main>
 
       <footer>

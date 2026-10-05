@@ -1337,8 +1337,184 @@ summary:hover {
   }
 }
 
+/* Swaad Samvaad - Luxury Shopify Policy Pages Styles */
+.ss-policy-page-wrapper {
+  background-color: #FFFDF9;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(198, 156, 109, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(180, 85, 43, 0.04) 0%, transparent 40%);
+  padding: 24px 0 72px 0;
+  min-height: 60vh;
+  color: #2B1A10;
+}
+
+.ss-policy-container {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.ss-policy-breadcrumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: #6B5B52;
+  margin-bottom: 24px;
+}
+
+.ss-policy-breadcrumbs a {
+  color: #6B5B52;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.ss-policy-breadcrumbs a:hover {
+  color: #8B2616;
+}
+
+.ss-policy-breadcrumbs__sep {
+  color: #C69C6D;
+  font-size: 0.75rem;
+}
+
+.ss-policy-breadcrumbs__current {
+  color: #8B2616;
+  font-weight: 600;
+}
+
 .shopify-policy__container {
-  padding-block: var(--padding-xl);
+  padding-block: 0 !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding-inline: 0 !important;
+}
+
+.shopify-policy__title {
+  text-align: center;
+  margin: 0 auto 36px auto;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #E8DFD3;
+}
+
+.shopify-policy__title h1 {
+  font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 700;
+  color: #2B1A10;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.shopify-policy__body {
+  background: #FFFFFF;
+  border: 1.5px solid #E8DFD3;
+  border-radius: 16px;
+  padding: 44px 48px;
+  box-shadow: 0 4px 20px rgba(43, 26, 16, 0.05);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #3F2C22;
+}
+
+.shopify-policy__body h2 {
+  font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: #2B1A10;
+  margin: 36px 0 16px 0;
+  padding-left: 14px;
+  border-left: 3px solid #B4552B;
+  line-height: 1.35;
+}
+
+.shopify-policy__body h3 {
+  font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #8B2616;
+  margin: 28px 0 12px 0;
+  line-height: 1.4;
+}
+
+.shopify-policy__body p {
+  margin: 0 0 18px 0;
+  color: #3F2C22;
+}
+
+.shopify-policy__body strong {
+  color: #2B1A10;
+  font-weight: 600;
+}
+
+.shopify-policy__body a {
+  color: #8B2616;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.shopify-policy__body a:hover {
+  color: #B4552B;
+}
+
+.shopify-policy__body ul,
+.shopify-policy__body ol {
+  margin: 0 0 22px 0;
+  padding-left: 24px;
+}
+
+.shopify-policy__body li {
+  margin-bottom: 8px;
+  color: #3F2C22;
+}
+
+.shopify-policy__body blockquote {
+  position: relative;
+  margin: 28px 0;
+  padding: 20px 24px;
+  background: #FAF6F0;
+  border-left: 4px solid #C69C6D;
+  border-radius: 0 12px 12px 0;
+  font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+  font-size: 1.15rem;
+  font-style: italic;
+  color: #2B1A10;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .ss-policy-container {
+    padding: 0 16px;
+  }
+
+  .ss-policy-breadcrumbs {
+    margin-bottom: 18px;
+    font-size: 0.82rem;
+  }
+
+  .shopify-policy__title {
+    margin-bottom: 24px;
+    padding-bottom: 18px;
+  }
+
+  .shopify-policy__title h1 {
+    font-size: 1.85rem;
+  }
+
+  .shopify-policy__body {
+    padding: 26px 18px;
+    border-radius: 12px;
+    font-size: 0.98rem;
+  }
+
+  .shopify-policy__body h2 {
+    font-size: 1.3rem;
+    margin: 26px 0 12px 0;
+  }
 }
 
 /* Radio buttons and checkboxes - shared base styles */

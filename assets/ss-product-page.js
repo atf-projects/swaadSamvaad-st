@@ -203,6 +203,8 @@
         });
       }
 
+      highlightStars(selectedRating);
+
       starBtns.forEach((sBtn, idx) => {
         sBtn.addEventListener('mouseenter', () => highlightStars(idx + 1));
         sBtn.addEventListener('mouseleave', () => highlightStars(selectedRating));
