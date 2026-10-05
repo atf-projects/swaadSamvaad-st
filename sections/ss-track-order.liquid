@@ -1,0 +1,571 @@
+{% comment %}
+  Section: Swaad Samvaad - Luxury Track Your Order Page (sections/ss-track-order.liquid)
+  Features:
+  - Heritage Breadcrumbs & Mithila Dispatch Motifs.
+  - Dual Tracking Mode: Order ID + Phone/Email OR Courier AWB Tracking Number.
+  - Quick Demo Chips for Instant Testing (#SS-9821, #SS-8743, #SS-3104).
+  - Dynamic 5-Step Crafting & Delivery Visual Timeline with Pulse Animations.
+  - Real-time Courier Status, Estimated Delivery Date, and Live Transit Activity Logs.
+  - Package Contents Summary & 90-Day Freshness Guarantee Badge.
+  - Direct 1-Click WhatsApp Support with Prefilled Order ID.
+  - Tracking & Dispatch FAQ Accordion.
+  - 100% Custom CSS, Responsive Across Mobile, Tablet & Desktop.
+{% endcomment %}
+
+{{ 'ss-track-order.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'ss-track-order.js' | asset_url }}" defer="defer"></script>
+
+<section
+  id="ss-track-order-{{ section.id }}"
+  class="ss-track-page"
+  data-ss-track-page
+  style="
+    --ss-track-pad-top: {{ section.settings.padding_top | default: 25 }}px;
+    --ss-track-pad-bottom: {{ section.settings.padding_bottom | default: 75 }}px;
+  "
+>
+  <div class="ss-track-container">
+
+    {%- comment -%} 1. Breadcrumbs {%- endcomment -%}
+    <nav class="ss-track-breadcrumbs" aria-label="Breadcrumbs">
+      <a href="{{ routes.root_url }}">Home</a>
+      <span class="ss-track-breadcrumbs__sep">❖</span>
+      <span class="ss-track-breadcrumbs__current">Track Order</span>
+    </nav>
+
+    {%- comment -%} 2. Hero Header {%- endcomment -%}
+    <div class="ss-track-hero">
+      <div class="ss-track-eyebrow">
+        <span class="ss-track-eyebrow-line"></span>
+        <span>{{ section.settings.eyebrow_text | default: '✦ SWAAD SAMVAAD DISPATCH & LOGISTICS ✦' }}</span>
+        <span class="ss-track-eyebrow-line"></span>
+      </div>
+      <h1 class="ss-track-heading">{{ section.settings.heading | default: 'Track Your Sacred Mithila Parcel' }}</h1>
+      <p class="ss-track-subheading">
+        {{ section.settings.subheading | default: 'Enter your Order ID or Courier AWB Tracking Number along with your registered Phone or Email to view live wood-fire batch status and express air courier updates.' }}
+      </p>
+    </div>
+
+    {%- comment -%} 3. Tracking Input Card {%- endcomment -%}
+    <div class="ss-track-card ss-track-input-card">
+      <div class="ss-track-tabs-nav" role="tablist">
+        <button
+          type="button"
+          class="ss-track-tab-btn is-active"
+          data-track-tab="order-id"
+          role="tab"
+          aria-selected="true"
+          aria-controls="ss-tab-order-id"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span>Order ID & Phone / Email</span>
+        </button>
+        <button
+          type="button"
+          class="ss-track-tab-btn"
+          data-track-tab="awb"
+          role="tab"
+          aria-selected="false"
+          aria-controls="ss-tab-awb"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="3" width="15" height="13"></rect>
+            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+            <circle cx="18.5" cy="18.5" r="2.5"></circle>
+          </svg>
+          <span>AWB / Courier Number</span>
+        </button>
+      </div>
+
+      <!-- Tab 1: By Order ID & Contact -->
+      <form class="ss-track-form is-active" id="ss-tab-order-id" data-track-form="order-id">
+        <div class="ss-track-form-grid">
+          <div class="ss-track-field-group">
+            <label for="track-order-number" class="ss-track-label">
+              Order ID <span class="ss-track-req">*</span>
+            </label>
+            <div class="ss-track-input-wrap">
+              <span class="ss-track-input-icon">#</span>
+              <input
+                type="text"
+                id="track-order-number"
+                name="order_id"
+                class="ss-track-input ss-track-input--has-icon"
+                placeholder="e.g. SS-9821 or 9821"
+                required
+                autocomplete="off"
+              >
+            </div>
+          </div>
+
+          <div class="ss-track-field-group">
+            <label for="track-order-contact" class="ss-track-label">
+              Mobile Number or Email <span class="ss-track-req">*</span>
+            </label>
+            <div class="ss-track-input-wrap">
+              <span class="ss-track-input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+              </span>
+              <input
+                type="text"
+                id="track-order-contact"
+                name="contact"
+                class="ss-track-input ss-track-input--has-icon"
+                placeholder="e.g. 9876543210 or name@example.com"
+                required
+                autocomplete="off"
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="ss-track-form-actions">
+          <button type="submit" class="ss-track-submit-btn" data-track-submit>
+            <span>Track Parcel Status</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Demo Order Chips -->
+        <div class="ss-track-demo-chips">
+          <span class="ss-track-demo-title">⚡ Try Demo Sample Orders:</span>
+          <button type="button" class="ss-track-chip" data-demo-order="SS-9821" data-demo-contact="9876543210" title="Click to test In-Transit order">
+            <span>#SS-9821 (In Transit • Air)</span>
+          </button>
+          <button type="button" class="ss-track-chip" data-demo-order="SS-8743" data-demo-contact="priyanshu@example.com" title="Click to test Out for Delivery order">
+            <span>#SS-8743 (Out for Delivery)</span>
+          </button>
+          <button type="button" class="ss-track-chip" data-demo-order="SS-3104" data-demo-contact="9811223344" title="Click to test Fresh Wood-Fire Crafting order">
+            <span>#SS-3104 (Fresh Wood-Fire Crafting)</span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Tab 2: By Courier AWB Tracking Number -->
+      <form class="ss-track-form" id="ss-tab-awb" data-track-form="awb" style="display: none;">
+        <div class="ss-track-form-grid ss-track-form-grid--single">
+          <div class="ss-track-field-group">
+            <label for="track-awb-number" class="ss-track-label">
+              AWB / Consignment Tracking Number <span class="ss-track-req">*</span>
+            </label>
+            <div class="ss-track-input-wrap">
+              <span class="ss-track-input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                  <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+              </span>
+              <input
+                type="text"
+                id="track-awb-number"
+                name="awb_number"
+                class="ss-track-input ss-track-input--has-icon"
+                placeholder="e.g. BD849201948IN or DEL99281744"
+                required
+                autocomplete="off"
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="ss-track-form-actions">
+          <button type="submit" class="ss-track-submit-btn" data-track-submit>
+            <span>Track AWB Consignment</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <div class="ss-track-demo-chips">
+          <span class="ss-track-demo-title">⚡ Try Demo AWB:</span>
+          <button type="button" class="ss-track-chip" data-demo-awb="BD849201948IN">
+            <span>BlueDart: BD849201948IN</span>
+          </button>
+          <button type="button" class="ss-track-chip" data-demo-awb="DEL99281744IN">
+            <span>Delhivery: DEL99281744IN</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    {%- comment -%} 4. Dynamic Tracking Results Container {%- endcomment -%}
+    <div class="ss-track-results" id="ss-track-results" data-ss-track-results style="display: none;">
+      
+      <!-- Top Status Banner -->
+      <div class="ss-track-status-banner" data-status-banner>
+        <div class="ss-track-status-banner__left">
+          <div class="ss-track-status-badge is-transit" data-status-badge>
+            <span class="ss-track-status-badge__dot"></span>
+            <span data-status-text>In Transit • Express Air Cargo</span>
+          </div>
+          <h2 class="ss-track-status-title" data-status-headline>Your Fresh Mithila Thekua is on the way!</h2>
+          <p class="ss-track-status-eta">
+            Estimated Delivery: <strong data-status-eta-date>Wednesday, Oct 08, 2026</strong> (by 7:00 PM)
+          </p>
+        </div>
+        <div class="ss-track-status-banner__right">
+          <a href="#" class="ss-track-courier-btn" data-courier-external-link target="_blank" rel="noopener">
+            <span>Track on BlueDart Portal</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Info Meta Grid -->
+      <div class="ss-track-meta-grid">
+        <div class="ss-track-meta-item">
+          <span class="ss-track-meta-label">Order Number</span>
+          <strong class="ss-track-meta-val" data-meta-order-id>#SS-9821</strong>
+        </div>
+        <div class="ss-track-meta-item">
+          <span class="ss-track-meta-label">Ghee Batch Crafted</span>
+          <strong class="ss-track-meta-val" data-meta-craft-date>Oct 04, 2026 (Morning Batch)</strong>
+        </div>
+        <div class="ss-track-meta-item">
+          <span class="ss-track-meta-label">Courier Partner</span>
+          <strong class="ss-track-meta-val" data-meta-courier>BlueDart Air Express</strong>
+        </div>
+        <div class="ss-track-meta-item">
+          <span class="ss-track-meta-label">AWB Tracking No.</span>
+          <strong class="ss-track-meta-val ss-track-meta-val--code" data-meta-awb>BD849201948IN</strong>
+        </div>
+        <div class="ss-track-meta-item">
+          <span class="ss-track-meta-label">Destination</span>
+          <strong class="ss-track-meta-val" data-meta-destination>Patna, Bihar (800001)</strong>
+        </div>
+      </div>
+
+      <!-- 5-Step Visual Crafting & Shipping Progress Bar -->
+      <div class="ss-track-progress-card">
+        <h3 class="ss-track-progress-heading">✦ Sacred Journey of Your Delicacy ✦</h3>
+        <div class="ss-track-stepper" data-track-stepper>
+          
+          <!-- Step 1 -->
+          <div class="ss-track-step is-completed" data-step="1">
+            <div class="ss-track-step__icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 11l3 3L22 4"></path>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              </svg>
+            </div>
+            <div class="ss-track-step__info">
+              <strong class="ss-track-step__name">1. Order Placed</strong>
+              <span class="ss-track-step__desc">A2 Ghee & Wheat Selected</span>
+              <time class="ss-track-step__time" data-step-time-1>Oct 04, 10:15 AM</time>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="ss-track-step is-completed" data-step="2">
+            <div class="ss-track-step__icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
+              </svg>
+            </div>
+            <div class="ss-track-step__info">
+              <strong class="ss-track-step__name">2. Wood-Fire Crafted</strong>
+              <span class="ss-track-step__desc">Handmade on Shisham Molds</span>
+              <time class="ss-track-step__time" data-step-time-2>Oct 04, 02:30 PM</time>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="ss-track-step is-completed" data-step="3">
+            <div class="ss-track-step__icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
+            </div>
+            <div class="ss-track-step__info">
+              <strong class="ss-track-step__name">3. Aroma-Lock Sealed</strong>
+              <span class="ss-track-step__desc">Nitrogen Fresh Box Packed</span>
+              <time class="ss-track-step__time" data-step-time-3>Oct 04, 06:00 PM</time>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="ss-track-step is-active" data-step="4">
+            <div class="ss-track-step__icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="3" width="15" height="13"></rect>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+              </svg>
+            </div>
+            <div class="ss-track-step__info">
+              <strong class="ss-track-step__name">4. In Transit (Air)</strong>
+              <span class="ss-track-step__desc">Dispatched from Darbhanga Hub</span>
+              <time class="ss-track-step__time" data-step-time-4>Oct 05, 08:30 AM</time>
+            </div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="ss-track-step is-pending" data-step="5">
+            <div class="ss-track-step__icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+            </div>
+            <div class="ss-track-step__info">
+              <strong class="ss-track-step__name">5. Doorstep Delivery</strong>
+              <span class="ss-track-step__desc">Auspicious Box Received</span>
+              <time class="ss-track-step__time" data-step-time-5>Expected Oct 08</time>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 2-Column Split: Detailed Activity Timeline + Package Contents & Quality Seal -->
+      <div class="ss-track-details-grid">
+        
+        <!-- Left: Live Activity Log -->
+        <div class="ss-track-card ss-track-log-card">
+          <div class="ss-track-card-header">
+            <h4 class="ss-track-card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span>Live Transit Activity Feed</span>
+            </h4>
+          </div>
+          <div class="ss-track-log-list" data-activity-log-list>
+            <!-- Items injected by JS -->
+          </div>
+        </div>
+
+        <!-- Right: Items In This Parcel & Freshness Pledge -->
+        <div class="ss-track-side-col">
+          <div class="ss-track-card ss-track-items-card">
+            <div class="ss-track-card-header">
+              <h4 class="ss-track-card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span>Items in This Consignment</span>
+              </h4>
+            </div>
+            <div class="ss-track-items-list" data-items-list>
+              <!-- Items injected by JS -->
+            </div>
+          </div>
+
+          <!-- Quality Guarantee Seal -->
+          <div class="ss-track-pledge-card">
+            <div class="ss-track-pledge-icon">🪔</div>
+            <div class="ss-track-pledge-content">
+              <strong>100% Rasoi-Fresh Guarantee</strong>
+              <p>Every Thekua in this box was wood-fire fried in 100% Pure Cow Desi Ghee within 24 hours of dispatch. Stays crispy and fragrant for 90 days.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    {%- comment -%} 5. Need Assistance & Contact Helpdesk Cards {%- endcomment -%}
+    <div class="ss-track-help-section">
+      <div class="ss-track-help-header">
+        <span class="ss-track-help-eyebrow">✦ DEDICATED RASOI HELPDESK ✦</span>
+        <h3 class="ss-track-help-title">Need Help with Your Order Delivery?</h3>
+        <p class="ss-track-help-subtitle">Our Darbhanga support team is available 9 AM to 8 PM (Mon-Sat) to assist with live location updates, address modifications, and priority delivery requests.</p>
+      </div>
+
+      <div class="ss-track-help-grid">
+        <!-- Help Card 1: WhatsApp -->
+        <a
+          href="https://wa.me/919876543210?text=Namaste%20Swaad%20Samvaad!%20Please%20help%20me%20with%20my%20Order%20Status."
+          class="ss-track-help-card"
+          target="_blank"
+          rel="noopener"
+          data-whatsapp-help-link
+        >
+          <div class="ss-track-help-card__icon ss-track-help-card__icon--whatsapp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+            </svg>
+          </div>
+          <div class="ss-track-help-card__body">
+            <span class="ss-track-help-card__tag">Fastest Reply • ~5 Mins</span>
+            <strong class="ss-track-help-card__name">WhatsApp Dispatch Desk</strong>
+            <span class="ss-track-help-card__val">+91 98765 43210</span>
+          </div>
+        </a>
+
+        <!-- Help Card 2: Email -->
+        <a href="mailto:support@swaadsamvaad.com?subject=Order%20Status%20Inquiry" class="ss-track-help-card">
+          <div class="ss-track-help-card__icon ss-track-help-card__icon--email">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </div>
+          <div class="ss-track-help-card__body">
+            <span class="ss-track-help-card__tag">Priority Email Support</span>
+            <strong class="ss-track-help-card__name">Delivery Support Desk</strong>
+            <span class="ss-track-help-card__val">orders@swaadsamvaad.com</span>
+          </div>
+        </a>
+
+        <!-- Help Card 3: Address Modification -->
+        <div class="ss-track-help-card ss-track-help-card--static">
+          <div class="ss-track-help-card__icon ss-track-help-card__icon--shipping">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+          </div>
+          <div class="ss-track-help-card__body">
+            <span class="ss-track-help-card__tag">Address Changes</span>
+            <strong class="ss-track-help-card__name">Before Dispatch (within 6 hrs)</strong>
+            <span class="ss-track-help-card__val">Contact directly via WhatsApp</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} 6. Tracking & Shipping FAQs Accordion {%- endcomment -%}
+    <div class="ss-track-faq-card">
+      <div class="ss-track-faq-header">
+        <span class="ss-track-faq-eyebrow">✦ FREQUENTLY ASKED QUESTIONS ✦</span>
+        <h3 class="ss-track-faq-title">Courier & Dispatch Guidelines</h3>
+      </div>
+
+      <div class="ss-track-faq-list" data-faq-list>
+        <!-- FAQ 1 -->
+        <div class="ss-track-faq-item is-open">
+          <button type="button" class="ss-track-faq-trigger" aria-expanded="true">
+            <span>How long does delivery take across India?</span>
+            <svg class="ss-track-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="ss-track-faq-panel">
+            <p>We dispatch all fresh batches directly from our traditional rasoi in Darbhanga, Bihar via Express Air Cargo (BlueDart, Delhivery, DTDC). Standard delivery times are <strong>2-3 working days</strong> for Metro cities (Delhi NCR, Patna, Kolkata, Mumbai, Bangalore) and <strong>3-5 working days</strong> for other regional pin codes across India.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="ss-track-faq-item">
+          <button type="button" class="ss-track-faq-trigger" aria-expanded="false">
+            <span>How does Swaad Samvaad ensure the Thekua stays fresh during transit?</span>
+            <svg class="ss-track-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="ss-track-faq-panel">
+            <p>Our thekua is fried in 100% pure cow desi ghee (which acts as a natural Vedic preservative). Each batch is cooled to room temperature, packed in food-grade airtight bags with moisture-absorbers, and housed in our signature gold-embossed crush-resistant box. This guarantees 100% crispiness and aroma for up to 90 days.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="ss-track-faq-item">
+          <button type="button" class="ss-track-faq-trigger" aria-expanded="false">
+            <span>Can I update my delivery address or phone number after ordering?</span>
+            <svg class="ss-track-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="ss-track-faq-panel">
+            <p>Yes, if your order is still in the "Wood-Fire Crafted" or "Packing" stage (typically within 4-6 hours of placing the order), you can message us instantly on WhatsApp (+91 98765 43210) with your Order ID to update the destination address.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="ss-track-faq-item">
+          <button type="button" class="ss-track-faq-trigger" aria-expanded="false">
+            <span>What should I do if my tracking status is not updating?</span>
+            <svg class="ss-track-faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="ss-track-faq-panel">
+            <p>Air courier scans are updated at each transit hub (e.g. Darbhanga Airport -> Patna Hub -> Destination Airport). Occasionally, scans take 6-12 hours to reflect on the online portal while the flight is in transit. If your tracking has not updated for more than 24 hours, our dispatch team will actively escalate it with the courier manager.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Track Your Order",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Eyebrow Text",
+      "default": "✦ SWAAD SAMVAAD DISPATCH & LOGISTICS ✦"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Main Heading",
+      "default": "Track Your Sacred Mithila Parcel"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Enter your Order ID (e.g. #SS-9821) along with your registered Phone / Email or AWB Number to check the live batch crafting and express courier status."
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top Spacing",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom Spacing",
+      "min": 20,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 75
+    }
+  ],
+  "presets": [
+    {
+      "name": "Track Your Order"
+    }
+  ]
+}
+{% endschema %}
