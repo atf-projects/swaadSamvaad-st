@@ -25,7 +25,8 @@
 -%}
 
 <div
-  id="ss-video-reviews-{{ section_id }}"
+  id="videos"
+  data-section-id="{{ section_id }}"
   class="ss-video-reviews"
   style="
     --ss-vrev-pad-top: {{ section.settings.padding_top | default: 80 }}px;

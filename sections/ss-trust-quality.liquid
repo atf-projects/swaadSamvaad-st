@@ -26,7 +26,8 @@
 -%}
 
 <div
-  id="ss-trust-quality-{{ section_id }}"
+  id="quality"
+  data-section-id="{{ section_id }}"
   class="ss-trust-sec"
   style="
     --ss-trust-pad-top: {{ section.settings.padding_top | default: 80 }}px;

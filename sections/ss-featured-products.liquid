@@ -44,7 +44,8 @@
 -%}
 
 <div
-  id="ss-featured-products-{{ section_id }}"
+  id="products"
+  data-section-id="{{ section_id }}"
   class="ss-featured-prods"
   style="
     --ss-fp-pad-top: {{ section.settings.padding_top | default: 64 }}px;

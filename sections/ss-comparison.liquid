@@ -24,7 +24,8 @@
 -%}
 
 <div
-  id="ss-comparison-{{ section_id }}"
+  id="comparison"
+  data-section-id="{{ section_id }}"
   class="ss-comparison"
   style="
     --ss-comp-pad-top: {{ section.settings.padding_top | default: 80 }}px;
