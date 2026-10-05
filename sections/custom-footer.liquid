@@ -74,39 +74,40 @@
               </li>
             {% endfor %}
           {% else %}
-            <li><a href="{{ routes.all_products_collection_url }}" class="ss-footer-link">Shop Gud Thekua</a></li>
-            <li><a href="{{ routes.all_products_collection_url }}" class="ss-footer-link">Shop Sugar Thekua</a></li>
-            <li><a href="/pages/refund-policy" class="ss-footer-link">100% Refund Terms</a></li>
-            <li><a href="/apps/track-order" class="ss-footer-link">Track Order</a></li>
-            <li><a href="/pages/shipping-policy" class="ss-footer-link">Shipping Policy</a></li>
-            <li><a href="/pages/privacy-policy" class="ss-footer-link">Privacy Policy</a></li>
+            <li><a href="/#products" class="ss-footer-link">Shop Gud Thekua</a></li>
+            <li><a href="/#products" class="ss-footer-link">Shop Sugar Thekua</a></li>
+            <li><a href="/#about" class="ss-footer-link">Our Mithila Story</a></li>
+            <li><a href="/apps/track-order" class="ss-footer-link">Track Your Order</a></li>
+            <li><a href="/#faq" class="ss-footer-link">Frequently Asked Questions</a></li>
+            <li><a href="/pages/contact" class="ss-footer-link">Customer Help Desk</a></li>
           {% endif %}
         </ul>
       </div>
 
-      {% comment %} Column 3: Also Available On (Amazon / Flipkart) {% endcomment %}
-      <div class="ss-footer-col ss-footer-col--marketplaces">
-        <h3 class="ss-footer-heading">{{ section.settings.marketplaces_title | default: 'ALSO AVAILABLE ON' }}</h3>
-        <div class="ss-footer-market-btns">
-          <a
-            href="{{ section.settings.amazon_url | default: 'https://www.amazon.in' }}"
-            class="ss-footer-market-btn ss-footer-market-btn--amazon"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Buy on Amazon"
-          >
-            Buy on <span>Amazon</span>
-          </a>
-          <a
-            href="{{ section.settings.flipkart_url | default: 'https://www.flipkart.com' }}"
-            class="ss-footer-market-btn ss-footer-market-btn--flipkart"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Buy on Flipkart"
-          >
-            Buy on <span>Flipkart</span>
-          </a>
-        </div>
+      {% comment %} Column 3: Policy Links Menu {% endcomment %}
+      <div class="ss-footer-col ss-footer-col--policies">
+        <h3 class="ss-footer-heading">{{ section.settings.policies_title | default: 'POLICIES' }}</h3>
+        <ul class="ss-footer-links-list">
+          {% if section.settings.policies_menu != blank and linklists[section.settings.policies_menu].links.size > 0 %}
+            {% for link in linklists[section.settings.policies_menu].links %}
+              <li>
+                <a href="{{ link.url }}" class="ss-footer-link">{{ link.title }}</a>
+              </li>
+            {% endfor %}
+          {% elsif shop.policies.size > 0 %}
+            {% for policy in shop.policies %}
+              <li>
+                <a href="{{ policy.url }}" class="ss-footer-link">{{ policy.title }}</a>
+              </li>
+            {% endfor %}
+          {% else %}
+            <li><a href="/policies/refund-policy" class="ss-footer-link">Refund & Cancellation</a></li>
+            <li><a href="/policies/shipping-policy" class="ss-footer-link">Shipping & Delivery</a></li>
+            <li><a href="/policies/privacy-policy" class="ss-footer-link">Privacy Policy</a></li>
+            <li><a href="/policies/terms-of-service" class="ss-footer-link">Terms of Service</a></li>
+            <li><a href="/pages/refund-policy" class="ss-footer-link">100% Taste Guarantee</a></li>
+          {% endif %}
+        </ul>
       </div>
 
       {% comment %} Column 4: Customer Support & GST Details {% endcomment %}
@@ -134,10 +135,19 @@
             </a>
           </div>
 
-          <div class="ss-footer-gst-card">
-            <span class="ss-footer-gst-company">{{ section.settings.company_info | default: 'Yumee International · New Delhi' }}</span>
-            <span class="ss-footer-gst-num">GSTIN: {{ section.settings.gstin | default: '07AMZPJ4823B1ZX' }}</span>
-          </div>
+          {% if section.settings.address != blank or section.settings.company_info != blank %}
+            <div class="ss-footer-address-card">
+              <span class="ss-footer-address-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+              </span>
+              <div class="ss-footer-address-text">
+                {{ section.settings.address | default: section.settings.company_info | default: 'Yumee International · New Delhi, India' }}
+              </div>
+            </div>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -256,27 +266,23 @@
     },
     {
       "type": "header",
-      "content": "Column 3: Marketplaces"
+      "content": "Column 3: Policies Menu"
     },
     {
       "type": "text",
-      "id": "marketplaces_title",
-      "label": "Marketplaces Heading",
-      "default": "ALSO AVAILABLE ON"
+      "id": "policies_title",
+      "label": "Policies Heading",
+      "default": "POLICIES"
     },
     {
-      "type": "url",
-      "id": "amazon_url",
-      "label": "Amazon Store URL"
-    },
-    {
-      "type": "url",
-      "id": "flipkart_url",
-      "label": "Flipkart Store URL"
+      "type": "link_list",
+      "id": "policies_menu",
+      "label": "Policies Menu (Optional)",
+      "info": "Select a menu created under Navigation, or leave empty to auto-load shop policies"
     },
     {
       "type": "header",
-      "content": "Column 4: Customer Support & GST"
+      "content": "Column 4: Customer Support & Address"
     },
     {
       "type": "text",
@@ -303,16 +309,10 @@
       "default": "support@swaadsamvaad.com"
     },
     {
-      "type": "text",
-      "id": "company_info",
-      "label": "Company & Location",
-      "default": "Yumee International · New Delhi"
-    },
-    {
-      "type": "text",
-      "id": "gstin",
-      "label": "GSTIN Number",
-      "default": "07AMZPJ4823B1ZX"
+      "type": "textarea",
+      "id": "address",
+      "label": "Company Address",
+      "default": "Yumee International · New Delhi, India"
     },
     {
       "type": "header",

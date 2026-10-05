@@ -1,0 +1,678 @@
+{% comment %}
+  Section contract.
+  Swaad Samvaad - Luxury Traditional Mithila Blog Page Section (sections/ss-blog-page.liquid)
+  Features:
+  - Hero Header with Mithila cultural motifs & typography.
+  - Interactive Tag / Category Filter Chips.
+  - Featured Editorial Spotlight Hero Article.
+  - Responsive 3-Column Luxury Article Grid.
+  - Rich metadata (Date, Author, Reading Time, Category tags).
+  - Built-in authentic Mithila fallback articles for empty blog states.
+  - Mithila Rasoi Newsletter & Story Subscription Card.
+  - Custom Gold-Accented Pagination.
+  - 100% Theme Customizer configurable.
+{% endcomment %}
+
+{{ 'ss-blog-page.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'ss-blog-page.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign articles_limit = section.settings.articles_per_page | default: 9
+  assign show_hero_spotlight = section.settings.show_hero_article
+  assign show_category_filter = section.settings.show_category_filter
+  assign show_newsletter = section.settings.show_newsletter
+-%}
+
+{%- paginate blog.articles by articles_limit -%}
+<section
+  id="ss-blog-page-{{ section.id }}"
+  class="ss-blog-page"
+  data-ss-blog-page
+  style="
+    --ss-blog-pad-top: {{ section.settings.padding_top | default: 30 }}px;
+    --ss-blog-pad-bottom: {{ section.settings.padding_bottom | default: 80 }}px;
+  "
+>
+  <div class="ss-blog-page__container">
+    
+    {%- comment -%} 1. Breadcrumbs & Page Header {%- endcomment -%}
+    <div class="ss-blog-page__header">
+      <nav class="ss-blog-page__breadcrumbs" aria-label="Breadcrumbs">
+        <a href="{{ routes.root_url }}">Home</a>
+        <span class="ss-blog-page__breadcrumb-sep">/</span>
+        <span class="ss-blog-page__breadcrumb-current">{{ blog.title | default: 'Mithila Patrika' }}</span>
+      </nav>
+
+      <div class="ss-blog-page__title-box">
+        <div class="ss-blog-page__eyebrow">
+          <span class="ss-blog-page__eyebrow-line"></span>
+          <span class="ss-blog-page__eyebrow-text">{{ section.settings.eyebrow_text | default: '✦ SWAAD SAMVAAD PATRIKA ✦' }}</span>
+          <span class="ss-blog-page__eyebrow-line"></span>
+        </div>
+
+        <h1 class="ss-blog-page__heading">
+          {{ section.settings.heading | default: blog.title | default: 'Stories of Mithila, Culture & Taste' }}
+        </h1>
+
+        <p class="ss-blog-page__subheading">
+          {{ section.settings.subheading | default: 'Discover the sacred heritage, authentic recipes, and time-honored Chhath traditions behind Bihar’s most cherished handcrafted delicacy.' }}
+        </p>
+
+        <div class="ss-blog-page__motif-divider" aria-hidden="true">
+          <span>❖</span>
+          <div class="ss-blog-page__motif-bar"></div>
+          <span>🪔</span>
+          <div class="ss-blog-page__motif-bar"></div>
+          <span>❖</span>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} 2. Category / Tag Filter Chips {%- endcomment -%}
+    {%- if show_category_filter -%}
+      <div class="ss-blog-page__filter-wrap">
+        <div class="ss-blog-page__filter-scroll" data-ss-blog-filters>
+          <a
+            href="{{ blog.url }}"
+            class="ss-blog-filter-chip {% if current_tags == blank %}is-active{% endif %}"
+            data-tag="all"
+          >
+            <span>All Stories</span>
+          </a>
+
+          {%- if section.settings.filter_menu != blank and linklists[section.settings.filter_menu].links.size > 0 -%}
+            {%- for link in linklists[section.settings.filter_menu].links -%}
+              <a
+                href="{{ link.url }}"
+                class="ss-blog-filter-chip {% if link.active %}is-active{% endif %}"
+              >
+                <span>{{ link.title }}</span>
+              </a>
+            {%- endfor -%}
+          {%- elsif blog.all_tags.size > 0 -%}
+            {%- for tag in blog.all_tags -%}
+              <a
+                href="{{ blog.url }}/tagged/{{ tag | handle }}"
+                class="ss-blog-filter-chip {% if current_tags contains tag %}is-active{% endif %}"
+                data-tag="{{ tag | handle }}"
+              >
+                <span>{{ tag | capitalize }}</span>
+              </a>
+            {%- endfor -%}
+          {%- else -%}
+            {%- comment -%} Fallback curated topic tags {%- endcomment -%}
+            <button type="button" class="ss-blog-filter-chip is-active" data-tag="all">All Stories</button>
+            <button type="button" class="ss-blog-filter-chip" data-tag="heritage">Mithila Heritage</button>
+            <button type="button" class="ss-blog-filter-chip" data-tag="chhath">Chhath Mahaparv</button>
+            <button type="button" class="ss-blog-filter-chip" data-tag="desi-ghee">Desi Ghee Secrets</button>
+            <button type="button" class="ss-blog-filter-chip" data-tag="recipes">Authentic Recipes</button>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if blog.articles.size > 0 -%}
+      
+      {%- comment -%} 3. Featured Spotlight Article (Only on Page 1) {%- endcomment -%}
+      {%- if show_hero_spotlight and paginate.current_page == 1 and current_tags == blank -%}
+        {%- assign hero_article = blog.articles.first -%}
+        <div class="ss-blog-spotlight">
+          <div class="ss-blog-spotlight__card">
+            <a href="{{ hero_article.url }}" class="ss-blog-spotlight__media-wrap" aria-label="{{ hero_article.title | escape }}">
+              {%- if hero_article.image != blank -%}
+                <img
+                  src="{{ hero_article.image | image_url: width: 1200 }}"
+                  alt="{{ hero_article.title | escape }}"
+                  class="ss-blog-spotlight__img"
+                  width="1200"
+                  height="700"
+                  loading="eager"
+                  fetchpriority="high"
+                >
+              {%- else -%}
+                <img
+                  src="{{ 'ss-thekua-crafting-art.jpg' | asset_url }}"
+                  alt="{{ hero_article.title | escape }}"
+                  class="ss-blog-spotlight__img"
+                  width="1200"
+                  height="700"
+                  loading="eager"
+                  fetchpriority="high"
+                >
+              {%- endif -%}
+
+              <div class="ss-blog-spotlight__badges">
+                <span class="ss-blog-badge ss-blog-badge--spotlight">✨ Spotlight Story</span>
+                {%- if hero_article.tags.first != blank -%}
+                  <span class="ss-blog-badge ss-blog-badge--tag">{{ hero_article.tags.first }}</span>
+                {%- else -%}
+                  <span class="ss-blog-badge ss-blog-badge--tag">Mithila Heritage</span>
+                {%- endif -%}
+              </div>
+            </a>
+
+            <div class="ss-blog-spotlight__content">
+              <div class="ss-blog-meta-row">
+                <span class="ss-blog-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                  {{ hero_article.published_at | date: '%b %d, %Y' }}
+                </span>
+                <span class="ss-blog-meta-sep">•</span>
+                <span class="ss-blog-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  {%- assign words = hero_article.content | strip_html | split: ' ' | size -%}
+                  {%- assign read_time = words | divided_by: 180 | at_least: 3 -%}
+                  {{ read_time }} Min Read
+                </span>
+              </div>
+
+              <h2 class="ss-blog-spotlight__title">
+                <a href="{{ hero_article.url }}">{{ hero_article.title }}</a>
+              </h2>
+
+              <p class="ss-blog-spotlight__excerpt">
+                {%- if hero_article.excerpt != blank -%}
+                  {{ hero_article.excerpt | strip_html | truncatewords: 35 }}
+                {%- else -%}
+                  {{ hero_article.content | strip_html | truncatewords: 35 }}
+                {%- endif -%}
+              </p>
+
+              <div class="ss-blog-spotlight__footer">
+                <div class="ss-blog-author-wrap">
+                  <div class="ss-blog-author-avatar">👩‍🍳</div>
+                  <div class="ss-blog-author-info">
+                    <span class="ss-blog-author-name">{{ hero_article.author | default: 'Swaad Samvaad Rasoi' }}</span>
+                    <span class="ss-blog-author-title">Master Artisan</span>
+                  </div>
+                </div>
+
+                <a href="{{ hero_article.url }}" class="ss-blog-spotlight__cta-btn">
+                  <span>Read Full Story</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} 4. Main Articles Grid {%- endcomment -%}
+      <div class="ss-blog-grid">
+        {%- for article in blog.articles -%}
+          {%- comment -%} If spotlight hero is shown on page 1, skip the first article in grid {%- endcomment -%}
+          {%- if show_hero_spotlight and paginate.current_page == 1 and current_tags == blank and forloop.first -%}
+            {%- continue -%}
+          {%- endif -%}
+
+          {%- liquid
+            assign words = article.content | strip_html | split: ' ' | size
+            assign read_time = words | divided_by: 180 | at_least: 2
+          -%}
+
+          <article class="ss-blog-card" data-ss-blog-card>
+            <a href="{{ article.url }}" class="ss-blog-card__media-wrap" aria-label="{{ article.title | escape }}">
+              {%- if article.image != blank -%}
+                <img
+                  src="{{ article.image | image_url: width: 600 }}"
+                  alt="{{ article.title | escape }}"
+                  class="ss-blog-card__img"
+                  width="600"
+                  height="380"
+                  loading="lazy"
+                >
+              {%- else -%}
+                <img
+                  src="{{ 'ss-hero-slide-1.jpg' | asset_url }}"
+                  alt="{{ article.title | escape }}"
+                  class="ss-blog-card__img"
+                  width="600"
+                  height="380"
+                  loading="lazy"
+                >
+              {%- endif -%}
+
+              <div class="ss-blog-card__badges">
+                {%- if article.tags.first != blank -%}
+                  <span class="ss-blog-badge ss-blog-badge--card">{{ article.tags.first }}</span>
+                {%- else -%}
+                  <span class="ss-blog-badge ss-blog-badge--card">Mithila Rasoi</span>
+                {%- endif -%}
+              </div>
+            </a>
+
+            <div class="ss-blog-card__body">
+              <div class="ss-blog-meta-row ss-blog-meta-row--compact">
+                <span class="ss-blog-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                  {{ article.published_at | date: '%b %d, %Y' }}
+                </span>
+                <span class="ss-blog-meta-sep">•</span>
+                <span class="ss-blog-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  {{ read_time }} Min
+                </span>
+              </div>
+
+              <h3 class="ss-blog-card__title">
+                <a href="{{ article.url }}">{{ article.title }}</a>
+              </h3>
+
+              <p class="ss-blog-card__excerpt">
+                {%- if article.excerpt != blank -%}
+                  {{ article.excerpt | strip_html | truncatewords: 18 }}
+                {%- else -%}
+                  {{ article.content | strip_html | truncatewords: 18 }}
+                {%- endif -%}
+              </p>
+
+              <div class="ss-blog-card__footer">
+                <span class="ss-blog-card__author">{{ article.author | default: 'Swaad Samvaad' }}</span>
+                <a href="{{ article.url }}" class="ss-blog-card__read-link" aria-label="Read {{ article.title | escape }}">
+                  <span>Read Story</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+        {%- endfor -%}
+      </div>
+
+    {%- else -%}
+      
+      {%- comment -%} 5. Fallback Demo Articles for Unpopulated Blog {%- endcomment -%}
+      <div class="ss-blog-spotlight">
+        <div class="ss-blog-spotlight__card">
+          <div class="ss-blog-spotlight__media-wrap">
+            <img
+              src="{{ 'ss-thekua-crafting-art.jpg' | asset_url }}"
+              alt="The Sacred Art of Slow-Made Thekua"
+              class="ss-blog-spotlight__img"
+              width="1200"
+              height="700"
+              loading="eager"
+            >
+            <div class="ss-blog-spotlight__badges">
+              <span class="ss-blog-badge ss-blog-badge--spotlight">✨ Spotlight Story</span>
+              <span class="ss-blog-badge ss-blog-badge--tag">Mithila Heritage</span>
+            </div>
+          </div>
+
+          <div class="ss-blog-spotlight__content">
+            <div class="ss-blog-meta-row">
+              <span class="ss-blog-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                October 2026
+              </span>
+              <span class="ss-blog-meta-sep">•</span>
+              <span class="ss-blog-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                5 Min Read
+              </span>
+            </div>
+
+            <h2 class="ss-blog-spotlight__title">
+              <a href="#">The Sacred Art of Slow-Made Thekua: Why Pure Cow Desi Ghee Matters</a>
+            </h2>
+
+            <p class="ss-blog-spotlight__excerpt">
+              In Mithila homes, making thekua is not merely cooking — it is an auspicious ritual passed down across generations. Learn why slow wood-fire frying in 100% pure cow ghee creates the unmistakable golden crunch and blissful aroma.
+            </p>
+
+            <div class="ss-blog-spotlight__footer">
+              <div class="ss-blog-author-wrap">
+                <div class="ss-blog-author-avatar">👩‍🍳</div>
+                <div class="ss-blog-author-info">
+                  <span class="ss-blog-author-name">Dadi Ki Rasoi</span>
+                  <span class="ss-blog-author-title">Authentic Recipe Master</span>
+                </div>
+              </div>
+
+              <a href="#newsletter" class="ss-blog-spotlight__cta-btn">
+                <span>Explore Stories</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ss-blog-grid">
+        <article class="ss-blog-card">
+          <div class="ss-blog-card__media-wrap">
+            <img src="{{ 'ss-hero-slide-2.jpg' | asset_url }}" alt="Chhath Mahaparv & The Divine Prasaad" class="ss-blog-card__img" width="600" height="380" loading="lazy">
+            <div class="ss-blog-card__badges">
+              <span class="ss-blog-badge ss-blog-badge--card">Chhath Special</span>
+            </div>
+          </div>
+          <div class="ss-blog-card__body">
+            <div class="ss-blog-meta-row ss-blog-meta-row--compact">
+              <span class="ss-blog-meta-item">October 2026</span>
+              <span class="ss-blog-meta-sep">•</span>
+              <span class="ss-blog-meta-item">4 Min</span>
+            </div>
+            <h3 class="ss-blog-card__title"><a href="#">Chhath Mahaparv & The Divine Prasaad: A 3,000-Year-Old Sun Worship Tradition</a></h3>
+            <p class="ss-blog-card__excerpt">Explore the spiritual significance of offering handcrafted thekua to Lord Surya along the sacred riverbanks.</p>
+            <div class="ss-blog-card__footer">
+              <span class="ss-blog-card__author">Mithila Sanskriti</span>
+              <a href="#" class="ss-blog-card__read-link"><span>Read Story</span> <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+          </div>
+        </article>
+
+        <article class="ss-blog-card">
+          <div class="ss-blog-card__media-wrap">
+            <img src="{{ 'ss-story-main-hero.png' | asset_url }}" alt="Grandma Wooden Sancha" class="ss-blog-card__img" width="600" height="380" loading="lazy">
+            <div class="ss-blog-card__badges">
+              <span class="ss-blog-badge ss-blog-badge--card">Kitchen Secrets</span>
+            </div>
+          </div>
+          <div class="ss-blog-card__body">
+            <div class="ss-blog-meta-row ss-blog-meta-row--compact">
+              <span class="ss-blog-meta-item">October 2026</span>
+              <span class="ss-blog-meta-sep">•</span>
+              <span class="ss-blog-meta-item">3 Min</span>
+            </div>
+            <h3 class="ss-blog-card__title"><a href="#">From Grandma's Sheesham Wood Sancha to Your Doorstep: The Swaad Samvaad Journey</a></h3>
+            <p class="ss-blog-card__excerpt">How our artisanal wooden molds carve the auspicious leaf and floral patterns on every single thekua.</p>
+            <div class="ss-blog-card__footer">
+              <span class="ss-blog-card__author">Swaad Samvaad</span>
+              <a href="#" class="ss-blog-card__read-link"><span>Read Story</span> <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+          </div>
+        </article>
+
+        <article class="ss-blog-card">
+          <div class="ss-blog-card__media-wrap">
+            <img src="{{ 'ss-hero-slide-3.jpg' | asset_url }}" alt="Desi Gud vs Sugar" class="ss-blog-card__img" width="600" height="380" loading="lazy">
+            <div class="ss-blog-card__badges">
+              <span class="ss-blog-badge ss-blog-badge--card">Healthy Living</span>
+            </div>
+          </div>
+          <div class="ss-blog-card__body">
+            <div class="ss-blog-meta-row ss-blog-meta-row--compact">
+              <span class="ss-blog-meta-item">October 2026</span>
+              <span class="ss-blog-meta-sep">•</span>
+              <span class="ss-blog-meta-item">4 Min</span>
+            </div>
+            <h3 class="ss-blog-card__title"><a href="#">Desi Gud vs Khandsari Chini: Which Authentic Thekua Suits Your Palate?</a></h3>
+            <p class="ss-blog-card__excerpt">A deep culinary dive into the earthy caramel notes of sugarcane jaggery versus the crisp sweetness of native sugar.</p>
+            <div class="ss-blog-card__footer">
+              <span class="ss-blog-card__author">Nutrition & Taste</span>
+              <a href="#" class="ss-blog-card__read-link"><span>Read Story</span> <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+          </div>
+        </article>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} 6. Pagination Controls {%- endcomment -%}
+    {%- if paginate.pages > 1 -%}
+      <div class="ss-blog-pagination">
+        <nav class="ss-blog-pagination__nav" aria-label="Blog pages pagination">
+          {%- if paginate.previous -%}
+            <a href="{{ paginate.previous.url }}" class="ss-blog-pagination__btn ss-blog-pagination__btn--prev" aria-label="Previous Page">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              <span>Previous</span>
+            </a>
+          {%- endif -%}
+
+          <div class="ss-blog-pagination__numbers">
+            {%- for part in paginate.parts -%}
+              {%- if part.is_link -%}
+                <a href="{{ part.url }}" class="ss-blog-pagination__num">{{ part.title }}</a>
+              {%- else -%}
+                {%- if part.title == paginate.current_page -%}
+                  <span class="ss-blog-pagination__num is-current" aria-current="page">{{ part.title }}</span>
+                {%- else -%}
+                  <span class="ss-blog-pagination__num is-ellipsis">{{ part.title }}</span>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+
+          {%- if paginate.next -%}
+            <a href="{{ paginate.next.url }}" class="ss-blog-pagination__btn ss-blog-pagination__btn--next" aria-label="Next Page">
+              <span>Next</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          {%- endif -%}
+        </nav>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} 7. Featured Products Showcase (Drive Readers to Product Page) {%- endcomment -%}
+    {%- if section.settings.show_featured_products -%}
+      {%- liquid
+        assign prod_collection = section.settings.featured_collection | default: collections['all']
+        assign prod_limit = section.settings.products_limit | default: 3
+      -%}
+      <div class="ss-blog-products-showcase">
+        <div class="ss-blog-products-showcase__header">
+          <div class="ss-blog-products-showcase__eyebrow">
+            <span class="ss-blog-products-showcase__eyebrow-line"></span>
+            <span>TASTE THE TRADITION</span>
+            <span class="ss-blog-products-showcase__eyebrow-line"></span>
+          </div>
+          <h2 class="ss-blog-products-showcase__heading">
+            {{ section.settings.products_heading | default: 'Handcrafted Mithila Thekua Delicacies' }}
+          </h2>
+          <p class="ss-blog-products-showcase__subheading">
+            {{ section.settings.products_subheading | default: 'Slow-made with 100% pure cow desi ghee, organic jaggery & traditional wooden molds. Taste the sacred prasaad of Mithila at home.' }}
+          </p>
+        </div>
+
+        <div class="ss-blog-products-grid">
+          {%- if prod_collection.products.size > 0 -%}
+            {%- for prod in prod_collection.products limit: prod_limit -%}
+              {%- liquid
+                assign compare_at = prod.compare_at_price
+                assign price = prod.price
+                assign savings_amount = 0
+                assign discount_pct = 0
+                if compare_at > price
+                  assign savings_amount = compare_at | minus: price
+                  assign discount_pct = savings_amount | times: 100.0 | divided_by: compare_at | round
+                endif
+                assign first_variant = prod.selected_or_first_available_variant
+              -%}
+              <div class="ss-blog-prod-card">
+                <a href="{{ prod.url }}" class="ss-blog-prod-card__media-wrap" aria-label="{{ prod.title | escape }}">
+                  {%- if prod.featured_image != blank -%}
+                    <img
+                      src="{{ prod.featured_image | image_url: width: 600 }}"
+                      alt="{{ prod.title | escape }}"
+                      class="ss-blog-prod-card__img"
+                      width="500"
+                      height="500"
+                      loading="lazy"
+                    >
+                  {%- else -%}
+                    <img
+                      src="{{ 'ss-thekua-wood-sancha.jpg' | asset_url }}"
+                      alt="{{ prod.title | escape }}"
+                      class="ss-blog-prod-card__img"
+                      width="500"
+                      height="500"
+                      loading="lazy"
+                    >
+                  {%- endif -%}
+
+                  {%- if discount_pct > 0 -%}
+                    <div class="ss-blog-prod-card__discount-badge">{{ discount_pct }}% OFF</div>
+                  {%- endif -%}
+
+                  <div class="ss-blog-prod-card__tag-badge">Pure Desi Ghee</div>
+                </a>
+
+                <div class="ss-blog-prod-card__body">
+                  <a href="{{ prod.url }}" class="ss-blog-prod-card__title" title="{{ prod.title | escape }}">
+                    {{ prod.title }}
+                  </a>
+
+                  <div class="ss-blog-prod-card__rating-row">
+                    <span class="ss-blog-prod-card__star">★ 4.9</span>
+                    <span class="ss-blog-prod-card__reviews">(1.6k+ reviews)</span>
+                  </div>
+
+                  <div class="ss-blog-prod-card__price-row">
+                    {%- if compare_at > price -%}
+                      <span class="ss-blog-prod-card__compare-price">{{ compare_at | money }}</span>
+                    {%- endif -%}
+                    <span class="ss-blog-prod-card__price">{{ price | money }}</span>
+                  </div>
+
+                  {%- if savings_amount > 0 -%}
+                    <div class="ss-blog-prod-card__savings">Save {{ savings_amount | money }}</div>
+                  {%- endif -%}
+
+                  <div class="ss-blog-prod-card__actions">
+                    <button
+                      type="button"
+                      class="ss-blog-prod-card__add-btn"
+                      data-variant-id="{{ first_variant.id | default: 1 }}"
+                      data-ss-blog-add-cart
+                      aria-label="Add {{ prod.title | escape }} to basket"
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                      </svg>
+                      <span>+ ADD TO BASKET</span>
+                    </button>
+                    <a href="{{ prod.url }}" class="ss-blog-prod-card__view-btn" aria-label="View {{ prod.title | escape }}">
+                      View Details
+                    </a>
+                  </div>
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+
+        <div class="ss-blog-products-showcase__footer">
+          <a href="/#products" class="ss-blog-products-showcase__explore-btn">
+            <span>Explore All Authentic Thekuas</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Swaad Blog Page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Eyebrow Text",
+      "default": "✦ SWAAD SAMVAAD PATRIKA ✦"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Main Heading",
+      "default": "Stories of Mithila, Culture & Taste"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading Description",
+      "default": "Discover the sacred heritage, authentic recipes, and time-honored Chhath traditions behind Bihar’s most cherished handcrafted delicacy."
+    },
+    {
+      "type": "range",
+      "id": "articles_per_page",
+      "label": "Articles Per Page",
+      "min": 3,
+      "max": 18,
+      "step": 3,
+      "default": 9
+    },
+    {
+      "type": "checkbox",
+      "id": "show_hero_article",
+      "label": "Show Featured Spotlight Hero Story",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_category_filter",
+      "label": "Show Topic Filter Chips",
+      "default": true
+    },
+    {
+      "type": "link_list",
+      "id": "filter_menu",
+      "label": "Custom Category Menu (Optional)",
+      "info": "Select a menu created under Navigation, or leave empty to auto-load Article Tags"
+    },
+    {
+      "type": "header",
+      "content": "Product Drive Section (Bottom)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_featured_products",
+      "label": "Show Featured Products Showcase",
+      "default": true
+    },
+    {
+      "type": "collection",
+      "id": "featured_collection",
+      "label": "Featured Products Collection"
+    },
+    {
+      "type": "text",
+      "id": "products_heading",
+      "label": "Products Section Heading",
+      "default": "Handcrafted Mithila Thekua Delicacies"
+    },
+    {
+      "type": "textarea",
+      "id": "products_subheading",
+      "label": "Products Section Subheading",
+      "default": "Slow-made with 100% pure cow desi ghee, organic jaggery & traditional wooden molds. Taste the sacred prasaad of Mithila at home."
+    },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "label": "Number of Products to Display",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top Spacing",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom Spacing",
+      "min": 20,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 80
+    }
+  ]
+}
+{% endschema %}
