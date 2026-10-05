@@ -155,6 +155,16 @@
                   height="500"
                   loading="lazy"
                 >
+                {%- if prod.images[1] != blank -%}
+                  <img
+                    src="{{ prod.images[1] | image_url: width: 600 }}"
+                    alt="{{ prod.title | escape }}"
+                    class="ss-col-card__img ss-col-card__img--secondary"
+                    width="500"
+                    height="500"
+                    loading="lazy"
+                  >
+                {%- endif -%}
               {%- else -%}
                 <img
                   src="{{ 'ss-thekua-crafting-art.jpg' | asset_url }}"
@@ -427,40 +437,6 @@
       </div>
     {%- endif -%}
 
-    {%- comment -%} 6. Mithila Purity Guarantee Strip {%- endcomment -%}
-    {%- if show_purity_strip -%}
-      <div class="ss-collection-purity-strip">
-        <div class="ss-col-purity-item">
-          <div class="ss-col-purity-icon">🧈</div>
-          <div class="ss-col-purity-text">
-            <strong>100% Pure Desi Ghee</strong>
-            <p>Slow wood-fire simmered in small batches</p>
-          </div>
-        </div>
-        <div class="ss-col-purity-item">
-          <div class="ss-col-purity-icon">🪵</div>
-          <div class="ss-col-purity-text">
-            <strong>Artisanal Wood Sancha</strong>
-            <p>Carved with sacred motifs by Mithila artisans</p>
-          </div>
-        </div>
-        <div class="ss-col-purity-item">
-          <div class="ss-col-purity-icon">🌿</div>
-          <div class="ss-col-purity-text">
-            <strong>Zero Palm Oil & Chemicals</strong>
-            <p>No artificial colors, 100% wholesome recipe</p>
-          </div>
-        </div>
-        <div class="ss-col-purity-item">
-          <div class="ss-col-purity-icon">📦</div>
-          <div class="ss-col-purity-text">
-            <strong>Aroma-Lock Fresh Dispatch</strong>
-            <p>Delivered fresh across India within 3-5 days</p>
-          </div>
-        </div>
-      </div>
-    {%- endif -%}
-
   </div>
 
   {%- comment -%} 7. Slide-Over Filter Drawer from Right {%- endcomment -%}
@@ -591,12 +567,6 @@
       "max": 24,
       "step": 4,
       "default": 12
-    },
-    {
-      "type": "checkbox",
-      "id": "show_purity_strip",
-      "label": "Show Mithila Purity Guarantee Strip",
-      "default": true
     },
     {
       "type": "header",

@@ -225,6 +225,16 @@
                     height="500"
                     loading="lazy"
                   >
+                  {%- if prod.images[1] != blank -%}
+                    <img
+                      src="{{ prod.images[1] | image_url: width: 600 }}"
+                      alt="{{ prod.title | escape }}"
+                      class="ss-sp-card__img ss-sp-card__img--secondary"
+                      width="500"
+                      height="500"
+                      loading="lazy"
+                    >
+                  {%- endif -%}
                 {%- else -%}
                   <img
                     src="{{ 'ss-thekua-crafting-art.jpg' | asset_url }}"
