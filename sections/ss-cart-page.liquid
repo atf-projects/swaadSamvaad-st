@@ -1,0 +1,436 @@
+{% comment %}
+  Section contract.
+  Swaad Samvaad - Luxury Traditional Cart Page
+  Features:
+  - 2-Column Responsive Layout.
+  - Dynamic Free Delivery Unlock Progress Bar.
+  - Cart item cards with high-res media, variant subtitle, steppers, and remove actions.
+  - Personalized Gift Note / Special Instructions Box.
+  - Mithila Combo Upsells / Recommendations with instant AJAX add.
+  - Sticky Order Summary Card with Subtotal, savings badge, trust pillars, and secure checkout.
+  - Empty cart state with "Shop Authentic Thekua" CTA.
+{% endcomment %}
+
+{{ 'ss-cart-page.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'ss-cart-page.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign threshold_rupees = section.settings.free_shipping_threshold_rupees | default: 500
+  assign free_shipping_threshold = threshold_rupees | times: 100
+  assign current_subtotal = cart.total_price
+  if current_subtotal >= free_shipping_threshold
+    assign shipping_diff = 0
+    assign progress_pct = 100
+  else
+    assign shipping_diff = free_shipping_threshold | minus: current_subtotal
+    assign progress_pct = current_subtotal | times: 100 | divided_by: free_shipping_threshold
+  endif
+
+  assign total_savings = 0
+  for item in cart.items
+    if item.variant.compare_at_price > item.final_price
+      assign saving_per_item = item.variant.compare_at_price | minus: item.final_price
+      assign item_savings = saving_per_item | times: item.quantity
+      assign total_savings = total_savings | plus: item_savings
+    endif
+  endfor
+-%}
+
+<section
+  id="ss-cart-page-{{ section.id }}"
+  class="ss-cart-page"
+  data-ss-cart-page
+  style="
+    --ss-cart-pad-top: {{ section.settings.padding_top | default: 40 }}px;
+    --ss-cart-pad-bottom: {{ section.settings.padding_bottom | default: 80 }}px;
+  "
+>
+  <div class="ss-cart-page__container">
+    
+    {%- comment -%} 1. Page Header {%- endcomment -%}
+    <div class="ss-cart-page__header">
+      <nav class="ss-cart-page__breadcrumbs" aria-label="Breadcrumbs">
+        <a href="/">Home</a>
+        <span class="ss-cart-page__breadcrumb-sep">/</span>
+        <span class="ss-cart-page__breadcrumb-active">Your Swaad Basket</span>
+      </nav>
+      <h1 class="ss-cart-page__title">
+        Your Swaad Basket 🧺
+        {% if cart.item_count > 0 %}
+          <span class="ss-cart-page__count-pill" data-ss-cart-total-items>{{ cart.item_count }} items</span>
+        {% endif %}
+      </h1>
+      <p class="ss-cart-page__subtitle">Slow-made Mithila Sweets & Handcrafted Desi Ghee Thekuas</p>
+    </div>
+
+    {%- comment -%} 2. Free Delivery Goal Banner {%- endcomment -%}
+    <div class="ss-cart-page__shipping-banner" data-ss-shipping-bar data-threshold="{{ free_shipping_threshold }}">
+      <div class="ss-cart-page__shipping-info">
+        <span class="ss-cart-page__shipping-icon">🚚</span>
+        <span class="ss-cart-page__shipping-text" data-ss-shipping-text>
+          {%- if current_subtotal >= free_shipping_threshold -%}
+            🎉 You have unlocked <strong>FREE Express Delivery</strong> nationwide!
+          {%- else -%}
+            Add <strong>{{ shipping_diff | money }}</strong> more to unlock <strong>FREE Express Delivery!</strong>
+          {%- endif -%}
+        </span>
+      </div>
+      <div class="ss-cart-page__progress-track">
+        <div class="ss-cart-page__progress-fill" data-ss-progress-fill style="width: {{ progress_pct }}%;"></div>
+      </div>
+    </div>
+
+    {%- if cart.item_count == 0 -%}
+      {%- comment -%} 3. Empty Basket State {%- endcomment -%}
+      <div class="ss-cart-page__empty-card">
+        <div class="ss-cart-page__empty-icon">🧺</div>
+        <h2 class="ss-cart-page__empty-heading">Your Swaad Basket is currently empty</h2>
+        <p class="ss-cart-page__empty-sub">
+          Bring home the authentic warmth and crunch of Grandma's traditional Mithila thekua recipe made with pure desi ghee.
+        </p>
+        <a href="/#products" class="ss-cart-page__shop-btn">
+          <span>Shop Authentic Thekuas</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+
+    {%- else -%}
+      {%- comment -%} 4. 2-Column Cart Grid {%- endcomment -%}
+      <div class="ss-cart-page__grid">
+        
+        {%- comment -%} Left Column: Items List & Notes {%- endcomment -%}
+        <div class="ss-cart-page__col-main">
+          
+          <div class="ss-cart-page__items-card">
+            <div class="ss-cart-page__items-header">
+              <span>Item Details</span>
+              <span>Total Price</span>
+            </div>
+
+            <div class="ss-cart-page__items-list" data-ss-cart-page-items>
+              {%- for item in cart.items -%}
+                <div class="ss-cart-page-item" data-line-key="{{ item.key }}" data-line-index="{{ forloop.index }}">
+                  <div class="ss-cart-page-item__media">
+                    {%- if item.image != blank -%}
+                      <img
+                        src="{{ item.image | image_url: width: 220 }}"
+                        alt="{{ item.title | escape }}"
+                        class="ss-cart-page-item__img"
+                        width="90"
+                        height="90"
+                        loading="lazy"
+                      >
+                    {%- else -%}
+                      <div class="ss-cart-page-item__img-placeholder">🍪</div>
+                    {%- endif -%}
+                  </div>
+
+                  <div class="ss-cart-page-item__details">
+                    <div class="ss-cart-page-item__top">
+                      <h3 class="ss-cart-page-item__title">
+                        <a href="{{ item.url }}">{{ item.product.title | escape }}</a>
+                      </h3>
+                      <div class="ss-cart-page-item__price">{{ item.final_line_price | money }}</div>
+                    </div>
+
+                    {%- if item.variant.title != blank and item.variant.title != 'Default Title' -%}
+                      <div class="ss-cart-page-item__variant">{{ item.variant.title }} · 100% Pure Desi Ghee</div>
+                    {%- else -%}
+                      <div class="ss-cart-page-item__variant">Authentic Recipe · 100% Pure Desi Ghee</div>
+                    {%- endif -%}
+
+                    <div class="ss-cart-page-item__unit-price">
+                      Unit Price: {{ item.final_price | money }}
+                    </div>
+
+                    <div class="ss-cart-page-item__bottom">
+                      <div class="ss-cart-stepper">
+                        <button type="button" class="ss-cart-stepper__btn ss-cart-stepper__btn--minus" data-page-stepper="minus" data-line="{{ forloop.index }}" data-qty="{{ item.quantity }}" aria-label="Decrease quantity">−</button>
+                        <span class="ss-cart-stepper__val">{{ item.quantity }}</span>
+                        <button type="button" class="ss-cart-stepper__btn ss-cart-stepper__btn--plus" data-page-stepper="plus" data-line="{{ forloop.index }}" data-qty="{{ item.quantity }}" aria-label="Increase quantity">+</button>
+                      </div>
+
+                      <button type="button" class="ss-cart-page-item__remove-btn" data-page-remove="{{ forloop.index }}">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        <span>Remove</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+
+          {%- comment -%} Personalized Gift Message & Special Instructions Box {%- endcomment -%}
+          <div class="ss-cart-page__note-card">
+            <details class="ss-cart-page__note-details">
+              <summary class="ss-cart-page__note-summary">
+                <span class="ss-cart-page__note-icon">🎁</span>
+                <span>Add Festive Gift Message or Packaging Request</span>
+                <span class="ss-cart-page__note-chevron">▼</span>
+              </summary>
+              <div class="ss-cart-page__note-body">
+                <textarea
+                  name="note"
+                  class="ss-cart-page__note-input"
+                  placeholder="Write a warm personalized message or special delivery instructions..."
+                  rows="3"
+                  data-ss-cart-note
+                >{{ cart.note }}</textarea>
+                <button type="button" class="ss-cart-page__note-save-btn" data-ss-save-note>Save Note</button>
+              </div>
+            </details>
+          </div>
+
+          {%- comment -%} Mithila Combo Upsells / Pairings {%- endcomment -%}
+          {%- liquid
+            assign displayed_upsells = 0
+          -%}
+          <div class="ss-cart-page__upsell-card">
+            <div class="ss-cart-page__upsell-heading">
+              <div class="ss-cart-page__upsell-eyebrow">
+                <span class="ss-cart-page__upsell-eyebrow-line"></span>
+                <span class="ss-cart-page__upsell-eyebrow-text">MITHILA PAIRINGS</span>
+                <span class="ss-cart-page__upsell-eyebrow-line"></span>
+              </div>
+              <h3 class="ss-cart-page__upsell-title">Complete Your Festive Celebration</h3>
+              <p class="ss-cart-page__upsell-desc">Add these authentic small-batch handcrafted delicacies freshly molded in pure desi ghee.</p>
+            </div>
+
+            <div class="ss-cart-page__upsell-grid">
+              {%- for prod in collections['all'].products -%}
+                {%- liquid
+                  assign in_cart = false
+                  for item in cart.items
+                    if item.product_id == prod.id
+                      assign in_cart = true
+                    endif
+                  endfor
+                -%}
+                {%- unless in_cart -%}
+                  {%- liquid
+                    assign compare_at = prod.compare_at_price
+                    assign price = prod.price
+                    assign savings_amount = 0
+                    assign discount_pct = 0
+                    if compare_at > price
+                      assign savings_amount = compare_at | minus: price
+                      assign discount_pct = savings_amount | times: 100.0 | divided_by: compare_at | round
+                    endif
+                    assign first_variant = prod.selected_or_first_available_variant
+                    assign displayed_upsells = displayed_upsells | plus: 1
+                  -%}
+
+                  <div class="ss-cart-upsell-item">
+                    <a href="{{ prod.url }}" class="ss-cart-upsell-item__media" aria-label="{{ prod.title | escape }}">
+                      {%- if prod.featured_image != blank -%}
+                        <img
+                          src="{{ prod.featured_image | image_url: width: 400 }}"
+                          alt="{{ prod.title | escape }}"
+                          class="ss-cart-upsell-item__img"
+                          width="240"
+                          height="240"
+                          loading="lazy"
+                        >
+                      {%- else -%}
+                        <img
+                          src="{{ 'ss-thekua-wood-sancha.jpg' | asset_url }}"
+                          alt="{{ prod.title | escape }}"
+                          class="ss-cart-upsell-item__img"
+                          width="240"
+                          height="240"
+                          loading="lazy"
+                        >
+                      {%- endif -%}
+
+                      {%- if discount_pct > 0 -%}
+                        <div class="ss-cart-upsell-item__badge-discount">
+                          {{ discount_pct }}% OFF
+                        </div>
+                      {%- endif -%}
+
+                      <div class="ss-cart-upsell-item__badge-tag">
+                        Pure Desi Ghee
+                      </div>
+                    </a>
+
+                    <div class="ss-cart-upsell-item__body">
+                      <a href="{{ prod.url }}" class="ss-cart-upsell-item__title" title="{{ prod.title | escape }}">
+                        {{ prod.title }}
+                      </a>
+
+                      <div class="ss-cart-upsell-item__rating-row">
+                        <span class="ss-cart-upsell-item__star">★ 4.9</span>
+                        <span class="ss-cart-upsell-item__reviews">(1.6k+ reviews)</span>
+                      </div>
+
+                      <div class="ss-cart-upsell-item__price-row">
+                        {%- if compare_at > price -%}
+                          <span class="ss-cart-upsell-item__compare-price">{{ compare_at | money }}</span>
+                        {%- endif -%}
+                        <span class="ss-cart-upsell-item__price">{{ price | money }}</span>
+                      </div>
+
+                      {%- if savings_amount > 0 -%}
+                        <div class="ss-cart-upsell-item__savings">Save {{ savings_amount | money }}</div>
+                      {%- endif -%}
+
+                      <button
+                        type="button"
+                        class="ss-cart-upsell-item__btn"
+                        data-upsell-variant-id="{{ first_variant.id | default: 1 }}"
+                        data-ss-upsell-btn
+                        aria-label="Add {{ prod.title | escape }} to basket"
+                      >
+                        <svg class="ss-cart-upsell-item__btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                          <line x1="3" y1="6" x2="21" y2="6"></line>
+                          <path d="M16 10a4 4 0 0 1-8 0"></path>
+                        </svg>
+                        <span>+ Add to Basket</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {%- if displayed_upsells >= 3 -%}
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endunless -%}
+              {%- endfor -%}
+            </div>
+          </div>
+
+        </div>
+
+        {%- comment -%} Right Column: Sticky Order Summary {%- endcomment -%}
+        <div class="ss-cart-page__col-summary">
+          <div class="ss-cart-page__summary-card">
+            <h2 class="ss-cart-page__summary-title">Order Summary</h2>
+
+            <div class="ss-cart-page__summary-rows">
+              <div class="ss-cart-page__summary-row">
+                <span>Items Subtotal</span>
+                <span class="ss-cart-page__val" data-ss-page-subtotal>{{ cart.total_price | money }}</span>
+              </div>
+
+              {%- if total_savings > 0 -%}
+                <div class="ss-cart-page__summary-row ss-cart-page__summary-row--savings">
+                  <span>Product Savings</span>
+                  <span class="ss-cart-page__savings-val">− {{ total_savings | money }}</span>
+                </div>
+              {%- endif -%}
+
+              <div class="ss-cart-page__summary-row">
+                <span>Delivery Charges</span>
+                <span class="ss-cart-page__delivery-val">
+                  {%- if current_subtotal >= free_shipping_threshold -%}
+                    <strong class="ss-cart-page__free-tag">FREE</strong>
+                  {%- else -%}
+                    ₹49 (Standard)
+                  {%- endif -%}
+                </span>
+              </div>
+
+              <div class="ss-cart-page__summary-row ss-cart-page__summary-row--taxes">
+                <span>Taxes & GST</span>
+                <span>Included in all prices</span>
+              </div>
+            </div>
+
+            <div class="ss-cart-page__total-divider"></div>
+
+            <div class="ss-cart-page__total-row">
+              <div>
+                <div class="ss-cart-page__total-label">Total Amount</div>
+                <div class="ss-cart-page__total-sub">Inclusive of all taxes</div>
+              </div>
+              <div class="ss-cart-page__total-price" data-ss-page-total>{{ cart.total_price | money }}</div>
+            </div>
+
+            <a href="/checkout" class="ss-cart-page__checkout-btn">
+              <span>Proceed to Checkout</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+
+            <div class="ss-cart-page__continue-row">
+              <a href="/#products" class="ss-cart-page__continue-link">← Continue Shopping</a>
+            </div>
+
+            {%- comment -%} Trust Pillars Ribbon {%- endcomment -%}
+            <div class="ss-cart-page__trust-box">
+              <div class="ss-cart-page__trust-item">
+                <span class="ss-cart-page__trust-icon">🌿</span>
+                <span>100% Cow Desi Ghee</span>
+              </div>
+              <div class="ss-cart-page__trust-item">
+                <span class="ss-cart-page__trust-icon">🛡️</span>
+                <span>100% Taste Refund Guarantee</span>
+              </div>
+              <div class="ss-cart-page__trust-item">
+                <span class="ss-cart-page__trust-icon">📜</span>
+                <span>FSSAI Certified Kitchen</span>
+              </div>
+              <div class="ss-cart-page__trust-item">
+                <span class="ss-cart-page__trust-icon">📦</span>
+                <span>Airtight Fresh Packaging</span>
+              </div>
+            </div>
+
+            {%- comment -%} Secure Payment Badges {%- endcomment -%}
+            <div class="ss-cart-page__payment-badges">
+              <span>100% Safe & Secure Checkout</span>
+              <div class="ss-cart-page__payment-icons">
+                <span class="ss-pay-pill">UPI</span>
+                <span class="ss-pay-pill">Google Pay</span>
+                <span class="ss-pay-pill">PhonePe</span>
+                <span class="ss-pay-pill">Cards</span>
+                <span class="ss-pay-pill">NetBanking</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Swaad Cart Page",
+  "settings": [
+    {
+      "type": "range",
+      "id": "free_shipping_threshold_rupees",
+      "label": "Free Delivery Goal (in ₹)",
+      "min": 100,
+      "max": 1500,
+      "step": 50,
+      "unit": "₹",
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top Spacing",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom Spacing",
+      "min": 20,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 80
+    }
+  ]
+}
+{% endschema %}

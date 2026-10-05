@@ -36,6 +36,8 @@ The theme seamlessly blends the authentic cultural elegance of Mithila & Bihar (
 | `sections/ss-video-reviews.liquid` | **Video Reels** | Engaging video review cards showcasing real reactions and ghee-rich texture close-ups. | `/#videos` |
 | `sections/ss-reviews-wall.liquid` | **Customer Review Wall** | Continuous auto-scrolling wall of verified buyer reviews across India & international locations (USA, UK, UAE). | `/#reviews` |
 | `sections/ss-faq.liquid` | **FAQ & WhatsApp Support** | Interactive accordion answering shelf life, ingredients, shipping, plus direct WhatsApp support CTA. | `/#faq` |
+| `snippets/ss-cart-drawer.liquid` | **Swaad Basket Drawer** | Pixel-perfect sliding cart sidebar with free shipping unlock bar, stepper controls, combo upsell & checkout CTA. | Cart Drawer |
+| `sections/ss-cart-page.liquid` | **Luxury Cart Page** | 2-Column dedicated cart page with delivery goal bar, gift notes, combo recommendations & sticky summary. | `/cart` |
 
 ---
 

@@ -287,10 +287,14 @@ class SSFeaturedProducts extends HTMLElement {
               } catch (err) {}
             });
 
-            // Open cart drawer if present
-            const cartDrawer = document.querySelector('cart-drawer-component, #cart-drawer, [id*="cart-drawer"]');
-            if (cartDrawer && typeof cartDrawer.open === 'function') {
-              cartDrawer.open();
+            // Open Swaad cart drawer
+            if (window.SwaadCartDrawer) {
+              window.SwaadCartDrawer.open();
+            } else {
+              const cartDrawer = document.querySelector('cart-drawer-component, #cart-drawer, [id*="cart-drawer"]');
+              if (cartDrawer && typeof cartDrawer.open === 'function') {
+                cartDrawer.open();
+              }
             }
 
             setTimeout(() => {

@@ -1,0 +1,578 @@
+/* ==========================================================================
+   SWAAD SAMVAAD - Luxury Cart Drawer (Sidebar Basket) CSS
+   Pixel-perfect match to provided reference design.
+   ========================================================================== */
+
+.ss-cart-drawer {
+  --ss-drawer-width: 440px;
+  --ss-color-brown-dark: #2B1A10;
+  --ss-color-brown-btn: #8C3B18;
+  --ss-color-brown-btn-hover: #722E10;
+  --ss-color-terracotta: #B4552B;
+  --ss-color-gold-border: #C69C6D;
+  --ss-color-cream-bg: #FCF9F5;
+  --ss-color-card-bg: #FFFFFF;
+  --ss-color-card-border: #EFE7DD;
+  --ss-color-green-trust: #15803D;
+
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s ease;
+  font-family: var(--font-body--family, var(--ss-font-sans, 'Plus Jakarta Sans', sans-serif));
+  box-sizing: border-box;
+}
+
+.ss-cart-drawer *,
+.ss-cart-drawer *::before,
+.ss-cart-drawer *::after {
+  box-sizing: border-box;
+}
+
+.ss-cart-drawer.is-open {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Backdrop */
+.ss-cart-drawer__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(27, 14, 7, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+
+/* Sliding Drawer Panel */
+.ss-cart-drawer__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: var(--ss-drawer-width);
+  background: var(--ss-color-cream-bg);
+  box-shadow: -12px 0 40px rgba(43, 26, 16, 0.25);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  overflow: hidden;
+}
+
+.ss-cart-drawer.is-open .ss-cart-drawer__panel {
+  transform: translateX(0);
+}
+
+/* 1. Header */
+.ss-cart-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  background: #FFFFFF;
+  border-bottom: 1px solid var(--ss-color-card-border);
+}
+
+.ss-cart-drawer__title {
+  font-family: var(--font-heading--family, var(--ss-font-serif, 'Outfit', serif));
+  font-size: 22px;
+  font-weight: 700;
+  color: #8C3B18;
+  margin: 0;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ss-cart-drawer__close-btn {
+  background: #F7EFE8;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #5C3A24;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.ss-cart-drawer__close-btn:hover {
+  background: #EBD8C8;
+  color: var(--ss-color-brown-dark);
+  transform: scale(1.06);
+}
+
+.ss-cart-drawer__close-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* 2. Free Delivery Goal Progress Bar */
+.ss-cart-drawer__shipping-bar {
+  background: #FFF9EE;
+  border-bottom: 1px solid #F5E6CC;
+  padding: 12px 24px 14px;
+}
+
+.ss-cart-drawer__shipping-text {
+  font-size: 13px;
+  color: var(--ss-color-brown-dark);
+  margin-bottom: 8px;
+  line-height: 1.35;
+}
+
+.ss-cart-drawer__shipping-text strong {
+  font-weight: 700;
+  color: #8C3B18;
+}
+
+.ss-cart-drawer__progress-track {
+  width: 100%;
+  height: 6px;
+  background: #EBDCC6;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.ss-cart-drawer__progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #B59344 0%, #3B8C4B 100%);
+  border-radius: 10px;
+  transition: width 0.4s ease;
+}
+
+/* 3. Scrollable Body */
+.ss-cart-drawer__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Empty State */
+.ss-cart-drawer__empty {
+  text-align: center;
+  padding: 48px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ss-cart-drawer__empty--hidden {
+  display: none !important;
+}
+
+.ss-cart-drawer__empty-icon {
+  font-size: 54px;
+  margin-bottom: 14px;
+}
+
+.ss-cart-drawer__empty-title {
+  font-family: var(--font-heading--family, var(--ss-font-serif, 'Outfit', serif));
+  font-size: 20px;
+  color: var(--ss-color-brown-dark);
+  margin: 0 0 8px;
+  font-weight: 700;
+}
+
+.ss-cart-drawer__empty-desc {
+  font-size: 13.5px;
+  color: #6E5B50;
+  line-height: 1.5;
+  max-width: 280px;
+  margin: 0 0 24px;
+}
+
+.ss-cart-drawer__empty-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ss-color-brown-btn);
+  color: #FFFFFF;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 14.5px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.ss-cart-drawer__empty-btn:hover {
+  background: var(--ss-color-brown-btn-hover);
+  transform: translateY(-2px);
+}
+
+.ss-cart-drawer__empty-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Cart Items */
+.ss-cart-drawer__items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ss-cart-drawer__items-list--hidden {
+  display: none !important;
+}
+
+.ss-cart-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #FFFFFF;
+  border: 1px solid var(--ss-color-card-border);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 2px 8px rgba(43, 26, 16, 0.04);
+}
+
+.ss-cart-item__media {
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #FAF5EE;
+}
+
+.ss-cart-item__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ss-cart-item__img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.ss-cart-item__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ss-cart-item__top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.ss-cart-item__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ss-color-brown-dark);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.ss-cart-item__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ss-cart-item__title a:hover {
+  color: var(--ss-color-terracotta);
+}
+
+.ss-cart-item__price {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ss-color-brown-dark);
+  white-space: nowrap;
+}
+
+.ss-cart-item__variant-text {
+  font-size: 12px;
+  color: #7A695E;
+  line-height: 1.3;
+}
+
+.ss-cart-item__bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+/* Stepper Pill */
+.ss-cart-stepper {
+  display: inline-flex;
+  align-items: center;
+  background: #FFFFFF;
+  border: 1px solid #D9CFC4;
+  border-radius: 20px;
+  padding: 2px 4px;
+  height: 30px;
+}
+
+.ss-cart-stepper__btn {
+  background: transparent;
+  border: none;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 700;
+  color: #5C3A24;
+  padding: 0;
+  transition: color 0.15s ease;
+}
+
+.ss-cart-stepper__btn:hover {
+  color: var(--ss-color-brown-btn);
+}
+
+.ss-cart-stepper__val {
+  min-width: 22px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ss-color-brown-dark);
+}
+
+.ss-cart-item__remove-btn {
+  background: transparent;
+  border: none;
+  font-size: 12px;
+  font-weight: 500;
+  color: #9C5134;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 4px;
+  transition: color 0.15s ease;
+}
+
+.ss-cart-item__remove-btn:hover {
+  color: #722E10;
+}
+
+/* 4. Mithila Combo Upsell Box */
+.ss-cart-upsell {
+  margin-top: 4px;
+}
+
+.ss-cart-upsell__card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #FFFDF9;
+  border: 1.5px dashed var(--ss-color-gold-border);
+  border-radius: 16px;
+  padding: 12px 14px;
+  box-shadow: 0 2px 8px rgba(198, 156, 109, 0.08);
+}
+
+.ss-cart-upsell__media {
+  width: 54px;
+  height: 54px;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #FAF2E8;
+}
+
+.ss-cart-upsell__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ss-cart-upsell__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ss-cart-upsell__text {
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--ss-color-brown-dark);
+  margin: 0;
+}
+
+.ss-cart-upsell__text strong {
+  font-weight: 700;
+  color: var(--ss-color-brown-btn);
+}
+
+.ss-cart-upsell__action {
+  flex-shrink: 0;
+}
+
+.ss-cart-upsell__add-btn {
+  background: var(--ss-color-brown-btn);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ss-cart-upsell__add-btn:hover {
+  background: var(--ss-color-brown-btn-hover);
+  transform: scale(1.04);
+}
+
+/* 5. Trust Guarantee Ribbon */
+.ss-cart-guarantee {
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.ss-cart-guarantee__pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #E8F8EE;
+  border: 1px solid #B8E8CA;
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--ss-color-green-trust);
+  font-size: 12.5px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.ss-cart-guarantee__icon {
+  font-size: 14px;
+}
+
+/* 6. Footer Sticky Summary */
+.ss-cart-drawer__footer {
+  background: #FFFFFF;
+  border-top: 1px solid var(--ss-color-card-border);
+  padding: 18px 24px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 -8px 24px rgba(43, 26, 16, 0.05);
+}
+
+.ss-cart-drawer__footer--hidden {
+  display: none !important;
+}
+
+.ss-cart-drawer__subtotal-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ss-cart-drawer__subtotal-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ss-color-brown-dark);
+}
+
+.ss-cart-drawer__subtotal-val {
+  font-family: var(--font-heading--family, var(--ss-font-display, 'Outfit', sans-serif));
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ss-color-brown-dark);
+}
+
+.ss-cart-drawer__savings-badge {
+  font-size: 13px;
+  font-weight: 600;
+  color: #15803D;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: -4px;
+}
+
+.ss-cart-drawer__checkout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--ss-color-brown-btn);
+  color: #FFFFFF;
+  font-size: 15.5px;
+  font-weight: 700;
+  text-decoration: none;
+  height: 48px;
+  border-radius: 12px;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(140, 59, 24, 0.35);
+  margin-top: 4px;
+}
+
+.ss-cart-drawer__checkout-btn:hover {
+  background: var(--ss-color-brown-btn-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(140, 59, 24, 0.45);
+}
+
+.ss-cart-drawer__view-cart-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7A695E;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.15s ease;
+}
+
+.ss-cart-drawer__view-cart-btn:hover {
+  color: var(--ss-color-brown-btn);
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .ss-cart-drawer {
+    --ss-drawer-width: 100vw;
+  }
+
+  .ss-cart-drawer__panel {
+    max-width: 100vw;
+  }
+
+  .ss-cart-drawer__header {
+    padding: 16px 18px;
+  }
+
+  .ss-cart-drawer__shipping-bar {
+    padding: 10px 18px 12px;
+  }
+
+  .ss-cart-drawer__body {
+    padding: 16px 18px;
+  }
+
+  .ss-cart-drawer__footer {
+    padding: 16px 18px 20px;
+  }
+}

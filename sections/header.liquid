@@ -379,16 +379,18 @@
     </div>
 
     <div class="ss-account-card-body">
-      <!-- Sign in with Shop Button (Clean Modern Style matching user's preferred modal) -->
-      <a href="/services/login_with_shop/authorize?locale={{ request.locale.iso_code }}" class="ss-shop-login-btn" aria-label="Sign in with Shop">
-        <span class="ss-shop-btn-text">Sign in with</span>
-        <span class="ss-shop-logo-text">shop</span>
-      </a>
+      {%- if section.settings.enable_shop_login -%}
+        <!-- Sign in with Shop Button (Only visible when enabled by Admin in Header settings) -->
+        <a href="/services/login_with_shop/authorize?locale={{ request.locale.iso_code }}" class="ss-shop-login-btn" aria-label="Sign in with Shop">
+          <span class="ss-shop-btn-text">Sign in with</span>
+          <span class="ss-shop-logo-text">shop</span>
+        </a>
 
-      <!-- Divider -->
-      <div class="ss-account-divider">
-        <span>OR</span>
-      </div>
+        <!-- Divider -->
+        <div class="ss-account-divider">
+          <span>OR</span>
+        </div>
+      {%- endif -%}
 
       <!-- Email Login Form -->
       <form action="{{ routes.account_login_url }}" method="post" class="ss-account-email-form">
@@ -752,6 +754,13 @@
       "id": "show_account",
       "label": "Show Account / Login Icon",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_shop_login",
+      "label": "Show 'Sign in with Shop' Button",
+      "info": "Toggle the purple 'Sign in with Shop' button. When disabled, only the clean email sign-in form is shown.",
+      "default": false
     },
     {
       "type": "header",

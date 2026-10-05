@@ -1,0 +1,162 @@
+{% comment %}
+  Swaad Samvaad - Premium Swaad Basket (Cart Drawer Sidebar)
+  Features:
+  - Free delivery dynamic progress bar.
+  - Pixel-perfect match to attached design reference.
+  - Cart item cards with quantity stepper & remove action.
+  - Mithila combo cross-sell card with instant AJAX add.
+  - 100% Refund Guarantee trust ribbon.
+  - Sticky footer with Subtotal, savings pill, Checkout button & "Go to Cart" button.
+  - Dynamic AJAX updates without page reload.
+{% endcomment %}
+
+{{ 'ss-cart-drawer.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'ss-cart-drawer.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign free_shipping_threshold = 49900
+  assign current_subtotal = cart.total_price
+  if current_subtotal >= free_shipping_threshold
+    assign shipping_diff = 0
+    assign progress_pct = 100
+  else
+    assign shipping_diff = free_shipping_threshold | minus: current_subtotal
+    assign progress_pct = current_subtotal | times: 100 | divided_by: free_shipping_threshold
+  endif
+
+  assign total_savings = 0
+  for item in cart.items
+    if item.variant.compare_at_price > item.final_price
+      assign saving_per_item = item.variant.compare_at_price | minus: item.final_price
+      assign item_savings = saving_per_item | times: item.quantity
+      assign total_savings = total_savings | plus: item_savings
+    endif
+  endfor
+-%}
+
+<div id="SwaadCartDrawer" class="ss-cart-drawer" role="dialog" aria-modal="true" aria-label="Your Swaad Basket" hidden>
+  <div class="ss-cart-drawer__backdrop" data-ss-cart-close></div>
+
+  <div class="ss-cart-drawer__panel">
+    
+    {%- comment -%} 1. Drawer Header {%- endcomment -%}
+    <div class="ss-cart-drawer__header">
+      <h2 class="ss-cart-drawer__title">Your Swaad Basket 🧺</h2>
+      <button type="button" class="ss-cart-drawer__close-btn" data-ss-cart-close aria-label="Close Cart Basket">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    {%- comment -%} 2. Free Delivery Goal Progress Bar {%- endcomment -%}
+    <div class="ss-cart-drawer__shipping-bar" data-ss-shipping-bar data-threshold="{{ free_shipping_threshold }}">
+      <div class="ss-cart-drawer__shipping-text" data-ss-shipping-text>
+        {%- if current_subtotal >= free_shipping_threshold -%}
+          🎉 You've unlocked <strong>FREE Delivery!</strong>
+        {%- else -%}
+          Add <strong>{{ shipping_diff | money }}</strong> more for <strong>FREE Delivery!</strong>
+        {%- endif -%}
+      </div>
+      <div class="ss-cart-drawer__progress-track">
+        <div class="ss-cart-drawer__progress-fill" data-ss-progress-fill style="width: {{ progress_pct }}%;"></div>
+      </div>
+    </div>
+
+    {%- comment -%} 3. Scrollable Body Content {%- endcomment -%}
+    <div class="ss-cart-drawer__body" data-ss-cart-body>
+      
+      {%- comment -%} Empty Cart State {%- endcomment -%}
+      <div class="ss-cart-drawer__empty {% if cart.item_count > 0 %}ss-cart-drawer__empty--hidden{% endif %}" data-ss-cart-empty>
+        <div class="ss-cart-drawer__empty-icon">🧺</div>
+        <h3 class="ss-cart-drawer__empty-title">Your Swaad Basket is empty</h3>
+        <p class="ss-cart-drawer__empty-desc">Explore our authentic slow-made Mithila thekuas molded with pure desi ghee!</p>
+        <a href="/#products" class="ss-cart-drawer__empty-btn" data-ss-cart-close>
+          <span>Explore Thekuas</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+
+      {%- comment -%} Items List {%- endcomment -%}
+      <div class="ss-cart-drawer__items-list {% if cart.item_count == 0 %}ss-cart-drawer__items-list--hidden{% endif %}" data-ss-cart-items>
+        {%- for item in cart.items -%}
+          <div class="ss-cart-item" data-line-key="{{ item.key }}" data-line-index="{{ forloop.index }}">
+            <div class="ss-cart-item__media">
+              {%- if item.image != blank -%}
+                <img
+                  src="{{ item.image | image_url: width: 180 }}"
+                  alt="{{ item.title | escape }}"
+                  class="ss-cart-item__img"
+                  width="74"
+                  height="74"
+                  loading="lazy"
+                >
+              {%- else -%}
+                <div class="ss-cart-item__img-placeholder">🍪</div>
+              {%- endif -%}
+            </div>
+
+            <div class="ss-cart-item__info">
+              <div class="ss-cart-item__top-row">
+                <h4 class="ss-cart-item__title">
+                  <a href="{{ item.url }}">{{ item.product.title | escape }}</a>
+                </h4>
+                <div class="ss-cart-item__price">{{ item.final_line_price | money }}</div>
+              </div>
+
+              {%- if item.variant.title != blank and item.variant.title != 'Default Title' -%}
+                <div class="ss-cart-item__variant-text">{{ item.variant.title }} · Fried in Pure Desi Ghee</div>
+              {%- else -%}
+                <div class="ss-cart-item__variant-text">Traditional Recipe · Fried in Pure Desi Ghee</div>
+              {%- endif -%}
+
+              <div class="ss-cart-item__bottom-row">
+                <div class="ss-cart-stepper">
+                  <button type="button" class="ss-cart-stepper__btn ss-cart-stepper__btn--minus" data-stepper-action="minus" data-line="{{ forloop.index }}" data-qty="{{ item.quantity }}" aria-label="Decrease quantity">−</button>
+                  <span class="ss-cart-stepper__val" data-stepper-val>{{ item.quantity }}</span>
+                  <button type="button" class="ss-cart-stepper__btn ss-cart-stepper__btn--plus" data-stepper-action="plus" data-line="{{ forloop.index }}" data-qty="{{ item.quantity }}" aria-label="Increase quantity">+</button>
+                </div>
+                <button type="button" class="ss-cart-item__remove-btn" data-line="{{ forloop.index }}" data-remove-action>Remove</button>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- comment -%} 4. Trust Guarantee Ribbon {%- endcomment -%}
+      <div class="ss-cart-guarantee">
+        <div class="ss-cart-guarantee__pill">
+          <span class="ss-cart-guarantee__icon">🛡️</span>
+          <span class="ss-cart-guarantee__text">100% Refund Guarantee Applies to This Order</span>
+        </div>
+      </div>
+
+    </div>
+
+    {%- comment -%} 5. Drawer Footer (Sticky Summary & CTAs) {%- endcomment -%}
+    <div class="ss-cart-drawer__footer {% if cart.item_count == 0 %}ss-cart-drawer__footer--hidden{% endif %}" data-ss-cart-footer>
+      <div class="ss-cart-drawer__subtotal-row">
+        <span class="ss-cart-drawer__subtotal-label">Subtotal</span>
+        <span class="ss-cart-drawer__subtotal-val" data-ss-cart-subtotal>{{ cart.total_price | money }}</span>
+      </div>
+
+      {%- if total_savings > 0 -%}
+        <div class="ss-cart-drawer__savings-badge" data-ss-cart-savings>
+          <span>🎉 You save {{ total_savings | money }} on this order</span>
+        </div>
+      {%- else -%}
+        <div class="ss-cart-drawer__savings-badge" data-ss-cart-savings style="display: none;"></div>
+      {%- endif -%}
+
+      <a href="/checkout" class="ss-cart-drawer__checkout-btn">
+        <span>Proceed to Checkout →</span>
+      </a>
+
+      <a href="{{ routes.cart_url }}" class="ss-cart-drawer__view-cart-btn">
+        <span>Go to Cart Page</span>
+      </a>
+    </div>
+
+  </div>
+</div>

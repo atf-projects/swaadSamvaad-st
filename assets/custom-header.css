@@ -800,13 +800,14 @@
 .ss-scan-card {
   position: relative;
   z-index: 2;
-  background: #FFFFFF;
+  background: #FFF9F2;
   width: 90%;
-  max-width: 400px;
-  border-radius: 20px;
-  padding: 28px 24px;
+  max-width: 410px;
+  border-radius: 24px;
+  padding: 32px 26px 28px;
   text-align: center;
-  box-shadow: 0 20px 50px rgba(61, 30, 11, 0.3);
+  box-shadow: 0 24px 60px -12px rgba(43, 26, 16, 0.32);
+  border: 1.5px solid rgba(198, 156, 109, 0.45);
   transform: scale(0.95);
   transition: transform var(--ss-transition-fast);
 }
@@ -817,39 +818,42 @@
 
 .ss-scan-close-btn {
   position: absolute;
-  top: 14px;
-  right: 14px;
-  background: #F5EFE6;
-  border: none;
+  top: 16px;
+  right: 16px;
+  background: #F4E8DB;
+  border: 1px solid rgba(198, 156, 109, 0.3);
   border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--ss-color-brown-dark);
-  font-size: 16px;
-  transition: background-color var(--ss-transition-fast);
+  color: #5C3A24;
+  font-size: 15px;
+  transition: all var(--ss-transition-fast);
 }
 
 .ss-scan-close-btn:hover {
-  background-color: #EBDDCE;
+  background-color: #EBD6C3;
+  color: #2B1A10;
+  transform: scale(1.06);
 }
 
 .ss-scan-header-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background-color: #E8F8EE;
-  color: #128C7E;
-  padding: 5px 14px;
-  border-radius: 20px;
+  gap: 7px;
+  background-color: rgba(37, 211, 102, 0.12);
+  border: 1px solid rgba(37, 211, 102, 0.28);
+  color: #0E7C3A;
+  padding: 6px 16px;
+  border-radius: 30px;
   font-size: 11.5px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 12px;
+  letter-spacing: 0.06em;
+  margin-bottom: 14px;
 }
 
 .ss-whatsapp-badge-icon {
@@ -859,41 +863,44 @@
 }
 
 .ss-whatsapp-badge-icon svg {
-  width: 14px;
-  height: 14px;
+  width: 15px;
+  height: 15px;
 }
 
 .ss-scan-title {
-  font-family: var(--ss-font-serif);
-  font-size: 22px;
+  font-family: var(--font-heading--family, var(--ss-font-serif, 'Outfit', serif));
+  font-size: 24px;
   font-weight: 700;
-  color: var(--ss-color-brown-dark);
-  margin: 0 0 6px 0;
+  color: #2B1A10;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.01em;
 }
 
 .ss-scan-subtitle {
-  font-size: 13px;
-  color: var(--ss-color-text-muted);
-  margin: 0 0 18px 0;
-  line-height: 1.4;
+  font-size: 13.5px;
+  color: #6C5546;
+  margin: 0 auto 20px auto;
+  line-height: 1.5;
+  max-width: 320px;
 }
 
 .ss-qr-box {
-  background: #FAF6F0;
-  border: 2px dashed var(--ss-color-gold-accent);
-  border-radius: 14px;
-  padding: 16px;
+  background: #FFFFFF;
+  border: 2px dashed #C69C6D;
+  border-radius: 18px;
+  padding: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 16px auto;
-  width: 190px;
-  height: 190px;
+  margin: 0 auto 20px auto;
+  width: 196px;
+  height: 196px;
+  box-shadow: 0 6px 20px rgba(43, 26, 16, 0.06);
 }
 
 .ss-qr-img {
-  width: 158px;
-  height: 158px;
+  width: 164px;
+  height: 164px;
   object-fit: contain;
   display: block;
 }
@@ -903,22 +910,23 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background-color: #25D366;
+  background: linear-gradient(135deg, #25D366 0%, #179E4A 100%);
   color: #FFFFFF;
-  font-size: 14.5px;
+  font-size: 15px;
   font-weight: 700;
-  padding: 13px 20px;
-  border-radius: 30px;
+  padding: 14px 24px;
+  border-radius: 12px;
   text-decoration: none;
   width: 100%;
-  margin-top: 10px;
-  transition: background-color var(--ss-transition-fast), transform var(--ss-transition-fast);
-  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
+  margin-top: 4px;
+  transition: all var(--ss-transition-fast);
+  box-shadow: 0 8px 24px -4px rgba(23, 158, 74, 0.45);
 }
 
 .ss-whatsapp-chat-btn:hover {
-  background-color: #1EBE5D;
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, #21C05B 0%, #13873E 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -4px rgba(23, 158, 74, 0.6);
 }
 
 .ss-whatsapp-chat-btn svg {
@@ -928,11 +936,11 @@
 }
 
 .ss-scan-footer-note {
-  margin-top: 14px;
-  font-size: 11.5px;
-  color: var(--ss-color-text-muted);
+  margin-top: 16px;
+  font-size: 12px;
+  color: #8C7565;
   font-weight: 500;
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 .ss-drawer-whatsapp-icon-wrap {
@@ -1013,11 +1021,11 @@ shopify-account:not(:defined) {
   right: 28px;
   width: 360px;
   max-width: calc(100vw - 32px);
-  background: #FFFFFF;
-  border-radius: 14px;
-  border: 1px solid #D8D2CA;
-  box-shadow: 0 16px 48px rgba(61, 30, 11, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
-  padding: 22px 20px 20px 20px;
+  background: #FFF9F2;
+  border-radius: 20px;
+  border: 1.5px solid rgba(198, 156, 109, 0.35);
+  box-shadow: 0 20px 50px rgba(43, 26, 16, 0.22);
+  padding: 24px 22px 22px;
   z-index: 2;
   transform: translateY(-8px) scale(0.98);
   transition: transform var(--ss-transition-fast);
@@ -1037,34 +1045,34 @@ shopify-account:not(:defined) {
 }
 
 .ss-account-card-title {
-  font-family: var(--ss-font-sans);
-  font-size: 16.5px;
-  font-weight: 600;
-  color: #221B17;
+  font-family: var(--font-heading--family, var(--ss-font-serif, 'Outfit', serif));
+  font-size: 19px;
+  font-weight: 700;
+  color: #2B1A10;
   margin: 0;
   line-height: 1.3;
   letter-spacing: -0.2px;
 }
 
 .ss-account-close-btn {
-  background: #FFFFFF;
-  border: 1.5px solid #D1CAC2;
+  background: #F4E8DB;
+  border: 1px solid rgba(198, 156, 109, 0.3);
   width: 32px;
   height: 32px;
-  border-radius: 6px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #554A44;
+  color: #5C3A24;
   transition: all var(--ss-transition-fast);
   padding: 0;
 }
 
 .ss-account-close-btn:hover {
-  background-color: #FAF6F0;
-  border-color: var(--ss-color-brown-dark);
-  color: var(--ss-color-brown-dark);
+  background-color: #EBD6C3;
+  color: #2B1A10;
+  transform: scale(1.06);
 }
 
 .ss-account-close-btn svg {
@@ -1154,11 +1162,11 @@ shopify-account:not(:defined) {
 .ss-account-email-input {
   width: 100%;
   height: 46px;
-  border: 1px solid #D5CFC8;
-  border-radius: 6px;
+  border: 1px solid #D5C7B8;
+  border-radius: 10px;
   padding: 0 42px 0 14px;
   font-size: 14px;
-  color: var(--ss-color-text-dark);
+  color: var(--ss-color-brown-dark);
   outline: none;
   background: #FFFFFF;
   transition: border-color var(--ss-transition-fast), box-shadow var(--ss-transition-fast);
@@ -1167,12 +1175,12 @@ shopify-account:not(:defined) {
 }
 
 .ss-account-email-input:focus {
-  border-color: var(--ss-color-brown-dark);
-  box-shadow: 0 0 0 3px rgba(61, 30, 11, 0.08);
+  border-color: #B4552B;
+  box-shadow: 0 0 0 3px rgba(180, 85, 43, 0.12);
 }
 
 .ss-account-email-input::placeholder {
-  color: #767676;
+  color: #8C7565;
   font-family: var(--ss-font-sans);
 }
 
@@ -1181,23 +1189,23 @@ shopify-account:not(:defined) {
   right: 6px;
   top: 50%;
   transform: translateY(-50%);
-  background: transparent;
+  background: #B4552B;
   border: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 4px;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #554A44;
+  color: #FFFFFF;
   transition: all var(--ss-transition-fast);
   padding: 0;
 }
 
 .ss-account-submit-arrow:hover {
-  color: var(--ss-color-brown-dark);
-  background-color: #FAF6F0;
+  background-color: #98431E;
+  transform: translateY(-50%) scale(1.05);
 }
 
 .ss-account-submit-arrow svg {
@@ -1245,9 +1253,9 @@ shopify-account:not(:defined) {
   justify-content: center;
   gap: 8px;
   height: 44px;
-  border: 1px solid #D5CFC8;
-  border-radius: 6px;
-  color: #2B2523;
+  border: 1px solid rgba(198, 156, 109, 0.4);
+  border-radius: 10px;
+  color: #2B1A10;
   text-decoration: none;
   font-size: 13.5px;
   font-weight: 600;
@@ -1257,11 +1265,11 @@ shopify-account:not(:defined) {
 }
 
 .ss-account-footer-btn:hover {
-  border-color: var(--ss-color-brown-dark);
-  color: var(--ss-color-brown-dark);
-  background-color: #FAF7F2;
+  border-color: #B4552B;
+  color: #B4552B;
+  background-color: #FFF2E8;
   transform: translateY(-1px);
-  box-shadow: 0 3px 10px rgba(61, 30, 11, 0.08);
+  box-shadow: 0 4px 12px rgba(180, 85, 43, 0.15);
 }
 
 .ss-account-footer-btn svg {
