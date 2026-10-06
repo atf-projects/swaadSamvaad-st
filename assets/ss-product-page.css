@@ -1118,34 +1118,30 @@
    Judge.me Custom Brand Styling & Compact Spacing Overrides
    ========================================================================== */
 .jdgm-widget {
-  font-family: var(--ss-prod-font-body) !important;
   color: var(--ss-prod-maroon) !important;
   margin: 0 !important;
   padding: 0 !important;
 }
 
-.jdgm-rev-widg {
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-.jdgm-rev-widg__header {
-  margin: 0 0 12px 0 !important;
-  padding-bottom: 8px !important;
-}
-
-.jdgm-rev-widg__summary {
-  margin: 0 !important;
-}
-
-.jdgm-rev-widg__body {
-  margin: 0 !important;
-  padding: 0 !important;
+.jdgm-widget:not(.jdgm-star):not(.jdgm-star *):not([class*="star"]) {
+  font-family: var(--ss-prod-font-body) !important;
 }
 
 .jdgm-star,
-.jdgm-preview-badge .jdgm-star {
+.jdgm-star:before,
+.jdgm-star:after,
+.jdgm-preview-badge .jdgm-star,
+.jdgm-preview-badge .jdgm-star:before,
+.jdgm-preview-badge .jdgm-star:after {
+  font-family: JudgemeStar !important;
   color: #E68A00 !important;
+}
+
+.jdgm-star.jdgm--off,
+.jdgm-star.jdgm--off:before,
+.jdgm-preview-badge .jdgm-star.jdgm--off,
+.jdgm-preview-badge .jdgm-star.jdgm--off:before {
+  color: #D4C3B3 !important;
 }
 
 .jdgm-btn,

@@ -11,12 +11,13 @@
 1. [About SweetCraft](#-about-sweetcraft)
 2. [Key Features & UX Architecture](#-key-features--ux-architecture)
 3. [Theme Flow & Core Pages](#-theme-flow--core-pages)
-4. [Step-by-Step Installation Guide](#-step-by-step-installation-guide)
-5. [⚠️ How to Update Theme WITHOUT Losing Client Settings](#️-how-to-update-theme-without-losing-client-settings)
-6. [Shopify Theme Customizer (Admin Guide)](#-shopify-theme-customizer-admin-guide)
-7. [Navigation Menu Setup (Homepage Anchors)](#-navigation-menu-setup-homepage-anchors)
-8. [Directory Structure](#-directory-structure)
-9. [Technical Standards & Performance](#-technical-standards--performance)
+4. [⭐ Judge.me Product Reviews Integration](#-judgeme-product-reviews-integration)
+5. [Step-by-Step Installation Guide](#-step-by-step-installation-guide)
+6. [⚠️ How to Update Theme WITHOUT Losing Client Settings](#️-how-to-update-theme-without-losing-client-settings)
+7. [Shopify Theme Customizer (Admin Guide)](#-shopify-theme-customizer-admin-guide)
+8. [Navigation Menu Setup (Homepage Anchors)](#-navigation-menu-setup-homepage-anchors)
+9. [Directory Structure](#-directory-structure)
+10. [Technical Standards & Performance](#-technical-standards--performance)
 
 ---
 
@@ -68,6 +69,32 @@
                                                                           │   CHECKOUT   │
                                                                           └──────────────┘
 ```
+
+---
+
+## ⭐ Judge.me Product Reviews Integration
+
+SweetCraft comes with **100% native out-of-the-box compatibility** for the **Judge.me: Product Reviews** Shopify app.
+
+### 📦 App Requirement
+To collect and display authentic customer star ratings, review widgets, and photo reviews on your store:
+1. Open the [Shopify App Store](https://apps.shopify.com/judgeme) and install **Judge.me Product Reviews**.
+2. Complete the initial 1-click Judge.me setup wizard.
+3. **No Code Editing Required**: SweetCraft's templates and snippets are already pre-wired with Judge.me widgets, rating badges, and metafields.
+
+### 🌟 Where Reviews Appear in SweetCraft
+- **Single Product Page (PDP)**: Full interactive review section (`#judgeme_product_reviews`) featuring rating score breakdown, verified buyer badges, customer review photos, and user submission form (`sections/ss-product-page.liquid`).
+- **Product Cards Across the Entire Store**: Dynamic review preview badges automatically render across:
+  - **Homepage**: Featured Products & Category Filter Tabs (`sections/ss-featured-products.liquid`)
+  - **Shop / Collection Page**: Full product grid (`sections/ss-collection-page.liquid`)
+  - **Search Results Page**: Delicacy search cards (`sections/ss-search-page.liquid`)
+  - **Cart Drawer & Cart Page**: Related cart upsell items (`sections/ss-cart-page.liquid`)
+  - **Blog Pages**: Story product callouts & recommendations (`sections/ss-article-page.liquid` & `sections/ss-blog-page.liquid`)
+
+### 🛡️ Smart Zero-Review Fallback System
+- If a product has **0 reviews** in Judge.me, SweetCraft automatically renders **5 elegant muted stars with "0 reviews"** via `snippets/ss-judgeme-badge.liquid`.
+- This guarantees product cards maintain consistent card heights and never look empty.
+- As soon as customers submit reviews in Judge.me, the badge dynamically switches to live star scores and review counts in real-time.
 
 ---
 
@@ -239,6 +266,7 @@ SweetCraft/
 │   ├── ss-blog-page.liquid         # Blog index & recipes listing
 │   └── ss-404.liquid               # Not found fallback section
 ├── snippets/
+│   ├── ss-judgeme-badge.liquid     # Judge.me official rating badge with 0-review fallback
 │   ├── ss-recent-sales-popup.liquid# Live sales notification toast
 │   ├── ss-cart-drawer.liquid       # AJAX Slide-out cart drawer
 │   └── icon.liquid                 # Scalable UI vector icons
@@ -256,7 +284,7 @@ SweetCraft/
 │   ├── page.contact.json           # Contact page template
 │   ├── page.track-order.json       # Track order page template
 │   ├── password.json               # Password lock template
-│   └── gift_card.liquid            # Gift card template
+├── CHANGELOG.md                    # Release history & version changelog
 └── README.md                       # Master Documentation
 ```
 

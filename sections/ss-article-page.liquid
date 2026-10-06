@@ -81,7 +81,7 @@
           </span>
           <span class="ss-article-meta-pill">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            {{ read_time }} Min Read
+            {{ article.published_at | date: '%I:%M %p' }}
           </span>
         </div>
 
@@ -259,74 +259,6 @@
               </a>
             {%- endif -%}
           </div>
-        {%- endif -%}
-
-        {%- comment -%} Shopify Native Comments {%- endcomment -%}
-        {%- if blog.comments_enabled? -%}
-          <section id="comments" class="ss-article-comments">
-            <h3 class="ss-article-comments__title">
-              Conversations & Reflections ({{ article.comments_count }})
-            </h3>
-
-            {%- if article.comments_count > 0 -%}
-              <div class="ss-article-comments__list">
-                {%- for comment in article.comments -%}
-                  <div id="{{ comment.id }}" class="ss-article-comment-item">
-                    <div class="ss-article-comment-item__header">
-                      <div class="ss-article-comment-item__avatar">💬</div>
-                      <div>
-                        <strong class="ss-article-comment-item__author">{{ comment.author }}</strong>
-                        <span class="ss-article-comment-item__date">{{ comment.created_at | date: '%b %d, %Y' }}</span>
-                      </div>
-                    </div>
-                    <div class="ss-article-comment-item__body">
-                      {{ comment.content }}
-                    </div>
-                  </div>
-                {%- endfor -%}
-              </div>
-            {%- endif -%}
-
-            {%- form 'new_comment', article -%}
-              <div class="ss-article-comment-form">
-                <h4 class="ss-article-comment-form__title">Leave a Sacred Reflection</h4>
-                <p class="ss-article-comment-form__desc">Share your family's thekua memories or ask a question about authentic Mithila recipes.</p>
-
-                {%- if form.posted_successfully? -%}
-                  <div class="ss-article-comment-success">
-                    ✓ Your reflection has been posted successfully! Dhanyavaad.
-                  </div>
-                {%- endif -%}
-
-                {%- if form.errors -%}
-                  <div class="ss-article-comment-error">
-                    {{ form.errors | default_errors }}
-                  </div>
-                {%- endif -%}
-
-                <div class="ss-article-form-grid">
-                  <div class="ss-article-form-group">
-                    <label for="CommentAuthor">Your Name *</label>
-                    <input type="text" name="comment[author]" id="CommentAuthor" class="ss-article-input" placeholder="e.g. Priyadarshini Jha" required>
-                  </div>
-                  <div class="ss-article-form-group">
-                    <label for="CommentEmail">Your Email *</label>
-                    <input type="email" name="comment[email]" id="CommentEmail" class="ss-article-input" placeholder="e.g. name@domain.com" required>
-                  </div>
-                </div>
-
-                <div class="ss-article-form-group">
-                  <label for="CommentBody">Your Message *</label>
-                  <textarea name="comment[body]" id="CommentBody" rows="4" class="ss-article-textarea" placeholder="Write your reflection here..." required></textarea>
-                </div>
-
-                <button type="submit" class="ss-article-comment-submit">
-                  <span>Post Reflection</span>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
-              </div>
-            {%- endform -%}
-          </section>
         {%- endif -%}
 
       </div>

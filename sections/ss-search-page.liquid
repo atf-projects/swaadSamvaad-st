@@ -271,8 +271,7 @@
                 </a>
 
                 <div class="ss-sp-card__rating-row">
-                  <span class="ss-sp-card__star">★ 4.9</span>
-                  <span class="ss-sp-card__reviews">(1.6k+)</span>
+                  {% render 'ss-judgeme-badge', product: prod %}
                 </div>
 
                 {%- if prod.variants.size > 1 -%}

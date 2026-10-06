@@ -1,0 +1,81 @@
+{%- comment -%}
+  Judge.me Official Badge with Custom Guaranteed Fallback for 0 Reviews
+  Usage: {% render 'ss-judgeme-badge', product: product %}
+{%- endcomment -%}
+{%- liquid
+  assign jm_badge = product.metafields.judgeme.badge
+  assign has_real_reviews = false
+  if jm_badge != blank and jm_badge contains 'jdgm-star'
+    unless jm_badge contains 'data-number-of-reviews="0"' or jm_badge contains "data-number-of-reviews='0'"
+      assign has_real_reviews = true
+    endunless
+  endif
+-%}
+
+<div class="ss-rating-badge-container" data-ss-product-id="{{ product.id }}">
+  {%- comment -%} Real Judge.me badge (visible if real reviews exist) {%- endcomment -%}
+  <div class="jdgm-widget jdgm-preview-badge ss-real-jdgm-badge" data-id="{{ product.id }}" style="{% unless has_real_reviews %}display: none !important;{% endunless %}">
+    {%- if has_real_reviews -%}
+      {{ jm_badge }}
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} Custom Fallback 0 Reviews Badge (Always shown when 0 reviews) {%- endcomment -%}
+  <div class="ss-empty-rating-badge" style="{% if has_real_reviews %}display: none !important;{% else %}display: inline-flex !important;{% endif %}">
+    <span class="ss-empty-rating-stars" aria-label="0 out of 5 stars">
+      {%- for i in (1..5) -%}
+        <svg class="ss-empty-star-svg" viewBox="0 0 20 20" width="13" height="13" fill="#D4C3B3">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+        </svg>
+      {%- endfor -%}
+    </span>
+    <span class="ss-empty-rating-text">0 reviews</span>
+  </div>
+</div>
+
+<script>
+  (function() {
+    if (window.__ss_judgeme_synced) return;
+    window.__ss_judgeme_synced = true;
+
+    function syncJudgeMeBadges() {
+      document.querySelectorAll('.ss-rating-badge-container').forEach(function(container) {
+        var jdgmWidget = container.querySelector('.ss-real-jdgm-badge');
+        var emptyBadge = container.querySelector('.ss-empty-rating-badge');
+        if (!jdgmWidget || !emptyBadge) return;
+
+        var badgeInner = jdgmWidget.querySelector('.jdgm-prev-badge');
+        var numReviews = badgeInner ? parseInt(badgeInner.getAttribute('data-number-of-reviews') || '0', 10) : 0;
+        var hasActiveStars = jdgmWidget.querySelector('.jdgm-star.jdgm--on, .jdgm-star.jdgm--half');
+
+        if (numReviews > 0 || hasActiveStars) {
+          jdgmWidget.style.setProperty('display', 'inline-flex', 'important');
+          emptyBadge.style.setProperty('display', 'none', 'important');
+        } else {
+          jdgmWidget.style.setProperty('display', 'none', 'important');
+          emptyBadge.style.setProperty('display', 'inline-flex', 'important');
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', syncJudgeMeBadges);
+    } else {
+      syncJudgeMeBadges();
+    }
+
+    document.addEventListener('jdgm.doneSetup', syncJudgeMeBadges);
+    document.addEventListener('shopify:section:load', syncJudgeMeBadges);
+
+    setTimeout(syncJudgeMeBadges, 400);
+    setTimeout(syncJudgeMeBadges, 1200);
+    setTimeout(syncJudgeMeBadges, 2500);
+
+    if (window.MutationObserver && document.body) {
+      var obs = new MutationObserver(function() {
+        syncJudgeMeBadges();
+      });
+      obs.observe(document.body, { childList: true, subtree: true });
+    }
+  })();
+</script>

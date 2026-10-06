@@ -180,15 +180,7 @@
 
         <div class="ss-prod-meta-row">
           <div class="ss-prod-rating">
-            <!-- Judge.me Preview Badge -->
-            <div style="display: inline-block;" class="jdgm-widget jdgm-preview-badge" data-id="{{ product.id }}">
-              {{ product.metafields.judgeme.badge }}
-            </div>
-            {%- unless product.metafields.judgeme.badge -%}
-              <span class="ss-prod-rating__stars">★★★★★</span>
-              <span class="ss-prod-rating__num">{{ section.settings.fallback_rating_score | default: '4.9' }}</span>
-              <span class="ss-prod-rating__count">({{ section.settings.fallback_rating_count | default: '1,640+ Verified Reviews' }})</span>
-            {%- endunless -%}
+            {% render 'ss-judgeme-badge', product: product %}
           </div>
           {%- if section.settings.bestseller_badge != blank -%}
             <span class="ss-prod-meta-badge">{{ section.settings.bestseller_badge }}</span>
@@ -659,11 +651,7 @@
                   </a>
 
                   <div class="ss-prod-card__rating-row">
-                    <span class="ss-prod-card__rating-star">
-                      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                      4.9
-                    </span>
-                    <span class="ss-prod-card__rating-count">(1.6k+ reviews)</span>
+                    {% render 'ss-judgeme-badge', product: rel_prod %}
                   </div>
 
                   <div class="ss-prod-card__price-row">

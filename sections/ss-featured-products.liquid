@@ -375,8 +375,7 @@
                   <a href="{{ url }}" class="ss-prod-card__title">{{ title }}</a>
 
                   <div class="ss-prod-card__rating-row">
-                    <span class="ss-prod-card__rating-star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> {{ rating }}</span>
-                    <span class="ss-prod-card__rating-count">({{ reviews }} reviews)</span>
+                    {% render 'ss-judgeme-badge', product: prod %}
                   </div>
 
                   <div class="ss-prod-card__price-row">
@@ -491,11 +490,7 @@
                   <a href="{{ prod.url }}" class="ss-prod-card__title">{{ prod.title }}</a>
 
                   <div class="ss-prod-card__rating-row">
-                    <span class="ss-prod-card__rating-star">
-                      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                      4.9
-                    </span>
-                    <span class="ss-prod-card__rating-count">(1653 reviews)</span>
+                    {% render 'ss-judgeme-badge', product: prod %}
                   </div>
 
                   <div class="ss-prod-card__price-row">
@@ -566,10 +561,6 @@
               </div>
               <div class="ss-prod-card__body">
                 <a href="/collections/all" class="ss-prod-card__title">Pure Desi Ghee Gud Thekua 500g</a>
-                <div class="ss-prod-card__rating-row">
-                  <span class="ss-prod-card__rating-star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 4.9</span>
-                  <span class="ss-prod-card__rating-count">(1653 reviews)</span>
-                </div>
                 <div class="ss-prod-card__price-row">
                   <span class="ss-prod-card__compare-price">Rs. 599.00</span>
                   <span class="ss-prod-card__regular-price">Rs. 449.00</span>
@@ -615,10 +606,6 @@
               </div>
               <div class="ss-prod-card__body">
                 <a href="/collections/all" class="ss-prod-card__title">Pure Desi Ghee Gud Thekua 1 Kg</a>
-                <div class="ss-prod-card__rating-row">
-                  <span class="ss-prod-card__rating-star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 4.95</span>
-                  <span class="ss-prod-card__rating-count">(2410 reviews)</span>
-                </div>
                 <div class="ss-prod-card__price-row">
                   <span class="ss-prod-card__compare-price">Rs. 1,099.00</span>
                   <span class="ss-prod-card__regular-price">Rs. 799.00</span>
@@ -659,10 +646,6 @@
               </div>
               <div class="ss-prod-card__body">
                 <a href="/collections/all" class="ss-prod-card__title">Pure Desi Ghee Chini Thekua 500g</a>
-                <div class="ss-prod-card__rating-row">
-                  <span class="ss-prod-card__rating-star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 4.88</span>
-                  <span class="ss-prod-card__rating-count">(980 reviews)</span>
-                </div>
                 <div class="ss-prod-card__price-row">
                   <span class="ss-prod-card__compare-price">Rs. 549.00</span>
                   <span class="ss-prod-card__regular-price">Rs. 429.00</span>
@@ -703,10 +686,6 @@
               </div>
               <div class="ss-prod-card__body">
                 <a href="/collections/all" class="ss-prod-card__title">Pure Desi Ghee Chini Thekua 1 Kg</a>
-                <div class="ss-prod-card__rating-row">
-                  <span class="ss-prod-card__rating-star"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 4.89</span>
-                  <span class="ss-prod-card__rating-count">(1101 reviews)</span>
-                </div>
                 <div class="ss-prod-card__price-row">
                   <span class="ss-prod-card__compare-price">Rs. 999.00</span>
                   <span class="ss-prod-card__regular-price">Rs. 749.00</span>

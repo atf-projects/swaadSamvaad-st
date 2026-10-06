@@ -119,9 +119,7 @@
                 <span class="ss-blog-meta-sep">•</span>
                 <span class="ss-blog-meta-item">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                  {%- assign words = hero_article.content | strip_html | split: ' ' | size -%}
-                  {%- assign read_time = words | divided_by: 180 | at_least: 3 -%}
-                  {{ read_time }} Min Read
+                  {{ hero_article.published_at | date: '%I:%M %p' }}
                 </span>
               </div>
 
@@ -164,11 +162,6 @@
             {%- continue -%}
           {%- endif -%}
 
-          {%- liquid
-            assign words = article.content | strip_html | split: ' ' | size
-            assign read_time = words | divided_by: 180 | at_least: 2
-          -%}
-
           <article class="ss-blog-card" data-ss-blog-card>
             <a href="{{ article.url }}" class="ss-blog-card__media-wrap" aria-label="{{ article.title | escape }}">
               {%- if article.image != blank -%}
@@ -209,7 +202,7 @@
                 <span class="ss-blog-meta-sep">•</span>
                 <span class="ss-blog-meta-item">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                  {{ read_time }} Min
+                  {{ article.published_at | date: '%I:%M %p' }}
                 </span>
               </div>
 
@@ -266,7 +259,7 @@
               <span class="ss-blog-meta-sep">•</span>
               <span class="ss-blog-meta-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                5 Min Read
+                10:30 AM
               </span>
             </div>
 
@@ -306,9 +299,15 @@
           </div>
           <div class="ss-blog-card__body">
             <div class="ss-blog-meta-row ss-blog-meta-row--compact">
-              <span class="ss-blog-meta-item">October 2026</span>
+              <span class="ss-blog-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                October 2026
+              </span>
               <span class="ss-blog-meta-sep">•</span>
-              <span class="ss-blog-meta-item">4 Min</span>
+              <span class="ss-blog-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                11:00 AM
+              </span>
             </div>
             <h3 class="ss-blog-card__title"><a href="#">Chhath Mahaparv & The Divine Prasaad: A 3,000-Year-Old Sun Worship Tradition</a></h3>
             <p class="ss-blog-card__excerpt">Explore the spiritual significance of offering handcrafted thekua to Lord Surya along the sacred riverbanks.</p>
@@ -328,9 +327,15 @@
           </div>
           <div class="ss-blog-card__body">
             <div class="ss-blog-meta-row ss-blog-meta-row--compact">
-              <span class="ss-blog-meta-item">October 2026</span>
+              <span class="ss-blog-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                October 2026
+              </span>
               <span class="ss-blog-meta-sep">•</span>
-              <span class="ss-blog-meta-item">3 Min</span>
+              <span class="ss-blog-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                02:30 PM
+              </span>
             </div>
             <h3 class="ss-blog-card__title"><a href="#">From Grandma's Sheesham Wood Sancha to Your Doorstep: The Swaad Samvaad Journey</a></h3>
             <p class="ss-blog-card__excerpt">How our artisanal wooden molds carve the auspicious leaf and floral patterns on every single thekua.</p>
@@ -350,9 +355,15 @@
           </div>
           <div class="ss-blog-card__body">
             <div class="ss-blog-meta-row ss-blog-meta-row--compact">
-              <span class="ss-blog-meta-item">October 2026</span>
+              <span class="ss-blog-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                October 2026
+              </span>
               <span class="ss-blog-meta-sep">•</span>
-              <span class="ss-blog-meta-item">4 Min</span>
+              <span class="ss-blog-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                04:15 PM
+              </span>
             </div>
             <h3 class="ss-blog-card__title"><a href="#">Desi Gud vs Khandsari Chini: Which Authentic Thekua Suits Your Palate?</a></h3>
             <p class="ss-blog-card__excerpt">A deep culinary dive into the earthy caramel notes of sugarcane jaggery versus the crisp sweetness of native sugar.</p>
@@ -470,8 +481,7 @@
                   </a>
 
                   <div class="ss-blog-prod-card__rating-row">
-                    <span class="ss-blog-prod-card__star">★ 4.9</span>
-                    <span class="ss-blog-prod-card__reviews">(1.6k+ reviews)</span>
+                    {% render 'ss-judgeme-badge', product: prod %}
                   </div>
 
                   <div class="ss-blog-prod-card__price-row">

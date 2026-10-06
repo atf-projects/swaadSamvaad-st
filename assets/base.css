@@ -2012,3 +2012,109 @@ main > .shopify-section:first-child .section:not(.disable-section-top-offset) {
     margin-top: calc(var(--header-height) * var(--transparent-header-offset-boolean) * -1);
   }
 }
+
+/* Judge.me Global Badge Customization */
+.jdgm-widget.jdgm-preview-badge,
+.jdgm-preview-badge,
+.jdgm-preview-badge .jdgm-prev-badge,
+.jdgm-prev-badge,
+.jdgm-prev-badge[data-number-of-reviews="0"],
+.jdgm-prev-badge--no-review,
+.jdgm-widget[style*="display: none"],
+.jdgm-prev-badge[style*="display: none"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  font-size: 0.82rem !important;
+  color: #5C4033 !important;
+  line-height: 1.2 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.jdgm-prev-badge__stars {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 1px !important;
+}
+
+.jdgm-star,
+.jdgm-star:before,
+.jdgm-star:after,
+.jdgm-preview-badge .jdgm-star,
+.jdgm-preview-badge .jdgm-star:before,
+.jdgm-preview-badge .jdgm-star:after {
+  font-family: JudgemeStar !important;
+  color: #E68A00 !important;
+  letter-spacing: normal !important;
+  display: inline-block !important;
+  line-height: 1 !important;
+}
+
+.jdgm-star.jdgm--on:before,
+.jdgm-preview-badge .jdgm-star.jdgm--on:before {
+  content: "\e000" !important;
+}
+
+.jdgm-star.jdgm--off,
+.jdgm-star.jdgm--off:before,
+.jdgm-preview-badge .jdgm-star.jdgm--off,
+.jdgm-preview-badge .jdgm-star.jdgm--off:before {
+  content: "\e001" !important;
+  color: #D4C3B3 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.jdgm-star.jdgm--half:before,
+.jdgm-preview-badge .jdgm-star.jdgm--half:before {
+  content: "\e002" !important;
+}
+
+.jdgm-preview-badge .jdgm-prev-badge__text {
+  font-family: inherit !important;
+  font-size: 0.8rem !important;
+  color: #6E5A4E !important;
+  font-weight: 500 !important;
+  margin-left: 3px !important;
+  display: inline-block !important;
+}
+
+/* Custom 0 Reviews Rating Component */
+.ss-rating-badge-container {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.ss-empty-rating-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.ss-empty-rating-stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.ss-empty-star-svg {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
+.ss-empty-rating-text {
+  font-family: inherit;
+  font-size: 0.8rem;
+  color: #6E5A4E;
+  font-weight: 500;
+  margin-left: 2px;
+  letter-spacing: 0;
+}
