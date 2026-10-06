@@ -144,24 +144,26 @@
         {%- comment -%} Purity Callout under image {%- endcomment -%}
         <div class="ss-prod-gallery__purity-badge-strip">
           <div class="ss-prod-purity-pill">
-            <span>🧈</span>
-            <strong>100% Pure Desi Ghee</strong>
+            <span>{{ section.settings.gallery_pill_1_icon | default: '🧈' }}</span>
+            <strong>{{ section.settings.gallery_pill_1_text | default: '100% Pure Desi Ghee' }}</strong>
           </div>
           <div class="ss-prod-purity-pill">
-            <span>🪵</span>
-            <strong>Sheesham Sancha Pressed</strong>
+            <span>{{ section.settings.gallery_pill_2_icon | default: '🪵' }}</span>
+            <strong>{{ section.settings.gallery_pill_2_text | default: 'Sheesham Sancha Pressed' }}</strong>
           </div>
           <div class="ss-prod-purity-pill">
-            <span>📦</span>
-            <strong>3-Day Dispatch Across India</strong>
+            <span>{{ section.settings.gallery_pill_3_icon | default: '📦' }}</span>
+            <strong>{{ section.settings.gallery_pill_3_text | default: '3-Day Dispatch Across India' }}</strong>
           </div>
         </div>
 
         {%- comment -%} Social Proof Live Urgency {%- endcomment -%}
-        <div class="ss-prod-urgency-box">
-          <span class="ss-prod-urgency-dot"></span>
-          <p><strong>142 people</strong> ordered this handcrafted batch in the last 24 hours!</p>
-        </div>
+        {%- if section.settings.show_urgency -%}
+          <div class="ss-prod-urgency-box" data-ss-urgency-box>
+            <span class="ss-prod-urgency-dot"></span>
+            <p data-ss-urgency-content>{{ section.settings.urgency_text | default: '<strong>142 people</strong> ordered this handcrafted batch in the last 24 hours!' }}</p>
+          </div>
+        {%- endif -%}
       </div>
 
       {%- comment -%} Right Column: Product Purchase & Details Box {%- endcomment -%}
@@ -178,11 +180,19 @@
 
         <div class="ss-prod-meta-row">
           <div class="ss-prod-rating">
-            <span class="ss-prod-rating__stars">★★★★★</span>
-            <span class="ss-prod-rating__num">4.9</span>
-            <span class="ss-prod-rating__count">(1,640+ Verified Reviews)</span>
+            <!-- Judge.me Preview Badge -->
+            <div style="display: inline-block;" class="jdgm-widget jdgm-preview-badge" data-id="{{ product.id }}">
+              {{ product.metafields.judgeme.badge }}
+            </div>
+            {%- unless product.metafields.judgeme.badge -%}
+              <span class="ss-prod-rating__stars">★★★★★</span>
+              <span class="ss-prod-rating__num">{{ section.settings.fallback_rating_score | default: '4.9' }}</span>
+              <span class="ss-prod-rating__count">({{ section.settings.fallback_rating_count | default: '1,640+ Verified Reviews' }})</span>
+            {%- endunless -%}
           </div>
-          <span class="ss-prod-meta-badge">✨ Mithila Bestseller</span>
+          {%- if section.settings.bestseller_badge != blank -%}
+            <span class="ss-prod-meta-badge">{{ section.settings.bestseller_badge }}</span>
+          {%- endif -%}
         </div>
 
         {%- comment -%} Price Row {%- endcomment -%}
@@ -201,14 +211,14 @@
           {%- endif -%}
 
           <p class="ss-prod-price__tax-note">
-            ✓ Inclusive of all taxes • <strong>Free Express Shipping</strong> on orders above ₹999
+            {{ section.settings.tax_shipping_note | default: '✓ Inclusive of all taxes • <strong>Free Express Shipping</strong> on orders above ₹999' }}
           </p>
         </div>
 
         {%- comment -%} Variant Weight Selector {%- endcomment -%}
         <div class="ss-prod-variant-selector">
           <div class="ss-prod-variant-header">
-            <label class="ss-prod-variant-label">Select Pack Size / Weight:</label>
+            <label class="ss-prod-variant-label">{{ section.settings.variant_selector_label | default: 'Select Pack Size / Weight:' }}</label>
             <span class="ss-prod-variant-selected-name" data-ss-selected-weight>
               {{ current_variant.title | default: '1 Kg Family Pack' }}
             </span>
@@ -284,10 +294,12 @@
               <input type="number" id="ss-prod-qty-input" class="ss-prod-qty-input" value="1" min="1" max="20" readonly data-ss-qty-input>
               <button type="button" class="ss-prod-qty-btn ss-prod-qty-btn--plus" data-qty-change="1" aria-label="Increase quantity">+</button>
             </div>
-            <div class="ss-prod-stock-status">
-              <span class="ss-prod-stock-dot"></span>
-              <span>Fresh Batch Made Today in Rasoi</span>
-            </div>
+            {%- if section.settings.stock_status_text != blank -%}
+              <div class="ss-prod-stock-status">
+                <span class="ss-prod-stock-dot"></span>
+                <span>{{ section.settings.stock_status_text }}</span>
+              </div>
+            {%- endif -%}
           </div>
 
           <div class="ss-prod-buttons-row">
@@ -303,7 +315,7 @@
                 <line x1="3" y1="6" x2="21" y2="6"></line>
                 <path d="M16 10a4 4 0 0 1-8 0"></path>
               </svg>
-              <span>+ ADD TO BASKET</span>
+              <span>{{ section.settings.add_to_cart_btn_text | default: '+ ADD TO BASKET' }}</span>
             </button>
 
             <button
@@ -313,60 +325,62 @@
               data-ss-prod-buy-now
               aria-label="Buy It Now"
             >
-              <span>⚡ BUY IT NOW</span>
+              <span>{{ section.settings.buy_now_btn_text | default: '⚡ BUY IT NOW' }}</span>
             </button>
           </div>
         </div>
 
         {%- comment -%} Pincode Delivery Estimator {%- endcomment -%}
-        <div class="ss-prod-pincode-box">
-          <div class="ss-prod-pincode-header">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="1" y="3" width="15" height="13"></rect>
-              <polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon>
-              <circle cx="5.5" cy="18.5" r="2.5"></circle>
-              <circle cx="18.5" cy="18.5" r="2.5"></circle>
-            </svg>
-            <strong>Check Express Delivery to Your City</strong>
+        {%- if section.settings.show_pincode_checker -%}
+          <div class="ss-prod-pincode-box">
+            <div class="ss-prod-pincode-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="1" y="3" width="15" height="13"></rect>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon>
+                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+              </svg>
+              <strong>{{ section.settings.pincode_heading | default: 'Check Express Delivery to Your City' }}</strong>
+            </div>
+            <div class="ss-prod-pincode-input-wrap">
+              <input
+                type="text"
+                class="ss-prod-pincode-input"
+                placeholder="{{ section.settings.pincode_placeholder | default: 'Enter 6-digit Pincode (e.g. 110001)' }}"
+                maxlength="6"
+                data-ss-pincode-input
+              >
+              <button type="button" class="ss-prod-pincode-btn" data-ss-pincode-check>
+                Check
+              </button>
+            </div>
+            <div class="ss-prod-pincode-result" data-ss-pincode-result style="display: none;">
+              {{ section.settings.pincode_result_text | default: '✓ Expected Delivery in <strong>3-4 Business Days</strong> • Free Shipping Eligible!' }}
+            </div>
           </div>
-          <div class="ss-prod-pincode-input-wrap">
-            <input
-              type="text"
-              class="ss-prod-pincode-input"
-              placeholder="Enter 6-digit Pincode (e.g. 110001)"
-              maxlength="6"
-              data-ss-pincode-input
-            >
-            <button type="button" class="ss-prod-pincode-btn" data-ss-pincode-check>
-              Check
-            </button>
-          </div>
-          <div class="ss-prod-pincode-result" data-ss-pincode-result style="display: none;">
-            ✓ Expected Delivery in <strong>3-4 Business Days</strong> • Free Shipping Eligible!
-          </div>
-        </div>
+        {%- endif -%}
 
         {%- comment -%} Highlights Trust Strip in Right Box {%- endcomment -%}
         <div class="ss-prod-highlights-box">
           <div class="ss-prod-highlight-item">
-            <span class="ss-prod-highlight-icon">✨</span>
+            <span class="ss-prod-highlight-icon">{{ section.settings.highlight_1_icon | default: '✨' }}</span>
             <div class="ss-prod-highlight-text">
-              <strong>Authentic Mithila Rasoi</strong>
-              <small>Made following sacred centuries-old recipes</small>
+              <strong>{{ section.settings.highlight_1_title | default: 'Authentic Mithila Rasoi' }}</strong>
+              <small>{{ section.settings.highlight_1_sub | default: 'Made following sacred centuries-old recipes' }}</small>
             </div>
           </div>
           <div class="ss-prod-highlight-item">
-            <span class="ss-prod-highlight-icon">🌿</span>
+            <span class="ss-prod-highlight-icon">{{ section.settings.highlight_2_icon | default: '🌿' }}</span>
             <div class="ss-prod-highlight-text">
-              <strong>Zero Preservatives</strong>
-              <small>Only natural organic ingredients & Pure Desi Ghee</small>
+              <strong>{{ section.settings.highlight_2_title | default: 'Zero Preservatives' }}</strong>
+              <small>{{ section.settings.highlight_2_sub | default: 'Only natural organic ingredients & Pure Desi Ghee' }}</small>
             </div>
           </div>
           <div class="ss-prod-highlight-item">
-            <span class="ss-prod-highlight-icon">🛡️</span>
+            <span class="ss-prod-highlight-icon">{{ section.settings.highlight_3_icon | default: '🛡️' }}</span>
             <div class="ss-prod-highlight-text">
-              <strong>100% Taste & Freshness Guarantee</strong>
-              <small>Damage-free delivery with aroma seal packaging</small>
+              <strong>{{ section.settings.highlight_3_title | default: '100% Taste & Freshness Guarantee' }}</strong>
+              <small>{{ section.settings.highlight_3_sub | default: 'Damage-free delivery with aroma seal packaging' }}</small>
             </div>
           </div>
         </div>
@@ -384,8 +398,16 @@
           aria-selected="true"
           data-tab-target="#ss-tab-ingredients"
         >
-          <span class="ss-prod-tab-icon">📜</span>
-          <span>Recipe & Ingredients</span>
+          <span class="ss-prod-tab-icon">{{ section.settings.tab1_icon | default: '📜' }}</span>
+          <span>
+            {%- if section.settings.tab1_title != blank -%}
+              {{ section.settings.tab1_title }}
+            {%- elsif product.description != blank -%}
+              Description & Ingredients
+            {%- else -%}
+              Recipe & Ingredients
+            {%- endif -%}
+          </span>
         </button>
 
         <button
@@ -395,8 +417,8 @@
           aria-selected="false"
           data-tab-target="#ss-tab-crafting"
         >
-          <span class="ss-prod-tab-icon">🪵</span>
-          <span>Wood-Fire Crafting</span>
+          <span class="ss-prod-tab-icon">{{ section.settings.tab2_icon | default: '🪵' }}</span>
+          <span>{{ section.settings.tab2_title | default: 'Wood-Fire Crafting' }}</span>
         </button>
 
         <button
@@ -406,8 +428,8 @@
           aria-selected="false"
           data-tab-target="#ss-tab-storage"
         >
-          <span class="ss-prod-tab-icon">📦</span>
-          <span>Storage & Shelf Life</span>
+          <span class="ss-prod-tab-icon">{{ section.settings.tab3_icon | default: '📦' }}</span>
+          <span>{{ section.settings.tab3_title | default: 'Storage & Shelf Life' }}</span>
         </button>
 
         <button
@@ -417,47 +439,51 @@
           aria-selected="false"
           data-tab-target="#ss-tab-shipping"
         >
-          <span class="ss-prod-tab-icon">🚚</span>
-          <span>Express Courier & Shipping</span>
+          <span class="ss-prod-tab-icon">{{ section.settings.tab4_icon | default: '🚚' }}</span>
+          <span>{{ section.settings.tab4_title | default: 'Express Courier & Shipping' }}</span>
         </button>
       </div>
 
       <div class="ss-prod-tabs-body">
-        <!-- Tab 1: Recipe & Ingredients -->
+        <!-- Tab 1: Product Description / Recipe & Ingredients -->
         <div id="ss-tab-ingredients" class="ss-prod-tab-pane is-active" role="tabpanel">
-          <div class="ss-prod-tab-text">
-            <h3 class="ss-prod-tab-heading">Sacred Mithila Recipe & Pure Ingredients</h3>
-            <p>Handcrafted using time-honored traditional rituals passed down through generations in Mithila. Every batch is slow-kneaded and crafted with pure devotion without any palm oil or synthetic additives:</p>
-            
-            <ul class="ss-prod-ingredients-list">
-              <li><strong>100% Pure Desi Ghee:</strong> Slow-churned, giving an irresistible divine aroma and melt-in-mouth texture.</li>
-              <li><strong>Organic Kolhu Gud (Jaggery):</strong> Chemical-free, iron-rich cane jaggery sourced directly from authentic farmers.</li>
-              <li><strong>Stone-Ground Sharbati Wheat Flour:</strong> Coarsely milled for signature crispness and rich crunch.</li>
-              <li><strong>Aromatic Spices:</strong> Crushed Green Cardamom (Elaichi) & Roasted Fennel (Saunf) for digestive wellness.</li>
-              <li><strong>Crunchy Dry Fruits:</strong> Generously embedded with premium Cashews (Kaju) and Almonds.</li>
-            </ul>
+          <div class="ss-prod-tab-text ss-prod-rte-content">
+            {%- if product.description != blank -%}
+              {{ product.description }}
+            {%- else -%}
+              <h3 class="ss-prod-tab-heading">{{ section.settings.tab1_heading | default: 'Sacred Mithila Recipe & Pure Ingredients' }}</h3>
+              <p>{{ section.settings.tab1_text | default: 'Handcrafted using time-honored traditional rituals passed down through generations in Mithila. Every batch is slow-kneaded and crafted with pure devotion without any palm oil or synthetic additives:' }}</p>
+              
+              <ul class="ss-prod-ingredients-list">
+                <li><strong>100% Pure Desi Ghee:</strong> Slow-churned, giving an irresistible divine aroma and melt-in-mouth texture.</li>
+                <li><strong>Organic Kolhu Gud (Jaggery):</strong> Chemical-free, iron-rich cane jaggery sourced directly from authentic farmers.</li>
+                <li><strong>Stone-Ground Sharbati Wheat Flour:</strong> Coarsely milled for signature crispness and rich crunch.</li>
+                <li><strong>Aromatic Spices:</strong> Crushed Green Cardamom (Elaichi) & Roasted Fennel (Saunf) for digestive wellness.</li>
+                <li><strong>Crunchy Dry Fruits:</strong> Generously embedded with premium Cashews (Kaju) and Almonds.</li>
+              </ul>
+            {%- endif -%}
           </div>
         </div>
 
         <!-- Tab 2: Wood-Fire Crafting -->
         <div id="ss-tab-crafting" class="ss-prod-tab-pane" role="tabpanel">
           <div class="ss-prod-tab-text">
-            <h3 class="ss-prod-tab-heading">Wood-Fire Crafting & Sheesham Sancha Molds</h3>
-            <p>Each Thekua is hand-pressed individually using heritage Sheesham wood molds (Sancha) intricately engraved by Mithila master woodcarvers with sacred Surya, Lotus, and Peacock motifs.</p>
-            <p>Slow-fried on mild woodfire earthen stoves in small batches by skilled Mithila rural women artisans to achieve that iconic golden-brown crispy exterior and delicate crumbly interior that stays crunchy for weeks.</p>
+            <h3 class="ss-prod-tab-heading">{{ section.settings.tab2_heading | default: 'Wood-Fire Crafting & Sheesham Sancha Molds' }}</h3>
+            <p>{{ section.settings.tab2_p1 | default: 'Each Thekua is hand-pressed individually using heritage Sheesham wood molds (Sancha) intricately engraved by Mithila master woodcarvers with sacred Surya, Lotus, and Peacock motifs.' }}</p>
+            <p>{{ section.settings.tab2_p2 | default: 'Slow-fried on mild woodfire earthen stoves in small batches by skilled Mithila rural women artisans to achieve that iconic golden-brown crispy exterior and delicate crumbly interior that stays crunchy for weeks.' }}</p>
           </div>
         </div>
 
         <!-- Tab 3: Storage & Shelf Life -->
         <div id="ss-tab-storage" class="ss-prod-tab-pane" role="tabpanel">
           <div class="ss-prod-tab-text">
-            <h3 class="ss-prod-tab-heading">Storage, Shelf Life & Freshness Guidelines</h3>
-            <p><strong>Shelf Life:</strong> Stays fresh, crispy, and aromatic for up to <strong>60 Days</strong> when stored properly in an airtight container at room temperature.</p>
+            <h3 class="ss-prod-tab-heading">{{ section.settings.tab3_heading | default: 'Storage, Shelf Life & Freshness Guidelines' }}</h3>
+            <p><strong>Shelf Life:</strong> {{ section.settings.tab3_shelf_life | default: 'Stays fresh, crispy, and aromatic for up to <strong>60 Days</strong> when stored properly in an airtight container at room temperature.' }}</p>
             <p><strong>Storage Instructions:</strong></p>
             <ul class="ss-prod-ingredients-list">
-              <li>Store in a clean, airtight steel or glass container after breaking the aroma seal.</li>
-              <li>Keep in a cool, dry place away from direct sunlight, moisture, and high heat.</li>
-              <li>No refrigeration required — retains its authentic crunch and divine fragrance naturally!</li>
+              <li>{{ section.settings.tab3_bullet_1 | default: 'Store in a clean, airtight steel or glass container after breaking the aroma seal.' }}</li>
+              <li>{{ section.settings.tab3_bullet_2 | default: 'Keep in a cool, dry place away from direct sunlight, moisture, and high heat.' }}</li>
+              <li>{{ section.settings.tab3_bullet_3 | default: 'No refrigeration required — retains its authentic crunch and divine fragrance naturally!' }}</li>
             </ul>
           </div>
         </div>
@@ -465,9 +491,9 @@
         <!-- Tab 4: Shipping & Guarantee -->
         <div id="ss-tab-shipping" class="ss-prod-tab-pane" role="tabpanel">
           <div class="ss-prod-tab-text">
-            <h3 class="ss-prod-tab-heading">All-India Express Courier & Purity Guarantee</h3>
-            <p>Packed in food-grade multi-layer protective boxes with tamper-evident seal to ensure zero breakage and 100% aroma retention during transit.</p>
-            <p>Shipped via premium express air couriers (BlueDart, Delhivery, DTDC) across 28,000+ Indian pincodes. Dispatched within 24 hours of fresh batch preparation with live SMS & WhatsApp tracking.</p>
+            <h3 class="ss-prod-tab-heading">{{ section.settings.tab4_heading | default: 'All-India Express Courier & Purity Guarantee' }}</h3>
+            <p>{{ section.settings.tab4_p1 | default: 'Packed in food-grade multi-layer protective boxes with tamper-evident seal to ensure zero breakage and 100% aroma retention during transit.' }}</p>
+            <p>{{ section.settings.tab4_p2 | default: 'Shipped via premium express air couriers (BlueDart, Delhivery, DTDC) across 28,000+ Indian pincodes. Dispatched within 24 hours of fresh batch preparation with live SMS & WhatsApp tracking.' }}</p>
           </div>
         </div>
       </div>
@@ -476,110 +502,36 @@
     {%- comment -%} 4. Mithila Purity Guarantee Strip {%- endcomment -%}
     <div class="ss-prod-purity-strip">
       <div class="ss-prod-purity-card">
-        <div class="ss-prod-purity-card__icon">🧈</div>
+        <div class="ss-prod-purity-card__icon">{{ section.settings.purity_1_icon | default: '🧈' }}</div>
         <div class="ss-prod-purity-card__text">
-          <strong>100% Pure Desi Ghee</strong>
-          <p>Zero palm oil, zero adulteration, slow simmered in small batches</p>
+          <strong>{{ section.settings.purity_1_title | default: '100% Pure Desi Ghee' }}</strong>
+          <p>{{ section.settings.purity_1_desc | default: 'Zero palm oil, zero adulteration, slow simmered in small batches' }}</p>
         </div>
       </div>
       <div class="ss-prod-purity-card">
-        <div class="ss-prod-purity-card__icon">🪵</div>
+        <div class="ss-prod-purity-card__icon">{{ section.settings.purity_2_icon | default: '🪵' }}</div>
         <div class="ss-prod-purity-card__text">
-          <strong>Artisanal Wood Sancha</strong>
-          <p>Hand-pressed by Mithila rural women artisans with sacred motifs</p>
+          <strong>{{ section.settings.purity_2_title | default: 'Artisanal Wood Sancha' }}</strong>
+          <p>{{ section.settings.purity_2_desc | default: 'Hand-pressed by Mithila rural women artisans with sacred motifs' }}</p>
         </div>
       </div>
       <div class="ss-prod-purity-card">
-        <div class="ss-prod-purity-card__icon">🌿</div>
+        <div class="ss-prod-purity-card__icon">{{ section.settings.purity_3_icon | default: '🌿' }}</div>
         <div class="ss-prod-purity-card__text">
-          <strong>Zero Preservatives</strong>
-          <p>100% pure organic ingredients with divine prasaad taste</p>
+          <strong>{{ section.settings.purity_3_title | default: 'Zero Preservatives' }}</strong>
+          <p>{{ section.settings.purity_3_desc | default: '100% pure organic ingredients with divine prasaad taste' }}</p>
         </div>
       </div>
       <div class="ss-prod-purity-card">
-        <div class="ss-prod-purity-card__icon">📦</div>
+        <div class="ss-prod-purity-card__icon">{{ section.settings.purity_4_icon | default: '📦' }}</div>
         <div class="ss-prod-purity-card__text">
-          <strong>Aroma-Lock Dispatch</strong>
-          <p>Dispatched within 24 hours of baking for maximum crunch</p>
+          <strong>{{ section.settings.purity_4_title | default: 'Aroma-Lock Dispatch' }}</strong>
+          <p>{{ section.settings.purity_4_desc | default: 'Dispatched within 24 hours of baking for maximum crunch' }}</p>
         </div>
       </div>
     </div>
 
-    {%- comment -%} 5. Customer Reviews Wall with "Write a Review" Action {%- endcomment -%}
-    <div class="ss-prod-reviews-section" id="ss-reviews-wall">
-      <div class="ss-prod-reviews-header">
-        <div class="ss-prod-reviews-title-wrap">
-          <span class="ss-prod-reviews-eyebrow">✦ TESTIMONIALS & TRUST ✦</span>
-          <h2 class="ss-prod-reviews-title">Loved by 10,000+ Mithila Food Enthusiasts</h2>
-        </div>
-
-        <div class="ss-prod-reviews-actions">
-          <div class="ss-prod-reviews-summary-card">
-            <div class="ss-prod-reviews-big-score">4.9</div>
-            <div class="ss-prod-reviews-stars-wrap">
-              <div class="ss-prod-stars">★★★★★</div>
-              <span>Based on 1,640+ Verified Reviews</span>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            class="ss-prod-write-review-btn"
-            data-ss-open-review-modal
-            aria-label="Write a Customer Review"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="ss-prod-review-btn-icon">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-            </svg>
-            <span>Write a Review</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="ss-prod-reviews-grid" data-ss-reviews-grid>
-        <div class="ss-prod-review-card">
-          <div class="ss-prod-review-card__top">
-            <div class="ss-prod-review-author">
-              <strong>Ananya Sharma</strong>
-              <span>Verified Buyer, Bengaluru</span>
-            </div>
-            <div class="ss-prod-review-stars">★★★★★</div>
-          </div>
-          <p class="ss-prod-review-text">
-            "Authentic Chhath prasaad taste! The Pure Desi Ghee aroma hits you the moment you open the box. Perfectly crunchy on the outside and soft inside. Ordering again for Diwali gifting!"
-          </p>
-        </div>
-
-        <div class="ss-prod-review-card">
-          <div class="ss-prod-review-card__top">
-            <div class="ss-prod-review-author">
-              <strong>Rajesh Jha</strong>
-              <span>Verified Buyer, Delhi NCR</span>
-            </div>
-            <div class="ss-prod-review-stars">★★★★★</div>
-          </div>
-          <p class="ss-prod-review-text">
-            "Being from Darbhanga living in Gurgaon, I really missed authentic Mithila thekua. Swaad Samvaad delivered within 3 days in superb aroma packaging. 100% genuine desi ghee!"
-          </p>
-        </div>
-
-        <div class="ss-prod-review-card">
-          <div class="ss-prod-review-card__top">
-            <div class="ss-prod-review-author">
-              <strong>Pooja Mishra</strong>
-              <span>Verified Buyer, Mumbai</span>
-            </div>
-            <div class="ss-prod-review-stars">★★★★★</div>
-          </div>
-          <p class="ss-prod-review-text">
-            "The jaggery sweetness is so subtle and natural, not overpowering. The saunf and elaichi flavor with crunchy kaju is absolute perfection. Highly recommended!"
-          </p>
-        </div>
-      </div>
-    </div>
-
-    {%- comment -%} 6. Related Delicacies Recommendations (Exact Match to Collection Card Layout) {%- endcomment -%}
+    {%- comment -%} 5. Related Delicacies Recommendations (Standard Product Card Design) {%- endcomment -%}
     {%- if section.settings.show_related_products -%}
       {%- liquid
         assign rel_limit = section.settings.related_products_count | default: 3
@@ -612,14 +564,8 @@
         endif
       -%}
 
-      <div class="ss-prod-related-section">
-        <div class="ss-prod-related-header">
-          <span class="ss-prod-related-eyebrow">{{ section.settings.related_eyebrow | default: '✦ MORE SACRED DELICACIES ✦' }}</span>
-          <h2 class="ss-prod-related-title">{{ section.settings.related_title | default: 'You May Also Relish' }}</h2>
-        </div>
-
-        <div class="ss-prod-related-grid">
-          {%- assign rel_rendered = 0 -%}
+      {%- assign rel_rendered = 0 -%}
+      {%- capture related_cards_html -%}
 
           {%- if rel_col != blank and rel_col.products.size > 0 -%}
             {%- for rel_prod in rel_col.products -%}
@@ -656,35 +602,47 @@
                   assign r_pct = r_save | times: 100.0 | divided_by: r_comp | round
                 endif
               -%}
-              <div class="ss-prod-rec-card">
-                <a href="{{ rel_prod.url }}" class="ss-prod-rec-card__media-wrap" aria-label="{{ rel_prod.title | escape }}">
+              <div class="ss-prod-card">
+                <a href="{{ rel_prod.url }}" class="ss-prod-card__media-wrap" aria-label="{{ rel_prod.title | escape }}">
                   {%- if rel_prod.featured_image != blank -%}
                     <img
                       src="{{ rel_prod.featured_image | image_url: width: 600 }}"
                       alt="{{ rel_prod.title | escape }}"
-                      class="ss-prod-rec-card__img"
-                      width="500"
-                      height="500"
+                      class="ss-prod-card__image"
+                      width="600"
+                      height="600"
                       loading="lazy"
                     >
+                    {%- if rel_prod.images[1] != blank -%}
+                      <img
+                        src="{{ rel_prod.images[1] | image_url: width: 600 }}"
+                        alt="{{ rel_prod.title | escape }}"
+                        class="ss-prod-card__image-secondary"
+                        width="600"
+                        height="600"
+                        loading="lazy"
+                      >
+                    {%- endif -%}
                   {%- else -%}
                     <img
                       src="{{ 'ss-thekua-crafting-art.jpg' | asset_url }}"
                       alt="{{ rel_prod.title | escape }}"
-                      class="ss-prod-rec-card__img"
-                      width="500"
-                      height="500"
+                      class="ss-prod-card__image"
+                      width="600"
+                      height="600"
                       loading="lazy"
                     >
                   {%- endif -%}
 
-                  {%- if r_pct > 0 -%}
-                    <div class="ss-prod-rec-card__discount-badge">{{ r_pct }}% OFF</div>
-                  {%- endif -%}
+                  <div class="ss-prod-card__badges">
+                    {%- if r_pct > 0 -%}
+                      <div class="ss-prod-card__discount-badge">{{ r_pct }}% <span>OFF</span></div>
+                    {%- endif -%}
+                  </div>
 
                   <button
                     type="button"
-                    class="ss-prod-rec-card__wishlist-btn"
+                    class="ss-prod-card__wishlist-btn"
                     data-wishlist-id="{{ rel_prod.id }}"
                     aria-label="Add to Wishlist"
                     title="Save for later"
@@ -695,217 +653,96 @@
                   </button>
                 </a>
 
-                <div class="ss-prod-rec-card__body">
-                  <a href="{{ rel_prod.url }}" class="ss-prod-rec-card__title" title="{{ rel_prod.title | escape }}">
+                <div class="ss-prod-card__body">
+                  <a href="{{ rel_prod.url }}" class="ss-prod-card__title" title="{{ rel_prod.title | escape }}">
                     {{ rel_prod.title }}
                   </a>
 
-                  <div class="ss-prod-rec-card__rating-row">
-                    <span class="ss-prod-rec-card__star">★ 4.9</span>
-                    <span class="ss-prod-rec-card__reviews">(1.6k+ reviews)</span>
+                  <div class="ss-prod-card__rating-row">
+                    <span class="ss-prod-card__rating-star">
+                      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                      4.9
+                    </span>
+                    <span class="ss-prod-card__rating-count">(1.6k+ reviews)</span>
                   </div>
 
-                  <div class="ss-prod-rec-card__price-row">
+                  <div class="ss-prod-card__price-row">
                     {%- if r_comp > r_price -%}
-                      <span class="ss-prod-rec-card__compare-price">{{ r_comp | money }}</span>
+                      <span class="ss-prod-card__compare-price">{{ r_comp | money }}</span>
                     {%- endif -%}
-                    <span class="ss-prod-rec-card__price">{{ r_price | money }}</span>
+                    <span class="ss-prod-card__regular-price">{{ r_price | money }}</span>
                   </div>
 
                   {%- if r_save > 0 -%}
-                    <div class="ss-prod-rec-card__savings">Save {{ r_save | money }}</div>
+                    <div class="ss-prod-card__savings">Save {{ r_save | money }}</div>
                   {%- endif -%}
 
-                  <div class="ss-prod-rec-card__actions">
-                    <button
-                      type="button"
-                      class="ss-prod-rec-card__add-btn"
-                      data-variant-id="{{ r_var.id | default: 1 }}"
-                      data-ss-rec-add-cart
-                      aria-label="Add {{ rel_prod.title | escape }} to basket"
-                    >
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                        <path d="M16 10a4 4 0 0 1-8 0"></path>
-                      </svg>
-                      <span>+ ADD TO BASKET</span>
-                    </button>
-                    <a href="{{ rel_prod.url }}" class="ss-prod-rec-card__view-btn">
-                      View Details
-                    </a>
-                  </div>
+                  <button
+                    type="button"
+                    class="ss-prod-card__add-btn"
+                    data-variant-id="{{ r_var.id | default: 1 }}"
+                    data-ss-rec-add-cart
+                    aria-label="Add {{ rel_prod.title | escape }} to basket"
+                  >
+                    <span class="ss-prod-card__btn-spinner"></span>
+                    <span class="ss-prod-card__btn-text">ADD</span>
+                    <svg class="ss-prod-card__btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                      <line x1="3" y1="6" x2="21" y2="6"></line>
+                      <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                  </button>
                 </div>
               </div>
             {%- endfor -%}
           {%- endif -%}
+      {%- endcapture -%}
 
-          {%- comment -%}
-            If no products were rendered from live catalog (e.g. newly initialized dev store or single product in catalog),
-            render curated Mithila Thekua recommendations that are different from the current product.
-          {%- endcomment -%}
-          {%- if rel_rendered == 0 -%}
-            {%- assign cur_title_low = product.title | downcase -%}
-            
-            {%- unless cur_title_low contains 'gud' and cur_title_low contains '1 kg' -%}
-              <div class="ss-prod-rec-card">
-                <a href="/products/pure-desi-ghee-gud-thekua" class="ss-prod-rec-card__media-wrap">
-                  <img src="{{ 'ss-thekua-crafting-art.jpg' | asset_url }}" alt="Pure Desi Ghee Gud Thekua 1 Kg" class="ss-prod-rec-card__img" width="500" height="500" loading="lazy">
-                  <div class="ss-prod-rec-card__discount-badge">18% OFF</div>
-                </a>
-                <div class="ss-prod-rec-card__body">
-                  <a href="/products/pure-desi-ghee-gud-thekua" class="ss-prod-rec-card__title">Pure Desi Ghee Gud Thekua 1 Kg</a>
-                  <div class="ss-prod-rec-card__rating-row">
-                    <span class="ss-prod-rec-card__star">★ 4.9</span>
-                    <span class="ss-prod-rec-card__reviews">(1.6k+ reviews)</span>
-                  </div>
-                  <div class="ss-prod-rec-card__price-row">
-                    <span class="ss-prod-rec-card__compare-price">Rs. 1,099.00</span>
-                    <span class="ss-prod-rec-card__price">Rs. 899.00</span>
-                  </div>
-                  <div class="ss-prod-rec-card__savings">Save Rs. 200.00</div>
-                  <div class="ss-prod-rec-card__actions">
-                    <button type="button" class="ss-prod-rec-card__add-btn" data-variant-id="1" data-ss-rec-add-cart>
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-                      <span>+ ADD TO BASKET</span>
-                    </button>
-                    <a href="/products/pure-desi-ghee-gud-thekua" class="ss-prod-rec-card__view-btn">View Details</a>
-                  </div>
-                </div>
-              </div>
-            {%- endunless -%}
+      {%- if rel_rendered > 0 -%}
+        <div class="ss-prod-related-section">
+          <div class="ss-prod-related-header">
+            <span class="ss-prod-related-eyebrow">{{ section.settings.related_eyebrow | default: '✦ MORE SACRED DELICACIES ✦' }}</span>
+            <h2 class="ss-prod-related-title">{{ section.settings.related_title | default: 'You May Also Relish' }}</h2>
+          </div>
 
-            {%- unless cur_title_low contains 'chini' and cur_title_low contains '1 kg' -%}
-              <div class="ss-prod-rec-card">
-                <a href="/products/pure-desi-ghee-chini-thekua" class="ss-prod-rec-card__media-wrap">
-                  <img src="{{ 'ss-hero-slide-2.jpg' | asset_url }}" alt="Pure Desi Ghee Chini Thekua 1 Kg" class="ss-prod-rec-card__img" width="500" height="500" loading="lazy">
-                  <div class="ss-prod-rec-card__discount-badge">25% OFF</div>
-                </a>
-                <div class="ss-prod-rec-card__body">
-                  <a href="/products/pure-desi-ghee-chini-thekua" class="ss-prod-rec-card__title">Pure Desi Ghee Chini Thekua 1 Kg</a>
-                  <div class="ss-prod-rec-card__rating-row">
-                    <span class="ss-prod-rec-card__star">★ 4.9</span>
-                    <span class="ss-prod-rec-card__reviews">(1.6k+ reviews)</span>
-                  </div>
-                  <div class="ss-prod-rec-card__price-row">
-                    <span class="ss-prod-rec-card__compare-price">Rs. 999.00</span>
-                    <span class="ss-prod-rec-card__price">Rs. 749.00</span>
-                  </div>
-                  <div class="ss-prod-rec-card__savings">Save Rs. 250.00</div>
-                  <div class="ss-prod-rec-card__actions">
-                    <button type="button" class="ss-prod-rec-card__add-btn" data-variant-id="1" data-ss-rec-add-cart>
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-                      <span>+ ADD TO BASKET</span>
-                    </button>
-                    <a href="/products/pure-desi-ghee-chini-thekua" class="ss-prod-rec-card__view-btn">View Details</a>
-                  </div>
-                </div>
-              </div>
-            {%- endunless -%}
-
-            {%- unless cur_title_low contains '500g' -%}
-              <div class="ss-prod-rec-card">
-                <a href="/products/pure-desi-ghee-chini-thekua-500g" class="ss-prod-rec-card__media-wrap">
-                  <img src="{{ 'ss-hero-slide-3.jpg' | asset_url }}" alt="Pure Desi Ghee Chini Thekua 500g" class="ss-prod-rec-card__img" width="500" height="500" loading="lazy">
-                  <div class="ss-prod-rec-card__discount-badge">11% OFF</div>
-                </a>
-                <div class="ss-prod-rec-card__body">
-                  <a href="/products/pure-desi-ghee-chini-thekua-500g" class="ss-prod-rec-card__title">Pure Desi Ghee Chini Thekua 500g</a>
-                  <div class="ss-prod-rec-card__rating-row">
-                    <span class="ss-prod-rec-card__star">★ 4.9</span>
-                    <span class="ss-prod-rec-card__reviews">(1.6k+ reviews)</span>
-                  </div>
-                  <div class="ss-prod-rec-card__price-row">
-                    <span class="ss-prod-rec-card__compare-price">Rs. 499.00</span>
-                    <span class="ss-prod-rec-card__price">Rs. 449.00</span>
-                  </div>
-                  <div class="ss-prod-rec-card__savings">Save Rs. 50.00</div>
-                  <div class="ss-prod-rec-card__actions">
-                    <button type="button" class="ss-prod-rec-card__add-btn" data-variant-id="1" data-ss-rec-add-cart>
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-                      <span>+ ADD TO BASKET</span>
-                    </button>
-                    <a href="/products/pure-desi-ghee-chini-thekua-500g" class="ss-prod-rec-card__view-btn">View Details</a>
-                  </div>
-                </div>
-              </div>
-            {%- endunless -%}
-          {%- endif -%}
+          <div class="ss-prod-related-grid">
+            {{ related_cards_html }}
+          </div>
         </div>
-      </div>
+      {%- endif -%}
     {%- endif -%}
 
-  </div>
-
-  {%- comment -%} 7. Interactive Review Modal Form {%- endcomment -%}
-  <div class="ss-review-modal-overlay" data-ss-review-modal-overlay aria-hidden="true">
-    <div class="ss-review-modal-container" role="dialog" aria-labelledby="ss-review-modal-heading" aria-modal="true">
-      <div class="ss-review-modal-header">
-        <div>
-          <span class="ss-review-modal-eyebrow">✦ SWAAD SAMVAAD FEEDBACK ✦</span>
-          <h3 id="ss-review-modal-heading" class="ss-review-modal-title">Write Your Verified Review</h3>
+    {%- comment -%} 6. Customer Reviews Wall (Judge.me Official Integration) {%- endcomment -%}
+    <div class="ss-prod-reviews-section" id="ss-reviews-wall">
+      <div class="ss-prod-reviews-header">
+        <div class="ss-prod-reviews-title-wrap">
+          <span class="ss-prod-reviews-eyebrow">✦ TESTIMONIALS & TRUST ✦</span>
+          <h2 class="ss-prod-reviews-title">{{ section.settings.reviews_title | default: 'Customer Reviews' }}</h2>
         </div>
-        <button type="button" class="ss-review-modal-close" data-ss-close-review-modal aria-label="Close review modal">
-          ✕
-        </button>
       </div>
 
-      <form class="ss-review-form" data-ss-review-form>
-        <!-- Star Selector -->
-        <div class="ss-review-form-group">
-          <label class="ss-review-form-label">Overall Rating *</label>
-          <div class="ss-review-star-selector" data-ss-star-selector>
-            <button type="button" class="ss-star-rate-btn is-active" data-star-value="1" aria-label="1 Star">★</button>
-            <button type="button" class="ss-star-rate-btn is-active" data-star-value="2" aria-label="2 Stars">★</button>
-            <button type="button" class="ss-star-rate-btn is-active" data-star-value="3" aria-label="3 Stars">★</button>
-            <button type="button" class="ss-star-rate-btn is-active" data-star-value="4" aria-label="4 Stars">★</button>
-            <button type="button" class="ss-star-rate-btn is-active" data-star-value="5" aria-label="5 Stars">★</button>
-          </div>
-          <input type="hidden" name="rating" id="ss-review-rating-val" value="5" data-ss-rating-input>
-        </div>
-
-        <div class="ss-review-form-row">
-          <div class="ss-review-form-group">
-            <label class="ss-review-form-label" for="ss-review-author-name">Your Name *</label>
-            <input
-              type="text"
-              id="ss-review-author-name"
-              class="ss-review-input"
-              placeholder="e.g. Priyanshu Jha"
-              required
-              data-ss-author-input
-            >
-          </div>
-          <div class="ss-review-form-group">
-            <label class="ss-review-form-label" for="ss-review-author-city">Your City / State *</label>
-            <input
-              type="text"
-              id="ss-review-author-city"
-              class="ss-review-input"
-              placeholder="e.g. Patna, Bihar"
-              required
-              data-ss-city-input
-            >
-          </div>
-        </div>
-
-        <div class="ss-review-form-group">
-          <label class="ss-review-form-label" for="ss-review-body">Your Review / Experience *</label>
-          <textarea
-            id="ss-review-body"
-            class="ss-review-textarea"
-            rows="4"
-            placeholder="Tell us about the taste, aroma, crunchiness, and packaging..."
-            required
-            data-ss-body-input
-          ></textarea>
-        </div>
-
-        <button type="submit" class="ss-review-submit-btn" data-ss-submit-review>
-          <span>Submit Review ✦</span>
-        </button>
-      </form>
+      <!-- Start of Judge.me code -->
+      {% assign has_legacy = false %}
+      {% if product.metafields.judgeme.widget.size > 20 %}
+        {% assign has_legacy = true %}
+      {% endif %}
+      <div style='clear:both'></div>
+      <div id='judgeme_product_reviews' class='jdgm-widget jdgm-review-widget' data-product-title='{{ product.title | escape }}' data-id='{{ product.id }}' data-product-id='{{ product.id }}' data-widget='review' data-auto-install='false' data-shop-reviews-count='{{ shop.metafields.judgeme.shop_reviews_count | default: 0 | escape }}' data-entry-point='review_widget.js' data-entry-key='review-widget/main.js'>
+        {% if has_legacy %}
+          <div class='jdgm-legacy-widget-content' style='display: none;'>{{ product.metafields.judgeme.widget }}</div>
+        {% endif %}
+      </div>
+      {% if product.metafields.judgeme.review_widget_data %}
+        <script>
+          jdgm = window.jdgm || {};
+          jdgm.data ||= {};
+          jdgm.data.reviewWidget ||= {};
+          jdgm.data.reviewWidget[{{ product.id }}] = {{ product.metafields.judgeme.review_widget_data }};
+        </script>
+      {% endif %}
+      <!-- End of Judge.me code -->
     </div>
+
   </div>
 
   {%- comment -%} 8. Mobile Sticky Bottom Add to Cart Bar {%- endcomment -%}
@@ -941,14 +778,418 @@
   "name": "Swaad Single Product",
   "settings": [
     {
+      "type": "header",
+      "content": "Top Eyebrow & Badges"
+    },
+    {
       "type": "text",
       "id": "eyebrow_text",
-      "label": "Eyebrow Text",
+      "label": "Top Eyebrow Text",
       "default": "✦ SWAAD SAMVAAD MITHILA SPECIAL ✦"
     },
     {
+      "type": "text",
+      "id": "bestseller_badge",
+      "label": "Bestseller Tag / Badge",
+      "default": "✨ Mithila Bestseller"
+    },
+    {
+      "type": "text",
+      "id": "fallback_rating_score",
+      "label": "Fallback Rating Score (if no judge.me)",
+      "default": "4.9"
+    },
+    {
+      "type": "text",
+      "id": "fallback_rating_count",
+      "label": "Fallback Rating Count",
+      "default": "1,640+ Verified Reviews"
+    },
+    {
       "type": "header",
-      "content": "Related Delicacies"
+      "content": "Pricing, CTA & Stock Note"
+    },
+    {
+      "type": "text",
+      "id": "tax_shipping_note",
+      "label": "Tax & Shipping Note",
+      "default": "✓ Inclusive of all taxes • <strong>Free Express Shipping</strong> on orders above ₹999"
+    },
+    {
+      "type": "text",
+      "id": "variant_selector_label",
+      "label": "Variant / Pack Size Label",
+      "default": "Select Pack Size / Weight:"
+    },
+    {
+      "type": "text",
+      "id": "stock_status_text",
+      "label": "Fresh Stock Status Text",
+      "default": "Fresh Batch Made Today in Rasoi"
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_btn_text",
+      "label": "Add To Basket Button Text",
+      "default": "+ ADD TO BASKET"
+    },
+    {
+      "type": "text",
+      "id": "buy_now_btn_text",
+      "label": "Buy It Now Button Text",
+      "default": "⚡ BUY IT NOW"
+    },
+    {
+      "type": "header",
+      "content": "Image Gallery Pills & Social Urgency"
+    },
+    {
+      "type": "text",
+      "id": "gallery_pill_1_icon",
+      "label": "Gallery Pill 1 Emoji",
+      "default": "🧈"
+    },
+    {
+      "type": "text",
+      "id": "gallery_pill_1_text",
+      "label": "Gallery Pill 1 Text",
+      "default": "100% Pure Desi Ghee"
+    },
+    {
+      "type": "text",
+      "id": "gallery_pill_2_icon",
+      "label": "Gallery Pill 2 Emoji",
+      "default": "🪵"
+    },
+    {
+      "type": "text",
+      "id": "gallery_pill_2_text",
+      "label": "Gallery Pill 2 Text",
+      "default": "Sheesham Sancha Pressed"
+    },
+    {
+      "type": "text",
+      "id": "gallery_pill_3_icon",
+      "label": "Gallery Pill 3 Emoji",
+      "default": "📦"
+    },
+    {
+      "type": "text",
+      "id": "gallery_pill_3_text",
+      "label": "Gallery Pill 3 Text",
+      "default": "3-Day Dispatch Across India"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_urgency",
+      "label": "Show Live Urgency Alert",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "urgency_text",
+      "label": "Urgency Alert Text",
+      "default": "<strong>142 people</strong> ordered this handcrafted batch in the last 24 hours!"
+    },
+    {
+      "type": "header",
+      "content": "Pincode Delivery Estimator"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pincode_checker",
+      "label": "Enable Pincode Checker",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "pincode_heading",
+      "label": "Pincode Box Heading",
+      "default": "Check Express Delivery to Your City"
+    },
+    {
+      "type": "text",
+      "id": "pincode_placeholder",
+      "label": "Pincode Input Placeholder",
+      "default": "Enter 6-digit Pincode (e.g. 110001)"
+    },
+    {
+      "type": "text",
+      "id": "pincode_result_text",
+      "label": "Delivery Result Text",
+      "default": "✓ Expected Delivery in <strong>3-4 Business Days</strong> • Free Shipping Eligible!"
+    },
+    {
+      "type": "header",
+      "content": "Key Highlights Trust Strip"
+    },
+    {
+      "type": "text",
+      "id": "highlight_1_icon",
+      "label": "Highlight 1 Emoji/Icon",
+      "default": "✨"
+    },
+    {
+      "type": "text",
+      "id": "highlight_1_title",
+      "label": "Highlight 1 Title",
+      "default": "Authentic Mithila Rasoi"
+    },
+    {
+      "type": "text",
+      "id": "highlight_1_sub",
+      "label": "Highlight 1 Subtitle",
+      "default": "Made following sacred centuries-old recipes"
+    },
+    {
+      "type": "text",
+      "id": "highlight_2_icon",
+      "label": "Highlight 2 Emoji/Icon",
+      "default": "🌿"
+    },
+    {
+      "type": "text",
+      "id": "highlight_2_title",
+      "label": "Highlight 2 Title",
+      "default": "Zero Preservatives"
+    },
+    {
+      "type": "text",
+      "id": "highlight_2_sub",
+      "label": "Highlight 2 Subtitle",
+      "default": "Only natural organic ingredients & Pure Desi Ghee"
+    },
+    {
+      "type": "text",
+      "id": "highlight_3_icon",
+      "label": "Highlight 3 Emoji/Icon",
+      "default": "🛡️"
+    },
+    {
+      "type": "text",
+      "id": "highlight_3_title",
+      "label": "Highlight 3 Title",
+      "default": "100% Taste & Freshness Guarantee"
+    },
+    {
+      "type": "text",
+      "id": "highlight_3_sub",
+      "label": "Highlight 3 Subtitle",
+      "default": "Damage-free delivery with aroma seal packaging"
+    },
+    {
+      "type": "header",
+      "content": "Product Information Tabs"
+    },
+    {
+      "type": "paragraph",
+      "content": "Tab 1 automatically pulls product.description. Below settings control custom titles, headings, and other tabs."
+    },
+    {
+      "type": "text",
+      "id": "tab1_icon",
+      "label": "Tab 1 Icon Emoji",
+      "default": "📜"
+    },
+    {
+      "type": "text",
+      "id": "tab1_title",
+      "label": "Tab 1 Title (Leave empty for auto)",
+      "default": "Description & Ingredients"
+    },
+    {
+      "type": "text",
+      "id": "tab1_heading",
+      "label": "Tab 1 Fallback Heading",
+      "default": "Sacred Mithila Recipe & Pure Ingredients"
+    },
+    {
+      "type": "textarea",
+      "id": "tab1_text",
+      "label": "Tab 1 Fallback Intro Text",
+      "default": "Handcrafted using time-honored traditional rituals passed down through generations in Mithila. Every batch is slow-kneaded and crafted with pure devotion without any palm oil or synthetic additives:"
+    },
+    {
+      "type": "text",
+      "id": "tab2_icon",
+      "label": "Tab 2 Icon Emoji",
+      "default": "🪵"
+    },
+    {
+      "type": "text",
+      "id": "tab2_title",
+      "label": "Tab 2 Title",
+      "default": "Wood-Fire Crafting"
+    },
+    {
+      "type": "text",
+      "id": "tab2_heading",
+      "label": "Tab 2 Heading",
+      "default": "Wood-Fire Crafting & Sheesham Sancha Molds"
+    },
+    {
+      "type": "textarea",
+      "id": "tab2_p1",
+      "label": "Tab 2 Paragraph 1",
+      "default": "Each Thekua is hand-pressed individually using heritage Sheesham wood molds (Sancha) intricately engraved by Mithila master woodcarvers with sacred Surya, Lotus, and Peacock motifs."
+    },
+    {
+      "type": "textarea",
+      "id": "tab2_p2",
+      "label": "Tab 2 Paragraph 2",
+      "default": "Slow-fried on mild woodfire earthen stoves in small batches by skilled Mithila rural women artisans to achieve that iconic golden-brown crispy exterior and delicate crumbly interior that stays crunchy for weeks."
+    },
+    {
+      "type": "text",
+      "id": "tab3_icon",
+      "label": "Tab 3 Icon Emoji",
+      "default": "📦"
+    },
+    {
+      "type": "text",
+      "id": "tab3_title",
+      "label": "Tab 3 Title",
+      "default": "Storage & Shelf Life"
+    },
+    {
+      "type": "text",
+      "id": "tab3_heading",
+      "label": "Tab 3 Heading",
+      "default": "Storage, Shelf Life & Freshness Guidelines"
+    },
+    {
+      "type": "text",
+      "id": "tab3_shelf_life",
+      "label": "Tab 3 Shelf Life Note",
+      "default": "Stays fresh, crispy, and aromatic for up to <strong>60 Days</strong> when stored properly in an airtight container at room temperature."
+    },
+    {
+      "type": "text",
+      "id": "tab3_bullet_1",
+      "label": "Tab 3 Bullet 1",
+      "default": "Store in a clean, airtight steel or glass container after breaking the aroma seal."
+    },
+    {
+      "type": "text",
+      "id": "tab3_bullet_2",
+      "label": "Tab 3 Bullet 2",
+      "default": "Keep in a cool, dry place away from direct sunlight, moisture, and high heat."
+    },
+    {
+      "type": "text",
+      "id": "tab3_bullet_3",
+      "label": "Tab 3 Bullet 3",
+      "default": "No refrigeration required — retains its authentic crunch and divine fragrance naturally!"
+    },
+    {
+      "type": "text",
+      "id": "tab4_icon",
+      "label": "Tab 4 Icon Emoji",
+      "default": "🚚"
+    },
+    {
+      "type": "text",
+      "id": "tab4_title",
+      "label": "Tab 4 Title",
+      "default": "Express Courier & Shipping"
+    },
+    {
+      "type": "text",
+      "id": "tab4_heading",
+      "label": "Tab 4 Heading",
+      "default": "All-India Express Courier & Purity Guarantee"
+    },
+    {
+      "type": "textarea",
+      "id": "tab4_p1",
+      "label": "Tab 4 Paragraph 1",
+      "default": "Packed in food-grade multi-layer protective boxes with tamper-evident seal to ensure zero breakage and 100% aroma retention during transit."
+    },
+    {
+      "type": "textarea",
+      "id": "tab4_p2",
+      "label": "Tab 4 Paragraph 2",
+      "default": "Shipped via premium express air couriers (BlueDart, Delhivery, DTDC) across 28,000+ Indian pincodes. Dispatched within 24 hours of fresh batch preparation with live SMS & WhatsApp tracking."
+    },
+    {
+      "type": "header",
+      "content": "Purity Guarantee 4-Card Strip"
+    },
+    {
+      "type": "text",
+      "id": "purity_1_icon",
+      "label": "Purity Card 1 Icon",
+      "default": "🧈"
+    },
+    {
+      "type": "text",
+      "id": "purity_1_title",
+      "label": "Purity Card 1 Title",
+      "default": "100% Pure Desi Ghee"
+    },
+    {
+      "type": "text",
+      "id": "purity_1_desc",
+      "label": "Purity Card 1 Description",
+      "default": "Zero palm oil, zero adulteration, slow simmered in small batches"
+    },
+    {
+      "type": "text",
+      "id": "purity_2_icon",
+      "label": "Purity Card 2 Icon",
+      "default": "🪵"
+    },
+    {
+      "type": "text",
+      "id": "purity_2_title",
+      "label": "Purity Card 2 Title",
+      "default": "Artisanal Wood Sancha"
+    },
+    {
+      "type": "text",
+      "id": "purity_2_desc",
+      "label": "Purity Card 2 Description",
+      "default": "Hand-pressed by Mithila rural women artisans with sacred motifs"
+    },
+    {
+      "type": "text",
+      "id": "purity_3_icon",
+      "label": "Purity Card 3 Icon",
+      "default": "🌿"
+    },
+    {
+      "type": "text",
+      "id": "purity_3_title",
+      "label": "Purity Card 3 Title",
+      "default": "Zero Preservatives"
+    },
+    {
+      "type": "text",
+      "id": "purity_3_desc",
+      "label": "Purity Card 3 Description",
+      "default": "100% pure organic ingredients with divine prasaad taste"
+    },
+    {
+      "type": "text",
+      "id": "purity_4_icon",
+      "label": "Purity Card 4 Icon",
+      "default": "📦"
+    },
+    {
+      "type": "text",
+      "id": "purity_4_title",
+      "label": "Purity Card 4 Title",
+      "default": "Aroma-Lock Dispatch"
+    },
+    {
+      "type": "text",
+      "id": "purity_4_desc",
+      "label": "Purity Card 4 Description",
+      "default": "Dispatched within 24 hours of baking for maximum crunch"
+    },
+    {
+      "type": "header",
+      "content": "Related Delicacies Section"
     },
     {
       "type": "checkbox",
@@ -967,7 +1208,7 @@
       "id": "related_products_count",
       "label": "Products to Show",
       "min": 2,
-      "max": 4,
+      "max": 6,
       "step": 1,
       "default": 3
     },
@@ -985,6 +1226,16 @@
     },
     {
       "type": "header",
+      "content": "Customer Reviews Section"
+    },
+    {
+      "type": "text",
+      "id": "reviews_title",
+      "label": "Reviews Section Title",
+      "default": "Customer Reviews"
+    },
+    {
+      "type": "header",
       "content": "Section Spacing"
     },
     {
@@ -995,7 +1246,7 @@
       "max": 80,
       "step": 5,
       "unit": "px",
-      "default": 25
+      "default": 20
     },
     {
       "type": "range",
@@ -1005,7 +1256,7 @@
       "max": 120,
       "step": 5,
       "unit": "px",
-      "default": 75
+      "default": 60
     }
   ]
 }
