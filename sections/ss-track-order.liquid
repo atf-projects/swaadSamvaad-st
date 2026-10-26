@@ -19,6 +19,8 @@
   id="ss-track-order-{{ section.id }}"
   class="ss-track-page"
   data-ss-track-page
+  data-customer-logged-in="{% if customer %}true{% else %}false{% endif %}"
+  data-login-url="{{ routes.account_login_url }}"
   style="
     --ss-track-pad-top: {{ section.settings.padding_top | default: 25 }}px;
     --ss-track-pad-bottom: {{ section.settings.padding_bottom | default: 75 }}px;
@@ -42,194 +44,146 @@
       </div>
       <h1 class="ss-track-heading">{{ section.settings.heading | default: 'Track Your Sacred Mithila Parcel' }}</h1>
       <p class="ss-track-subheading">
-        {{ section.settings.subheading | default: 'Enter your Order ID or Courier AWB Tracking Number along with your registered Phone or Email to view live wood-fire batch status and express air courier updates.' }}
+        {{ section.settings.subheading | default: 'Enter your Order ID (with hashtag #, e.g. #1001) to check the live batch crafting and express courier status.' }}
       </p>
     </div>
 
-    {%- comment -%} 3. Tracking Input Card {%- endcomment -%}
+    {%- comment -%} Customer Orders Real Data Embed {%- endcomment -%}
+    {% if customer and customer.orders.size > 0 %}
+      <script id="ss-customer-orders-data" type="application/json">
+        [
+          {% for order in customer.orders %}
+            {
+              "id": {{ order.name | json }},
+              "order_number": {{ order.order_number | json }},
+              "created_at": {{ order.created_at | date: "%b %d, %Y" | json }},
+              "cancelled": {{ order.cancelled | default: false | json }},
+              "cancelled_at": {{ order.cancelled_at | date: "%b %d, %Y" | json }},
+              "cancel_reason": {{ order.cancel_reason_label | default: order.cancel_reason | json }},
+              "financial_status": {{ order.financial_status | json }},
+              "financial_status_label": {{ order.financial_status_label | json }},
+              "fulfillment_status": {{ order.fulfillment_status | json }},
+              "fulfillment_status_label": {{ order.fulfillment_status_label | default: 'Unfulfilled' | json }},
+              "total_price": {{ order.total_price | money | json }},
+              "order_status_url": {{ order.order_status_url | json }},
+              "destination": {% if order.shipping_address %}{{ order.shipping_address.city | append: ', ' | append: order.shipping_address.province | append: ' (' | append: order.shipping_address.zip | append: ')' | json }}{% else %}"Verified Customer Address"{% endif %},
+              "tracking_company": {{ order.fulfillments.first.tracking_company | default: order.line_items.first.fulfillment.tracking_company | default: '' | json }},
+              "tracking_number": {{ order.fulfillments.first.tracking_number | default: order.line_items.first.fulfillment.tracking_number | default: '' | json }},
+              "tracking_url": {{ order.fulfillments.first.tracking_url | default: order.line_items.first.fulfillment.tracking_url | default: '' | json }},
+              "line_items": [
+                {% for item in order.line_items %}
+                  {
+                    "title": {{ item.title | json }},
+                    "quantity": {{ item.quantity | json }},
+                    "price": {{ item.final_price | money | json }},
+                    "image": {{ item.image | image_url: width: 120 | json }}
+                  }{% unless forloop.last %},{% endunless %}
+                {% endfor %}
+              ]
+            }{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ]
+      </script>
+    {% endif %}
+
+    {%- comment -%} 3. Single Order ID Tracking Input Card {%- endcomment -%}
     <div class="ss-track-card ss-track-input-card">
-      <div class="ss-track-tabs-nav" role="tablist">
-        <button
-          type="button"
-          class="ss-track-tab-btn is-active"
-          data-track-tab="order-id"
-          role="tab"
-          aria-selected="true"
-          aria-controls="ss-tab-order-id"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <path d="M16 10a4 4 0 0 1-8 0"></path>
-          </svg>
-          <span>Order ID & Phone / Email</span>
-        </button>
-        <button
-          type="button"
-          class="ss-track-tab-btn"
-          data-track-tab="awb"
-          role="tab"
-          aria-selected="false"
-          aria-controls="ss-tab-awb"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="1" y="3" width="15" height="13"></rect>
-            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
-            <circle cx="5.5" cy="18.5" r="2.5"></circle>
-            <circle cx="18.5" cy="18.5" r="2.5"></circle>
-          </svg>
-          <span>AWB / Courier Number</span>
-        </button>
-      </div>
-
-      <!-- Tab 1: By Order ID & Contact -->
-      <form class="ss-track-form is-active" id="ss-tab-order-id" data-track-form="order-id">
-        <div class="ss-track-form-grid">
-          <div class="ss-track-field-group">
-            <label for="track-order-number" class="ss-track-label">
-              Order ID <span class="ss-track-req">*</span>
-            </label>
-            <div class="ss-track-input-wrap">
-              <span class="ss-track-input-icon">#</span>
-              <input
-                type="text"
-                id="track-order-number"
-                name="order_id"
-                class="ss-track-input ss-track-input--has-icon"
-                placeholder="e.g. SS-9821 or 9821"
-                required
-                autocomplete="off"
-              >
-            </div>
+      <form class="ss-track-single-form" id="ss-order-track-form" data-track-form="single-order">
+        <div class="ss-track-single-wrap">
+          <label for="track-order-number" class="ss-track-single-label">
+            Enter Order ID
+          </label>
+          <div class="ss-track-single-input-bar">
+            <span class="ss-track-hash-badge">#</span>
+            <input
+              type="text"
+              id="track-order-number"
+              name="order_id"
+              class="ss-track-single-input"
+              placeholder="e.g. #1001 or 1001"
+              required
+              autocomplete="off"
+              aria-label="Order ID with hashtag"
+            >
+            <button type="submit" class="ss-track-single-submit-btn" data-track-submit>
+              <span class="ss-track-btn-text">Track Order</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
           </div>
-
-          <div class="ss-track-field-group">
-            <label for="track-order-contact" class="ss-track-label">
-              Mobile Number or Email <span class="ss-track-req">*</span>
-            </label>
-            <div class="ss-track-input-wrap">
-              <span class="ss-track-input-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                </svg>
-              </span>
-              <input
-                type="text"
-                id="track-order-contact"
-                name="contact"
-                class="ss-track-input ss-track-input--has-icon"
-                placeholder="e.g. 9876543210 or name@example.com"
-                required
-                autocomplete="off"
-              >
-            </div>
-          </div>
-        </div>
-
-        <div class="ss-track-form-actions">
-          <button type="submit" class="ss-track-submit-btn" data-track-submit>
-            <span>Track Parcel Status</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
+          <div class="ss-track-single-hint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
             </svg>
-          </button>
-        </div>
-
-        {%- if section.settings.show_demo_chips -%}
-          <!-- Demo Order Chips -->
-          <div class="ss-track-demo-chips">
-            <span class="ss-track-demo-title">⚡ Try Demo Sample Orders:</span>
-            <button type="button" class="ss-track-chip" data-demo-order="SS-9821" data-demo-contact="9876543210" title="Click to test In-Transit order">
-              <span>#SS-9821 (In Transit • Air)</span>
-            </button>
-            <button type="button" class="ss-track-chip" data-demo-order="SS-8743" data-demo-contact="priyanshu@example.com" title="Click to test Out for Delivery order">
-              <span>#SS-8743 (Out for Delivery)</span>
-            </button>
-            <button type="button" class="ss-track-chip" data-demo-order="SS-3104" data-demo-contact="9811223344" title="Click to test Fresh Wood-Fire Crafting order">
-              <span>#SS-3104 (Fresh Wood-Fire Crafting)</span>
-            </button>
-          </div>
-        {%- endif -%}
-      </form>
-
-      <!-- Tab 2: By Courier AWB Tracking Number -->
-      <form class="ss-track-form" id="ss-tab-awb" data-track-form="awb" style="display: none;">
-        <div class="ss-track-form-grid ss-track-form-grid--single">
-          <div class="ss-track-field-group">
-            <label for="track-awb-number" class="ss-track-label">
-              AWB / Consignment Tracking Number <span class="ss-track-req">*</span>
-            </label>
-            <div class="ss-track-input-wrap">
-              <span class="ss-track-input-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
-                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                  <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                </svg>
-              </span>
-              <input
-                type="text"
-                id="track-awb-number"
-                name="awb_number"
-                class="ss-track-input ss-track-input--has-icon"
-                placeholder="e.g. BD849201948IN or DEL99281744"
-                required
-                autocomplete="off"
-              >
-            </div>
+            <span>Enter your Order ID with or without hashtag (e.g. <strong>#1001</strong>). You can find this in your order confirmation SMS or email.</span>
           </div>
         </div>
-
-        <div class="ss-track-form-actions">
-          <button type="submit" class="ss-track-submit-btn" data-track-submit>
-            <span>Track AWB Consignment</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </button>
-        </div>
-
-        {%- if section.settings.show_demo_chips -%}
-          <div class="ss-track-demo-chips">
-            <span class="ss-track-demo-title">⚡ Try Demo AWB:</span>
-            <button type="button" class="ss-track-chip" data-demo-awb="BD849201948IN">
-              <span>BlueDart: BD849201948IN</span>
-            </button>
-            <button type="button" class="ss-track-chip" data-demo-awb="DEL99281744IN">
-              <span>Delhivery: DEL99281744IN</span>
-            </button>
-          </div>
-        {%- endif -%}
       </form>
     </div>
 
-    {%- comment -%} 4. Dynamic Tracking Results Container {%- endcomment -%}
+    {%- comment -%} 3.5. Wrong Order ID / Order Not Found State / Login Required State {%- endcomment -%}
+    <div class="ss-track-card ss-track-error-card" id="ss-track-error" data-ss-track-error style="display: none;">
+      <div class="ss-track-error-icon-box" data-error-icon-box>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="15" y1="9" x2="9" y2="15"></line>
+          <line x1="9" y1="9" x2="15" y2="15"></line>
+        </svg>
+      </div>
+      <div class="ss-track-error-content">
+        <div class="ss-track-error-badge" data-error-badge>Wrong Order ID</div>
+        <h3 class="ss-track-error-heading">
+          <span data-error-heading-text>Order Not Found:</span> <span data-error-order-id>#0000</span>
+        </h3>
+        <p class="ss-track-error-desc" data-error-desc>
+          No order found with this Order ID. Please make sure you have entered the correct Order ID (e.g. <strong>#1001</strong> or <strong>#SS-1001</strong>) as mentioned in your order confirmation SMS or email.
+        </p>
+        <div class="ss-track-error-actions">
+          <a
+            href="{{ routes.account_login_url }}"
+            class="ss-track-error-login-btn"
+            data-error-login-btn
+            style="display: none;"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+              <polyline points="10 17 15 12 10 7"></polyline>
+              <line x1="15" y1="12" x2="3" y2="12"></line>
+            </svg>
+            <span>Log In to Your Account</span>
+          </a>
+          <a
+            href="https://wa.me/917982006449"
+            class="ss-track-error-wa-btn"
+            data-error-wa-btn
+            target="_blank"
+            rel="noopener"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.27-2.42 5.82a8.19 8.19 0 0 1-5.82 2.42c-1.42 0-2.82-.37-4.06-1.07l-.29-.17-3.12.82.83-3.04-.19-.3a8.21 8.21 0 0 1-1.28-4.48c0-4.54 3.7-8.24 8.24-8.24zm4.51 11.64c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.98-.14.17-.29.19-.54.06-.25-.13-1.07-.39-2.03-1.25-.75-.67-1.26-1.5-1.41-1.75-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.47c-.17 0-.44.06-.67.31-.23.25-.89.87-.89 2.12s.91 2.46 1.04 2.63c.13.17 1.79 2.74 4.34 3.84.61.26 1.08.42 1.45.54.61.19 1.17.17 1.61.1.49-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.17-.48-.29z"/>
+            </svg>
+            <span>Contact Support on WhatsApp</span>
+          </a>
+          <button type="button" class="ss-track-error-retry-btn" data-error-retry-btn>
+            <span>Re-enter Order ID</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dynamic Tracking Results Container -->
     <div class="ss-track-results" id="ss-track-results" data-ss-track-results style="display: none;">
       
-      <!-- Top Status Banner -->
-      <div class="ss-track-status-banner" data-status-banner>
-        <div class="ss-track-status-banner__left">
-          <div class="ss-track-status-badge is-transit" data-status-badge>
-            <span class="ss-track-status-badge__dot"></span>
-            <span data-status-text>In Transit • Express Air Cargo</span>
-          </div>
-          <h2 class="ss-track-status-title" data-status-headline>Your Fresh Mithila Thekua is on the way!</h2>
-          <p class="ss-track-status-eta">
-            Estimated Delivery: <strong data-status-eta-date>Wednesday, Oct 08, 2026</strong> (by 7:00 PM)
-          </p>
-        </div>
-        <div class="ss-track-status-banner__right">
-          <a href="#" class="ss-track-courier-btn" data-courier-external-link target="_blank" rel="noopener">
-            <span>Track on BlueDart Portal</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-              <polyline points="15 3 21 3 21 9"></polyline>
-              <line x1="10" y1="14" x2="21" y2="3"></line>
-            </svg>
-          </a>
+      <!-- Special Status Notice (For Cancelled, Refunded, On Hold, or Pending Payment) -->
+      <div class="ss-track-order-alert-box" data-order-alert-box style="display: none;">
+        <div class="ss-track-order-alert-icon" data-alert-icon>⚠️</div>
+        <div class="ss-track-order-alert-content">
+          <strong class="ss-track-order-alert-title" data-alert-title>Order Cancelled</strong>
+          <p class="ss-track-order-alert-desc" data-alert-desc>This order was cancelled.</p>
         </div>
       </div>
 
@@ -240,26 +194,22 @@
           <strong class="ss-track-meta-val" data-meta-order-id>#SS-9821</strong>
         </div>
         <div class="ss-track-meta-item">
-          <span class="ss-track-meta-label">Ghee Batch Crafted</span>
-          <strong class="ss-track-meta-val" data-meta-craft-date>Oct 04, 2026 (Morning Batch)</strong>
+          <span class="ss-track-meta-label">Payment & Order Status</span>
+          <strong class="ss-track-meta-val" data-meta-craft-date>Paid</strong>
         </div>
         <div class="ss-track-meta-item">
           <span class="ss-track-meta-label">Courier Partner</span>
-          <strong class="ss-track-meta-val" data-meta-courier>BlueDart Air Express</strong>
+          <strong class="ss-track-meta-val" data-meta-courier>Not Assigned</strong>
         </div>
         <div class="ss-track-meta-item">
           <span class="ss-track-meta-label">AWB Tracking No.</span>
-          <strong class="ss-track-meta-val ss-track-meta-val--code" data-meta-awb>BD849201948IN</strong>
-        </div>
-        <div class="ss-track-meta-item">
-          <span class="ss-track-meta-label">Destination</span>
-          <strong class="ss-track-meta-val" data-meta-destination>Patna, Bihar (800001)</strong>
+          <strong class="ss-track-meta-val ss-track-meta-val--code" data-meta-awb>Not Generated</strong>
         </div>
       </div>
 
       <!-- 5-Step Visual Crafting & Shipping Progress Bar -->
-      <div class="ss-track-progress-card">
-        <h3 class="ss-track-progress-heading">✦ Sacred Journey of Your Delicacy ✦</h3>
+      <div class="ss-track-progress-card" data-stepper-card>
+        <h3 class="ss-track-progress-heading" data-stepper-heading>✦ Sacred Journey of Your Delicacy ✦</h3>
         <div class="ss-track-stepper" data-track-stepper>
           
           <!-- Step 1 -->
@@ -526,17 +476,6 @@
       "id": "subheading",
       "label": "Subheading Description",
       "default": "Enter your Order ID (e.g. #SS-9821) along with your registered Phone / Email or AWB Number to check the live batch crafting and express courier status."
-    },
-    {
-      "type": "header",
-      "content": "Demo / Testing Settings"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_demo_chips",
-      "label": "Show Demo Sample Orders (For Testing)",
-      "default": false,
-      "info": "Turn ON during testing/development to show quick sample order buttons (#SS-9821, #SS-8743). Turn OFF for live customers."
     },
     {
       "type": "header",
