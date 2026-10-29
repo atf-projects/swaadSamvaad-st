@@ -448,6 +448,27 @@
         </a>
       </div>
 
+      <!-- Full-Width Login / Logout Button -->
+      {%- if customer -%}
+        <a href="{{ routes.account_logout_url }}" class="ss-account-login-main-btn" title="Log out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          <span>Log out</span>
+        </a>
+      {%- else -%}
+        <a href="{{ routes.account_login_url }}" class="ss-account-login-main-btn" id="ssAccountLoginSubmitBtn" title="Login">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+            <polyline points="10 17 15 12 10 7" />
+            <line x1="15" y1="12" x2="3" y2="12" />
+          </svg>
+          <span>Login</span>
+        </a>
+      {%- endif -%}
+
       <!-- Quick Register Link -->
       <div class="ss-account-signup-row">
         <span>Don't have an account?</span>

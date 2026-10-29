@@ -361,6 +361,19 @@ document.addEventListener('DOMContentLoaded', function () {
     btn.addEventListener('click', closeAccountModal);
   });
 
+  // Handle Login Button Click inside Account Modal
+  const accountLoginMainBtn = document.getElementById('ssAccountLoginSubmitBtn');
+  const accountEmailForm = document.querySelector('.ss-account-email-form');
+  const accountEmailInput = document.querySelector('.ss-account-email-input');
+  if (accountLoginMainBtn && accountEmailForm && accountEmailInput) {
+    accountLoginMainBtn.addEventListener('click', function (e) {
+      if (accountEmailInput.value && accountEmailInput.value.trim() !== '') {
+        e.preventDefault();
+        accountEmailForm.submit();
+      }
+    });
+  }
+
   // Global Backdrop Click & Escape Key Listeners
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
