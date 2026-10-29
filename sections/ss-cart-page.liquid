@@ -348,9 +348,13 @@
 
             {%- liquid
               assign checkout_target = '/checkout'
-              unless customer
+              assign require_login = settings.require_login_on_checkout
+              if section.settings.require_login_on_checkout != nil
+                assign require_login = section.settings.require_login_on_checkout
+              endif
+              if require_login and customer == nil
                 assign checkout_target = routes.account_login_url | append: '?checkout_url=/checkout&return_to=%2Fcheckout'
-              endunless
+              endif
             -%}
             <a href="{{ checkout_target }}" class="ss-cart-page__checkout-btn">
               <span>Proceed to Checkout</span>
@@ -435,6 +439,13 @@
       "step": 5,
       "unit": "px",
       "default": 80
+    },
+    {
+      "type": "checkbox",
+      "id": "require_login_on_checkout",
+      "label": "Require login on checkout",
+      "info": "When enabled, unauthenticated customers clicking 'Proceed to Checkout' are directed to login (via phone OTP app or email). When disabled, customers proceed directly to checkout.",
+      "default": true
     }
   ]
 }

@@ -51,6 +51,7 @@
     "button_border_radius_secondary": 0,
     "cart_type": "drawer",
     "auto_open_cart_drawer": true,
+    "require_login_on_checkout": true,
     "drawer_background_color": "{{ settings.color_palette.background }}",
     "drawer_text_color": "{{ settings.color_palette.foreground }}",
     "palette_input_background": "{{ settings.color_palette.background }}",

@@ -260,9 +260,9 @@
 <div class="cart__ctas">
   {%- liquid
     assign checkout_target = '/checkout'
-    unless customer
+    if settings.require_login_on_checkout and customer == nil
       assign checkout_target = routes.account_login_url | append: '?checkout_url=/checkout&return_to=%2Fcheckout'
-    endunless
+    endif
   -%}
   {%- if customer -%}
     <button

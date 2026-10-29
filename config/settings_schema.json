@@ -1531,6 +1531,13 @@
       },
       {
         "type": "checkbox",
+        "id": "require_login_on_checkout",
+        "label": "Require login on checkout",
+        "info": "When enabled, unauthenticated customers clicking 'Proceed to Checkout' are directed to login (via phone OTP app or email). When disabled, customers proceed directly to checkout.",
+        "default": true
+      },
+      {
+        "type": "checkbox",
         "id": "show_cart_note",
         "label": "t:settings.seller_note",
         "default": false
