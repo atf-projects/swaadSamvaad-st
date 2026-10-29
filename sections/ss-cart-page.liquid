@@ -346,7 +346,13 @@
               <div class="ss-cart-page__total-price" data-ss-page-total>{{ cart.total_price | money }}</div>
             </div>
 
-            <a href="/checkout" class="ss-cart-page__checkout-btn">
+            {%- liquid
+              assign checkout_target = '/checkout'
+              unless customer
+                assign checkout_target = routes.account_login_url | append: '?checkout_url=/checkout&return_to=%2Fcheckout'
+              endunless
+            -%}
+            <a href="{{ checkout_target }}" class="ss-cart-page__checkout-btn">
               <span>Proceed to Checkout</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>

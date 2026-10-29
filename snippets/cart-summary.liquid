@@ -258,20 +258,42 @@
 </div>
 
 <div class="cart__ctas">
-  <button
-    type="submit"
-    id="checkout"
-    class="cart__checkout-button button"
-    name="checkout"
-    {% if cart == empty %}
-      disabled
-    {% endif %}
-    form="cart-form"
-  >
-    <span class="button-text">
-      {{ 'content.checkout' | t }}
-    </span>
-  </button>
+  {%- liquid
+    assign checkout_target = '/checkout'
+    unless customer
+      assign checkout_target = routes.account_login_url | append: '?checkout_url=/checkout&return_to=%2Fcheckout'
+    endunless
+  -%}
+  {%- if customer -%}
+    <button
+      type="submit"
+      id="checkout"
+      class="cart__checkout-button button"
+      name="checkout"
+      {% if cart == empty %}
+        disabled
+      {% endif %}
+      form="cart-form"
+    >
+      <span class="button-text">
+        {{ 'content.checkout' | t }}
+      </span>
+    </button>
+  {%- else -%}
+    <a
+      href="{{ checkout_target }}"
+      id="checkout"
+      class="cart__checkout-button button"
+      {% if cart == empty %}
+        aria-disabled="true"
+        style="pointer-events: none; opacity: 0.5;"
+      {% endif %}
+    >
+      <span class="button-text">
+        {{ 'content.checkout' | t }}
+      </span>
+    </a>
+  {%- endif -%}
 
   {% if additional_checkout_buttons and settings.show_accelerated_checkout_buttons %}
     <div
